@@ -1,0 +1,41 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Pack
+    network: mumbai
+    source:
+      address: "0xFe92320f002062e8dE6Af21970Ad8Fc4B024C2Bf"
+      abi: Pack
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.2
+      language: wasm/assemblyscript
+      entities:
+        - ApprovalForAll
+        - PackCreated
+        - PackOpenFulfilled
+        - PackOpenRequest
+        - TransferBatch
+        - TransferSingle
+        - URI
+      abis:
+        - name: Pack
+          file: ./abis/Pack.json
+      eventHandlers:
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: PackCreated(indexed address,indexed address,(uint256,address,string,uint256,uint256,uint256),(address,uint256[],uint256[]))
+          handler: handlePackCreated
+        - event: PackOpenFulfilled(indexed uint256,indexed address,bytes32,indexed address,uint256)
+          handler: handlePackOpenFulfilled
+        - event: PackOpenRequest(indexed uint256,indexed address,bytes32)
+          handler: handlePackOpenRequest
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: URI(string,indexed uint256)
+          handler: handleURI
+      file: ./src/mapping.ts
