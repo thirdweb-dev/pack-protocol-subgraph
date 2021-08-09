@@ -1,6 +1,98 @@
-type ExampleEntity @entity {
+# Account
+type Account @entity {
   id: ID!
-  count: BigInt!
-  account: Bytes! # address
-  operator: Bytes! # address
+  packsOwned: [PackOwnership!]! @derivedFrom(field: "owner")
+  rewardsOwned: [RewardOwnership!]! @derivedFrom(field: "owner")
+  packsCreated: [Pack!]! @derivedFrom(field: "creator")
+  rewardsCreated: [Reward!]! @derivedFrom(field: "creator")
+}
+
+type PackOwnership @entity {
+  id: ID!
+  owner: Account!
+  balance: BigInt
+  pack: Pack!
+}
+
+type RewardOwnership @entity {
+  id: ID!
+  owner: Account!
+  balance: BigInt
+  reward: Reward!
+}
+
+# Pack
+type Pack @entity {
+  id: ID!
+  packId: BigInt!
+  creator: Account!
+  owners: [PackOwnership!] @derivedFrom(field: "pack")
+  rewards: [Reward!] @derivedFrom(field: "pack")
+  uri: String
+  supply: BigInt
+  openStart: BigInt
+  openEnd: BigInt
+  rewardContract: Bytes!
+}
+
+# Reward
+enum UnderlyingTokenType {
+  None,
+  ERC20,
+  ERC721
+}
+
+type Reward @entity {
+  id: ID!
+  pack: Pack!
+  tokenId: BigInt!
+  creator: Account!
+  owners: [RewardOwnership!] @derivedFrom(field: "reward")
+  uri: String!
+  supply: BigInt!
+  underlyingToken: RewardUnderlyingToken @derivedFrom(field: "reward")
+}
+
+type RewardUnderlyingToken @entity {
+  id: ID!
+  type: UnderlyingTokenType!
+  reward: Reward!
+  erc20: RewardUnderlyingTokenERC20
+  erc721: RewardUnderlyingTokenERC721
+}
+
+type RewardUnderlyingTokenERC20 @entity {
+  id: ID!
+  rewardAmount: BigInt!
+  tokenContract: Bytes!
+  tokenAmount: BigInt!
+
+  " ERC20 interfaces "
+  name: String
+  symbol: String
+  decimals: BigInt
+}
+
+type RewardUnderlyingTokenERC721 @entity {
+  id: ID!
+  tokenContract: Bytes!
+  tokenId: BigInt!
+
+  " ERC721 interfaces "
+  name: String
+  symbol: String
+  uri: String
+}
+
+# Listing
+type Listing @entity {
+  id: ID!
+  seller: Account!
+  assetContract: Bytes!
+  tokenId: BigInt
+  quantity: BigInt
+  currency: Bytes!
+  price: BigInt!
+  saleStart: BigInt
+  saleEnd: BigInt
 }

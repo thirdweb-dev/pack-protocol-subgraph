@@ -1,4 +1,4 @@
-specVersion: 0.0.1
+specVersion: 0.0.3
 schema:
   file: ./schema.graphql
 dataSources:
@@ -10,32 +10,120 @@ dataSources:
       abi: Pack
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.2
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - ApprovalForAll
-        - PackCreated
-        - PackOpenFulfilled
-        - PackOpenRequest
-        - TransferBatch
-        - TransferSingle
-        - URI
+        - Account
+        - Pack
+        - PackOwnership
       abis:
         - name: Pack
           file: ./abis/Pack.json
       eventHandlers:
-        - event: ApprovalForAll(indexed address,indexed address,bool)
-          handler: handleApprovalForAll
         - event: PackCreated(indexed address,indexed address,(uint256,address,string,uint256,uint256,uint256),(address,uint256[],uint256[]))
           handler: handlePackCreated
         - event: PackOpenFulfilled(indexed uint256,indexed address,bytes32,indexed address,uint256)
           handler: handlePackOpenFulfilled
-        - event: PackOpenRequest(indexed uint256,indexed address,bytes32)
-          handler: handlePackOpenRequest
         - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
           handler: handleTransferBatch
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
-        - event: URI(string,indexed uint256)
-          handler: handleURI
-      file: ./src/mapping.ts
+      file: ./src/pack.ts
+  - kind: ethereum/contract
+    name: Market
+    network: mumbai
+    source:
+      address: "0xD73f01f9c143EFc6Fe8eE110aF334D9ff1F2E852"
+      abi: Market
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Listing
+        - Sale
+      abis:
+        - name: Market
+          file: ./abis/Market.json
+      eventHandlers:
+        - event: ListingUpdate(indexed address,indexed uint256,(address,address,uint256,uint256,address,uint256,uint256,uint256))
+          handler: handleListingUpdate
+        - event: NewListing(indexed address,indexed address,(address,address,uint256,uint256,address,uint256,uint256,uint256))
+          handler: handleNewListing
+        - event: NewSale(indexed address,indexed address,indexed uint256,address,(address,address,uint256,uint256,address,uint256,uint256,uint256))
+          handler: handleNewSale
+      file: ./src/market.ts
+  - kind: ethereum/contract
+    name: ProtocolControl
+    network: mumbai
+    source:
+      address: "0x28F7BDF6902d09c6EF2496976Fd886e47adce744"
+      abi: ProtocolControl
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Module
+        - Role
+      abis:
+        - name: ProtocolControl
+          file: ./abis/ProtocolControl.json
+      eventHandlers:
+        - event: ModuleInitialized(bytes32,address)
+          handler: handleModuleInitialized
+        - event: ModuleUpdated(bytes32,address)
+          handler: handleModuleUpdated
+        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+          handler: handleRoleAdminChanged
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+      file: ./src/protocol_control.ts
+  - kind: ethereum/contract
+    name: Reward
+    network: mumbai
+    source:
+      address: "0xF0D1064ec8Dee772af45D6e9E45Cfa5F429d80a7"
+      abi: Reward
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - RewardOwnership
+        - Reward
+        - RewardUnderlyingToken
+        - RewardUnderlyingTokenERC20
+        - RewardUnderlyingTokenERC721
+      abis:
+        - name: Reward
+          file: ./abis/Rewards.json
+      eventHandlers:
+        - event: ERC20Redeemed(indexed address,indexed address,uint256,uint256)
+          handler: handleERC20Redeemed
+        - event: ERC20Rewards(indexed address,indexed address,uint256,uint256,string)
+          handler: handleERC20Rewards
+        - event: ERC721Redeemed(indexed address,indexed address,uint256,uint256)
+          handler: handleERC721Redeemed
+        - event: ERC721Rewards(indexed address,indexed address,uint256,uint256,string)
+          handler: handleERC721Rewards
+        - event: NativeRewards(indexed address,uint256[],string[],uint256[])
+          handler: handleNativeRewards
+        - event: Paused(address)
+          handler: handlePaused
+        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+          handler: handleRoleAdminChanged
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/reward.ts
