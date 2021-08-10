@@ -52,16 +52,6 @@ export function handleNativeRewards(event: NativeRewards): void {
     rewardUnderlyingToken.reward = rewardId
 
     rewardUnderlyingToken.save()
-
-    // Create `RewardOwnership` for creator
-    let rewardOwnershipId = creatorAccountId + rewardContractAddress + rewardId
-    let rewardOwnership = new RewardOwnership(rewardOwnershipId)
-
-    rewardOwnership.owner = creatorAccountId
-    rewardOwnership.balance = rewardSupplies[i]
-    rewardOwnership.reward = rewardId
-
-    rewardOwnership.save()
   }
 }
 
@@ -122,7 +112,7 @@ export function handleTransferBatch(event: TransferBatch): void {
     let rewardId = rewardIds[i].toString()
 
     if(event.params.from.toHexString() != zeroAddress) {
-      // Update `PackOwnership` for sender
+      // Update `RewardOwnership` for sender
       let senderOwnershipId = event.params.from.toHexString() + rewardContractAddress + rewardId
       let senderOwnership = RewardOwnership.load(senderOwnershipId)
   
@@ -138,7 +128,7 @@ export function handleTransferBatch(event: TransferBatch): void {
       senderOwnership.save()
     }
 
-    // Update `PackOwnership` for receiver
+    // Update `RewardOwnership` for receiver
     let receiverOwnershipId = event.params.to.toHexString() + rewardContractAddress + rewardId
     let receiverOwnership = RewardOwnership.load(receiverOwnershipId)
 
