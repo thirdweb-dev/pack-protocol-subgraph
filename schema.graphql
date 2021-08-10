@@ -49,7 +49,7 @@ enum UnderlyingTokenType {
 # ID: reward contract address + tokenId
 type Reward @entity {
   id: ID!
-  pack: Pack!
+  pack: Pack
   tokenId: BigInt!
   creator: Account!
   owners: [RewardOwnership!] @derivedFrom(field: "reward")
