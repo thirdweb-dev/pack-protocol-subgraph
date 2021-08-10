@@ -1,5 +1,7 @@
 import {
   NativeRewards,
+  TransferSingle,
+  TransferBatch
 } from "../generated/Reward/Reward"
 
 import {
@@ -8,6 +10,7 @@ import {
 
 
 const rewardContractAddress: string = "0xF0D1064ec8Dee772af45D6e9E45Cfa5F429d80a7"
+const zeroAddress: string = "0x0000000000000000000000000000000000000000"
 
 /**
  * 
@@ -59,5 +62,96 @@ export function handleNativeRewards(event: NativeRewards): void {
     rewardOwnership.reward = rewardId
 
     rewardOwnership.save()
+  }
+}
+
+/**
+ * 
+ * @param event TransferSingle(address operator, address from, address to, uint256 id, uint256 value)
+ */
+ export function handleTransferSingle(event: TransferSingle): void {
+  
+  // Get reward tokenId
+  let rewardId = event.params.id.toString();
+  
+  if(event.params.from.toHexString() != zeroAddress) {
+    // Update `RewardOwnership` for sender
+    let senderOwnershipId = event.params.from.toHexString() + rewardContractAddress + rewardId
+    let senderOwnership = RewardOwnership.load(senderOwnershipId)
+
+    if(senderOwnership == null) {
+      senderOwnership = new RewardOwnership(senderOwnershipId)
+
+      senderOwnership.owner = event.params.from.toHexString()
+      senderOwnership.reward = rewardId
+    }
+
+    senderOwnership.balance = (senderOwnership.balance).minus(event.params.value)
+
+    senderOwnership.save()
+  }
+
+  // Update `RewardOwnership` for receiver
+  let receiverOwnershipId = event.params.to.toHexString() + rewardContractAddress + rewardId
+  let receiverOwnership = RewardOwnership.load(receiverOwnershipId)
+
+  if(receiverOwnership == null) {
+    receiverOwnership = new RewardOwnership(receiverOwnershipId)
+
+    receiverOwnership.owner = event.params.to.toHexString()
+    receiverOwnership.balance = event.params.value
+    receiverOwnership.reward = rewardId
+  } else {
+    receiverOwnership.balance = (receiverOwnership.balance).plus(event.params.value)
+  }
+
+  receiverOwnership.save()
+}
+
+/**
+ * 
+ * @param event TransferBatch(address operator, address from, address to, uint256[] ids, uint256[] values)
+ */
+export function handleTransferBatch(event: TransferBatch): void {
+
+  let rewardIds = event.params.ids
+  let values = event.params.values
+
+  for(let i = 0; i < rewardIds.length; i++) {
+    // Get reward tokenId
+    let rewardId = rewardIds[i].toString()
+
+    if(event.params.from.toHexString() != zeroAddress) {
+      // Update `PackOwnership` for sender
+      let senderOwnershipId = event.params.from.toHexString() + rewardContractAddress + rewardId
+      let senderOwnership = RewardOwnership.load(senderOwnershipId)
+  
+      if(senderOwnership == null) {
+        senderOwnership = new RewardOwnership(senderOwnershipId)
+  
+        senderOwnership.owner = event.params.from.toHexString()
+        senderOwnership.reward = rewardId
+      }
+  
+      senderOwnership.balance = (senderOwnership.balance).minus(values[i])
+  
+      senderOwnership.save()
+    }
+
+    // Update `PackOwnership` for receiver
+    let receiverOwnershipId = event.params.to.toHexString() + rewardContractAddress + rewardId
+    let receiverOwnership = RewardOwnership.load(receiverOwnershipId)
+
+    if(receiverOwnership == null) {
+      receiverOwnership = new RewardOwnership(receiverOwnershipId)
+
+      receiverOwnership.owner = event.params.to.toHexString()
+      receiverOwnership.balance = values[i]
+      receiverOwnership.reward = rewardId
+    } else {
+      receiverOwnership.balance = (receiverOwnership.balance).plus(values[i])
+    }
+
+    receiverOwnership.save()
   }
 }
