@@ -12,7 +12,7 @@ type Account @entity {
 type PackOwnership @entity {
   id: ID!
   owner: Account!
-  balance: BigInt
+  balance: BigInt!
   pack: Pack!
 }
 
@@ -34,8 +34,8 @@ type Pack @entity {
   rewards: [Reward!] @derivedFrom(field: "pack")
   uri: String
   supply: BigInt
-  openStart: BigInt
-  openEnd: BigInt
+  openStartTimestamp: BigInt
+  openEndTimestamp: BigInt
   rewardContract: Bytes!
 }
 

@@ -118,21 +118,13 @@ export class PackOwnership extends Entity {
     this.set("owner", Value.fromString(value));
   }
 
-  get balance(): BigInt | null {
+  get balance(): BigInt {
     let value = this.get("balance");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
+    return value.toBigInt();
   }
 
-  set balance(value: BigInt | null) {
-    if (value === null) {
-      this.unset("balance");
-    } else {
-      this.set("balance", Value.fromBigInt(value as BigInt));
-    }
+  set balance(value: BigInt) {
+    this.set("balance", Value.fromBigInt(value));
   }
 
   get pack(): string {
@@ -327,8 +319,8 @@ export class Pack extends Entity {
     }
   }
 
-  get openStart(): BigInt | null {
-    let value = this.get("openStart");
+  get openStartTimestamp(): BigInt | null {
+    let value = this.get("openStartTimestamp");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -336,16 +328,16 @@ export class Pack extends Entity {
     }
   }
 
-  set openStart(value: BigInt | null) {
+  set openStartTimestamp(value: BigInt | null) {
     if (value === null) {
-      this.unset("openStart");
+      this.unset("openStartTimestamp");
     } else {
-      this.set("openStart", Value.fromBigInt(value as BigInt));
+      this.set("openStartTimestamp", Value.fromBigInt(value as BigInt));
     }
   }
 
-  get openEnd(): BigInt | null {
-    let value = this.get("openEnd");
+  get openEndTimestamp(): BigInt | null {
+    let value = this.get("openEndTimestamp");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -353,11 +345,11 @@ export class Pack extends Entity {
     }
   }
 
-  set openEnd(value: BigInt | null) {
+  set openEndTimestamp(value: BigInt | null) {
     if (value === null) {
-      this.unset("openEnd");
+      this.unset("openEndTimestamp");
     } else {
-      this.set("openEnd", Value.fromBigInt(value as BigInt));
+      this.set("openEndTimestamp", Value.fromBigInt(value as BigInt));
     }
   }
 
@@ -401,13 +393,21 @@ export class Reward extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get pack(): string {
+  get pack(): string | null {
     let value = this.get("pack");
-    return value.toString();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set pack(value: string) {
-    this.set("pack", Value.fromString(value));
+  set pack(value: string | null) {
+    if (value === null) {
+      this.unset("pack");
+    } else {
+      this.set("pack", Value.fromString(value as string));
+    }
   }
 
   get tokenId(): BigInt {
@@ -606,13 +606,13 @@ export class RewardUnderlyingTokenERC20 extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get rewardAmount(): BigInt {
-    let value = this.get("rewardAmount");
+  get shares(): BigInt {
+    let value = this.get("shares");
     return value.toBigInt();
   }
 
-  set rewardAmount(value: BigInt) {
-    this.set("rewardAmount", Value.fromBigInt(value));
+  set shares(value: BigInt) {
+    this.set("shares", Value.fromBigInt(value));
   }
 
   get tokenContract(): Bytes {

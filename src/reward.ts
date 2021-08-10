@@ -16,7 +16,7 @@ const rewardContractAddress: string = "0xF0D1064ec8Dee772af45D6e9E45Cfa5F429d80a
 export function handleNativeRewards(event: NativeRewards): void {
 
   // Update `Account` for creator
-  let creatorAccountId: string = event.params.creator.toHex()
+  let creatorAccountId: string = event.params.creator.toHexString()
   let creatorAccount = Account.load(creatorAccountId)
 
   if(creatorAccount == null) {
