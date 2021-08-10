@@ -1,84 +1,47 @@
-import { BigInt } from "@graphprotocol/graph-ts"
 import {
-  Pack,
-  ApprovalForAll,
-  PackCreated,
-  PackOpenFulfilled,
-  PackOpenRequest,
-  TransferBatch,
-  TransferSingle,
-  URI
-} from "../generated/Pack/Pack"
-import { ExampleEntity } from "../generated/schema"
+  NewListing,
+  ListingUpdate
+} from "../generated/Market/Market"
 
-export function handleApprovalForAll(event: ApprovalForAll): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
+import { Listing } from "../generated/schema"
 
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
-  if (entity == null) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
+/**
+ * 
+ * @param event NewListing(address indexed assetContract, address indexed seller, Listing listing)
+ */
+export function handleNewListing(event: NewListing): void {
 
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
-  }
+  let listingId = ""
+  let listing = new Listing(listingId)
 
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
+  listing.seller = event.params.seller.toHexString()
+  listing.assetContract = event.params.assetContract
+  listing.tokenId = event.params.listing.tokenId
+  listing.quantity = event.params.listing.quantity
+  listing.currency = event.params.listing.currency
+  listing.price = event.params.listing.pricePerToken
+  listing.saleStartTimestamp = event.params.listing.saleStart
+  listing.saleEndTimestamp = event.params.listing.saleEnd
 
-  // Entity fields can be set based on event parameters
-  entity.account = event.params.account
-  entity.operator = event.params.operator
-
-  // Entities can be written to the store with `.save()`
-  entity.save()
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract.balanceOf(...)
-  // - contract.balanceOfBatch(...)
-  // - contract.createPack(...)
-  // - contract.creator(...)
-  // - contract.getPack(...)
-  // - contract.getPackWithRewards(...)
-  // - contract.getRewardsInPack(...)
-  // - contract.isApprovedForAll(...)
-  // - contract.nextTokenId(...)
-  // - contract.onERC1155BatchReceived(...)
-  // - contract.onERC1155Received(...)
-  // - contract.packs(...)
-  // - contract.pendingRequests(...)
-  // - contract.randomnessRequests(...)
-  // - contract.rewards(...)
-  // - contract.supportsInterface(...)
-  // - contract.uri(...)
-  // - contract.vrfFees(...)
-  // - contract.vrfKeyHash(...)
+  listing.save()
 }
 
-export function handlePackCreated(event: PackCreated): void {}
+/**
+ * 
+ * @param event ListingUpdate(address indexed seller, uint indexed listingId, Listing lisitng)
+ */
+export function handleListingUpdate(event: ListingUpdate): void {
+  let listingId = event.params.listingId.toString()
+  let listing = new Listing(listingId)
 
-export function handlePackOpenFulfilled(event: PackOpenFulfilled): void {}
+  listing.seller = event.params.seller.toHexString()
+  listing.assetContract = event.params.lisitng.assetContract
+  listing.tokenId = event.params.lisitng.tokenId
+  listing.quantity = event.params.lisitng.quantity
+  listing.currency = event.params.lisitng.currency
+  listing.price = event.params.lisitng.pricePerToken
+  listing.saleStartTimestamp = event.params.lisitng.saleStart
+  listing.saleEndTimestamp = event.params.lisitng.saleEnd
 
-export function handlePackOpenRequest(event: PackOpenRequest): void {}
-
-export function handleTransferBatch(event: TransferBatch): void {}
-
-export function handleTransferSingle(event: TransferSingle): void {}
-
-export function handleURI(event: URI): void {}
+  listing.save()
+}

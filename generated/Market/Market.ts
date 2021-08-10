@@ -70,6 +70,28 @@ export class ListingUpdateLisitngStruct extends ethereum.Tuple {
   }
 }
 
+export class MarketFeesChanged extends ethereum.Event {
+  get params(): MarketFeesChanged__Params {
+    return new MarketFeesChanged__Params(this);
+  }
+}
+
+export class MarketFeesChanged__Params {
+  _event: MarketFeesChanged;
+
+  constructor(event: MarketFeesChanged) {
+    this._event = event;
+  }
+
+  get protocolFeeBps(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get creatorFeeBps(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
 export class NewListing extends ethereum.Event {
   get params(): NewListing__Params {
     return new NewListing__Params(this);
@@ -91,8 +113,12 @@ export class NewListing__Params {
     return this._event.parameters[1].value.toAddress();
   }
 
+  get listingId(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
   get listing(): NewListingListingStruct {
-    return this._event.parameters[2].value.toTuple() as NewListingListingStruct;
+    return this._event.parameters[3].value.toTuple() as NewListingListingStruct;
   }
 }
 
@@ -367,29 +393,6 @@ export class Market extends ethereum.SmartContract {
     );
   }
 
-  getTotalNumOfListings(_seller: Address): BigInt {
-    let result = super.call(
-      "getTotalNumOfListings",
-      "getTotalNumOfListings(address):(uint256)",
-      [ethereum.Value.fromAddress(_seller)]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_getTotalNumOfListings(_seller: Address): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "getTotalNumOfListings",
-      "getTotalNumOfListings(address):(uint256)",
-      [ethereum.Value.fromAddress(_seller)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
   listings(param0: Address, param1: BigInt): Market__listingsResult {
     let result = super.call(
       "listings",
@@ -578,21 +581,17 @@ export class Market extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  totalListings(param0: Address): BigInt {
-    let result = super.call(
-      "totalListings",
-      "totalListings(address):(uint256)",
-      [ethereum.Value.fromAddress(param0)]
-    );
+  totalListings(): BigInt {
+    let result = super.call("totalListings", "totalListings():(uint256)", []);
 
     return result[0].toBigInt();
   }
 
-  try_totalListings(param0: Address): ethereum.CallResult<BigInt> {
+  try_totalListings(): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "totalListings",
-      "totalListings(address):(uint256)",
-      [ethereum.Value.fromAddress(param0)]
+      "totalListings():(uint256)",
+      []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -855,6 +854,40 @@ export class OnERC1155ReceivedCall__Outputs {
 
   get value0(): Bytes {
     return this._call.outputValues[0].value.toBytes();
+  }
+}
+
+export class SetFeesCall extends ethereum.Call {
+  get inputs(): SetFeesCall__Inputs {
+    return new SetFeesCall__Inputs(this);
+  }
+
+  get outputs(): SetFeesCall__Outputs {
+    return new SetFeesCall__Outputs(this);
+  }
+}
+
+export class SetFeesCall__Inputs {
+  _call: SetFeesCall;
+
+  constructor(call: SetFeesCall) {
+    this._call = call;
+  }
+
+  get _protocolCut(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get _creatorCut(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+}
+
+export class SetFeesCall__Outputs {
+  _call: SetFeesCall;
+
+  constructor(call: SetFeesCall) {
+    this._call = call;
   }
 }
 

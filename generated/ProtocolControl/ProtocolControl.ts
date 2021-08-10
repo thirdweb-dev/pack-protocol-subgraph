@@ -10,6 +10,32 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class FundsTransferred extends ethereum.Event {
+  get params(): FundsTransferred__Params {
+    return new FundsTransferred__Params(this);
+  }
+}
+
+export class FundsTransferred__Params {
+  _event: FundsTransferred;
+
+  constructor(event: FundsTransferred) {
+    this._event = event;
+  }
+
+  get asset(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get to(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+}
+
 export class ModuleInitialized extends ethereum.Event {
   get params(): ModuleInitialized__Params {
     return new ModuleInitialized__Params(this);
@@ -129,6 +155,24 @@ export class RoleRevoked__Params {
 
   get sender(): Address {
     return this._event.parameters[2].value.toAddress();
+  }
+}
+
+export class SystemPaused extends ethereum.Event {
+  get params(): SystemPaused__Params {
+    return new SystemPaused__Params(this);
+  }
+}
+
+export class SystemPaused__Params {
+  _event: SystemPaused;
+
+  constructor(event: SystemPaused) {
+    this._event = event;
+  }
+
+  get isPaused(): boolean {
+    return this._event.parameters[0].value.toBoolean();
   }
 }
 
@@ -399,6 +443,36 @@ export class InitializeProtocolCall__Outputs {
   _call: InitializeProtocolCall;
 
   constructor(call: InitializeProtocolCall) {
+    this._call = call;
+  }
+}
+
+export class PausePackProtocolCall extends ethereum.Call {
+  get inputs(): PausePackProtocolCall__Inputs {
+    return new PausePackProtocolCall__Inputs(this);
+  }
+
+  get outputs(): PausePackProtocolCall__Outputs {
+    return new PausePackProtocolCall__Outputs(this);
+  }
+}
+
+export class PausePackProtocolCall__Inputs {
+  _call: PausePackProtocolCall;
+
+  constructor(call: PausePackProtocolCall) {
+    this._call = call;
+  }
+
+  get _toPause(): boolean {
+    return this._call.inputValues[0].value.toBoolean();
+  }
+}
+
+export class PausePackProtocolCall__Outputs {
+  _call: PausePackProtocolCall;
+
+  constructor(call: PausePackProtocolCall) {
     this._call = call;
   }
 }

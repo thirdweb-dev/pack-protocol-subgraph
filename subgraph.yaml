@@ -6,7 +6,7 @@ dataSources:
     name: Pack
     network: mumbai
     source:
-      address: "0xFe92320f002062e8dE6Af21970Ad8Fc4B024C2Bf"
+      address: "0xdF6D4D22918048bA57e849dBBc83d9Bb502bb150"
       abi: Pack
     mapping:
       kind: ethereum/events
@@ -33,7 +33,7 @@ dataSources:
     name: Market
     network: mumbai
     source:
-      address: "0xD73f01f9c143EFc6Fe8eE110aF334D9ff1F2E852"
+      address: "0xc8035e0347A9182E6d9973e8B081b166Bb8F075a"
       abi: Market
     mapping:
       kind: ethereum/events
@@ -48,7 +48,7 @@ dataSources:
       eventHandlers:
         - event: ListingUpdate(indexed address,indexed uint256,(address,address,uint256,uint256,address,uint256,uint256,uint256))
           handler: handleListingUpdate
-        - event: NewListing(indexed address,indexed address,(address,address,uint256,uint256,address,uint256,uint256,uint256))
+        - event: NewListing(indexed address,indexed address,indexed uint256,(address,address,uint256,uint256,address,uint256,uint256,uint256))
           handler: handleNewListing
         - event: NewSale(indexed address,indexed address,indexed uint256,address,(address,address,uint256,uint256,address,uint256,uint256,uint256))
           handler: handleNewSale
@@ -57,7 +57,7 @@ dataSources:
     name: ProtocolControl
     network: mumbai
     source:
-      address: "0x28F7BDF6902d09c6EF2496976Fd886e47adce744"
+      address: "0x932a80d12133daDa78d1eFeAa69C53f35b7717eB"
       abi: ProtocolControl
     mapping:
       kind: ethereum/events
@@ -85,7 +85,7 @@ dataSources:
     name: Reward
     network: mumbai
     source:
-      address: "0xF0D1064ec8Dee772af45D6e9E45Cfa5F429d80a7"
+      address: "0xe9559e34a8A32FA8Dc050fAaFD9343B666BC92CF"
       abi: Reward
     mapping:
       kind: ethereum/events
@@ -112,18 +112,8 @@ dataSources:
           handler: handleERC721Rewards
         - event: NativeRewards(indexed address,uint256[],string[],uint256[])
           handler: handleNativeRewards
-        - event: Paused(address)
-          handler: handlePaused
-        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
-          handler: handleRoleAdminChanged
-        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
-          handler: handleRoleGranted
-        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
-          handler: handleRoleRevoked
         - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
           handler: handleTransferBatch
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
-        - event: Unpaused(address)
-          handler: handleUnpaused
       file: ./src/reward.ts
