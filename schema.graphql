@@ -102,6 +102,6 @@ type Listing @entity {
   quantity: BigInt
   currency: Bytes!
   price: BigInt!
-  saleStart: BigInt
-  saleEnd: BigInt
+  saleStartTimestamp: BigInt
+  saleEndTimestamp: BigInt
 }

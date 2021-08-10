@@ -891,8 +891,8 @@ export class Listing extends Entity {
     this.set("price", Value.fromBigInt(value));
   }
 
-  get saleStart(): BigInt | null {
-    let value = this.get("saleStart");
+  get saleStartTimestamp(): BigInt | null {
+    let value = this.get("saleStartTimestamp");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -900,16 +900,16 @@ export class Listing extends Entity {
     }
   }
 
-  set saleStart(value: BigInt | null) {
+  set saleStartTimestamp(value: BigInt | null) {
     if (value === null) {
-      this.unset("saleStart");
+      this.unset("saleStartTimestamp");
     } else {
-      this.set("saleStart", Value.fromBigInt(value as BigInt));
+      this.set("saleStartTimestamp", Value.fromBigInt(value as BigInt));
     }
   }
 
-  get saleEnd(): BigInt | null {
-    let value = this.get("saleEnd");
+  get saleEndTimestamp(): BigInt | null {
+    let value = this.get("saleEndTimestamp");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -917,11 +917,11 @@ export class Listing extends Entity {
     }
   }
 
-  set saleEnd(value: BigInt | null) {
+  set saleEndTimestamp(value: BigInt | null) {
     if (value === null) {
-      this.unset("saleEnd");
+      this.unset("saleEndTimestamp");
     } else {
-      this.set("saleEnd", Value.fromBigInt(value as BigInt));
+      this.set("saleEndTimestamp", Value.fromBigInt(value as BigInt));
     }
   }
 }
