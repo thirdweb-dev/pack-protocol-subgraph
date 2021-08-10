@@ -1,4 +1,5 @@
 # Account
+# ID: Account public address
 type Account @entity {
   id: ID!
   packsOwned: [PackOwnership!]! @derivedFrom(field: "owner")
@@ -7,6 +8,7 @@ type Account @entity {
   rewardsCreated: [Reward!]! @derivedFrom(field: "creator")
 }
 
+# ID: account public address + pack tokenId
 type PackOwnership @entity {
   id: ID!
   owner: Account!
@@ -14,6 +16,7 @@ type PackOwnership @entity {
   pack: Pack!
 }
 
+# account public address + reward contract address + reward tokenId
 type RewardOwnership @entity {
   id: ID!
   owner: Account!
@@ -22,6 +25,7 @@ type RewardOwnership @entity {
 }
 
 # Pack
+# ID: pack tokenId
 type Pack @entity {
   id: ID!
   packId: BigInt!
@@ -42,6 +46,7 @@ enum UnderlyingTokenType {
   ERC721
 }
 
+# ID: reward contract address + tokenId
 type Reward @entity {
   id: ID!
   pack: Pack!
@@ -53,6 +58,7 @@ type Reward @entity {
   underlyingToken: RewardUnderlyingToken @derivedFrom(field: "reward")
 }
 
+# ID: reward contract address + tokenId + '-underlying'
 type RewardUnderlyingToken @entity {
   id: ID!
   type: UnderlyingTokenType!
@@ -61,9 +67,10 @@ type RewardUnderlyingToken @entity {
   erc721: RewardUnderlyingTokenERC721
 }
 
+# ID: reward contract address + tokenId + '-underlying' + '-ERC20'
 type RewardUnderlyingTokenERC20 @entity {
   id: ID!
-  rewardAmount: BigInt!
+  shares: BigInt!
   tokenContract: Bytes!
   tokenAmount: BigInt!
 
@@ -73,6 +80,7 @@ type RewardUnderlyingTokenERC20 @entity {
   decimals: BigInt
 }
 
+# ID: reward contract address + tokenId + '-underlying' + '-ERC721'
 type RewardUnderlyingTokenERC721 @entity {
   id: ID!
   tokenContract: Bytes!
@@ -85,6 +93,7 @@ type RewardUnderlyingTokenERC721 @entity {
 }
 
 # Listing
+# ID: listing ID
 type Listing @entity {
   id: ID!
   seller: Account!
