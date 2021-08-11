@@ -28,20 +28,20 @@ export function handleNewListing(event: NewListing): void {
 
 /**
  * 
- * @param event ListingUpdate(address indexed seller, uint indexed listingId, Listing lisitng)
+ * @param event ListingUpdate(address indexed seller, uint indexed listingId, Listing listing)
  */
 export function handleListingUpdate(event: ListingUpdate): void {
   let listingId = event.params.listingId.toString()
   let listing = new Listing(listingId)
 
   listing.seller = event.params.seller.toHexString()
-  listing.assetContract = event.params.lisitng.assetContract
-  listing.tokenId = event.params.lisitng.tokenId
-  listing.quantity = event.params.lisitng.quantity
-  listing.currency = event.params.lisitng.currency
-  listing.price = event.params.lisitng.pricePerToken
-  listing.saleStartTimestamp = event.params.lisitng.saleStart
-  listing.saleEndTimestamp = event.params.lisitng.saleEnd
+  listing.assetContract = event.params.listing.assetContract
+  listing.tokenId = event.params.listing.tokenId
+  listing.quantity = event.params.listing.quantity
+  listing.currency = event.params.listing.currency
+  listing.price = event.params.listing.pricePerToken
+  listing.saleStartTimestamp = event.params.listing.saleStart
+  listing.saleEndTimestamp = event.params.listing.saleEnd
 
   listing.save()
 }

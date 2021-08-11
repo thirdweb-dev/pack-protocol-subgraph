@@ -1,0 +1,84 @@
+specVersion: 0.0.3
+description: Pack Protocol lets you create and sell packs filled with rewards.
+repository: https://github.com/nftlabs/pack-protocol-subgraph
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Pack
+    network: mumbai
+    source:
+      address: "0xdF6D4D22918048bA57e849dBBc83d9Bb502bb150"
+      abi: Pack
+      startBlock: 17428181
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - Pack
+        - PackOwnership
+      abis:
+        - name: Pack
+          file: Pack\abis\Pack.json
+      eventHandlers:
+        - event: PackCreated(indexed address,indexed
+            address,(uint256,address,string,uint256,uint256,uint256),(address,uint256[],uint256[]))
+          handler: handlePackCreated
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+      file: Pack\Pack.wasm
+  - kind: ethereum/contract
+    name: Market
+    network: mumbai
+    source:
+      address: "0x420dF8F7659cad7b9701b882E5A0f0282c49907d"
+      abi: Market
+      startBlock: 17504871
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Listing
+      abis:
+        - name: Market
+          file: Market\abis\Market.json
+      eventHandlers:
+        - event: ListingUpdate(indexed address,indexed
+            uint256,(address,address,uint256,uint256,address,uint256,uint256,uint256))
+          handler: handleListingUpdate
+        - event: NewListing(indexed address,indexed address,indexed
+            uint256,(address,address,uint256,uint256,address,uint256,uint256,uint256))
+          handler: handleNewListing
+      file: Market\Market.wasm
+  - kind: ethereum/contract
+    name: Reward
+    network: mumbai
+    source:
+      address: "0xe9559e34a8A32FA8Dc050fAaFD9343B666BC92CF"
+      abi: Reward
+      startBlock: 17428165
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - RewardOwnership
+        - Reward
+        - RewardUnderlyingToken
+      abis:
+        - name: Reward
+          file: Reward\abis\Rewards.json
+      eventHandlers:
+        - event: NativeRewards(indexed address,uint256[],string[],uint256[])
+          handler: handleNativeRewards
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+      file: Reward\Reward.wasm

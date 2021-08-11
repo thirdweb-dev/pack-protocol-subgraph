@@ -31,12 +31,12 @@ export class ListingUpdate__Params {
     return this._event.parameters[1].value.toBigInt();
   }
 
-  get lisitng(): ListingUpdateLisitngStruct {
-    return this._event.parameters[2].value.toTuple() as ListingUpdateLisitngStruct;
+  get listing(): ListingUpdateListingStruct {
+    return this._event.parameters[2].value.toTuple() as ListingUpdateListingStruct;
   }
 }
 
-export class ListingUpdateLisitngStruct extends ethereum.Tuple {
+export class ListingUpdateListingStruct extends ethereum.Tuple {
   get seller(): Address {
     return this[0].toAddress();
   }
