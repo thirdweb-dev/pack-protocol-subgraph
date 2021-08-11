@@ -42,40 +42,72 @@ export class Account extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get packsOwned(): Array<string> {
+  get packsOwned(): Array<string> | null {
     let value = this.get("packsOwned");
-    return value.toStringArray();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set packsOwned(value: Array<string>) {
-    this.set("packsOwned", Value.fromStringArray(value));
+  set packsOwned(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("packsOwned");
+    } else {
+      this.set("packsOwned", Value.fromStringArray(value as Array<string>));
+    }
   }
 
-  get rewardsOwned(): Array<string> {
+  get rewardsOwned(): Array<string> | null {
     let value = this.get("rewardsOwned");
-    return value.toStringArray();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set rewardsOwned(value: Array<string>) {
-    this.set("rewardsOwned", Value.fromStringArray(value));
+  set rewardsOwned(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("rewardsOwned");
+    } else {
+      this.set("rewardsOwned", Value.fromStringArray(value as Array<string>));
+    }
   }
 
-  get packsCreated(): Array<string> {
+  get packsCreated(): Array<string> | null {
     let value = this.get("packsCreated");
-    return value.toStringArray();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set packsCreated(value: Array<string>) {
-    this.set("packsCreated", Value.fromStringArray(value));
+  set packsCreated(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("packsCreated");
+    } else {
+      this.set("packsCreated", Value.fromStringArray(value as Array<string>));
+    }
   }
 
-  get rewardsCreated(): Array<string> {
+  get rewardsCreated(): Array<string> | null {
     let value = this.get("rewardsCreated");
-    return value.toStringArray();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set rewardsCreated(value: Array<string>) {
-    this.set("rewardsCreated", Value.fromStringArray(value));
+  set rewardsCreated(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("rewardsCreated");
+    } else {
+      this.set("rewardsCreated", Value.fromStringArray(value as Array<string>));
+    }
   }
 }
 

@@ -64,21 +64,39 @@ export function handleTransferSingle(event: TransferSingle): void {
     senderOwnership.save()
   }
 
-  // Update `PackOwnership` for receiver
-  let receiverOwnershipId = event.params.to.toHexString() + packId
-  let receiverOwnership = PackOwnership.load(receiverOwnershipId)
+  if(event.params.to.toHexString() == zeroAddress) {
+    // Update `Pack` supply
+    let pack = Pack.load(packId)
+    pack.supply = (pack.supply).minus(event.params.value)
+    pack.save()
 
-  if(receiverOwnership == null) {
-    receiverOwnership = new PackOwnership(receiverOwnershipId)
-
-    receiverOwnership.owner = event.params.to.toHexString()
-    receiverOwnership.balance = event.params.value
-    receiverOwnership.pack = packId
   } else {
-    receiverOwnership.balance = (receiverOwnership.balance).plus(event.params.value)
-  }
 
-  receiverOwnership.save()
+    // Create `Account` for receiver if it doesn't exist.
+    let receiverAccountId = event.params.to.toHexString()
+    let receiverAccount = Account.load(receiverAccountId)
+
+    if(receiverAccount == null) {
+      receiverAccount = new Account(receiverAccountId)
+      receiverAccount.save()
+    }
+
+    // Update `PackOwnership` for receiver
+    let receiverOwnershipId = receiverAccountId + packId
+    let receiverOwnership = PackOwnership.load(receiverOwnershipId)
+
+    if(receiverOwnership == null) {
+      receiverOwnership = new PackOwnership(receiverOwnershipId)
+
+      receiverOwnership.owner = event.params.to.toHexString()
+      receiverOwnership.balance = event.params.value
+      receiverOwnership.pack = packId
+    } else {
+      receiverOwnership.balance = (receiverOwnership.balance).plus(event.params.value)
+    }
+
+    receiverOwnership.save()
+  }
 }
 
 /**
@@ -89,6 +107,15 @@ export function handleTransferBatch(event: TransferBatch): void {
 
   let packIds = event.params.ids
   let values = event.params.values
+
+  // Create `Account` for receiver if it doesn't exist.
+  let receiverAccountId = event.params.to.toHexString()
+  let receiverAccount = Account.load(receiverAccountId)
+
+  if(receiverAccount == null) {
+    receiverAccount = new Account(receiverAccountId)
+    receiverAccount.save()
+  }
 
   for(let i = 0; i < packIds.length; i++) {
     // Get pack tokenId
@@ -111,20 +138,29 @@ export function handleTransferBatch(event: TransferBatch): void {
       senderOwnership.save()
     }
 
-    // Update `PackOwnership` for receiver
-    let receiverOwnershipId = event.params.to.toHexString() + packId
-    let receiverOwnership = PackOwnership.load(receiverOwnershipId)
-
-    if(receiverOwnership == null) {
-      receiverOwnership = new PackOwnership(receiverOwnershipId)
-
-      receiverOwnership.owner = event.params.to.toHexString()
-      receiverOwnership.balance = values[i]
-      receiverOwnership.pack = packId
+    if(event.params.to.toHexString() == zeroAddress) {
+      // Update `Pack` supply
+      let pack = Pack.load(packId)
+      pack.supply = (pack.supply).minus(values[i])
+      pack.save()
+  
     } else {
-      receiverOwnership.balance = (receiverOwnership.balance).plus(values[i])
-    }
 
-    receiverOwnership.save()
+      // Update `PackOwnership` for receiver
+      let receiverOwnershipId = event.params.to.toHexString() + packId
+      let receiverOwnership = PackOwnership.load(receiverOwnershipId)
+
+      if(receiverOwnership == null) {
+        receiverOwnership = new PackOwnership(receiverOwnershipId)
+
+        receiverOwnership.owner = event.params.to.toHexString()
+        receiverOwnership.balance = values[i]
+        receiverOwnership.pack = packId
+      } else {
+        receiverOwnership.balance = (receiverOwnership.balance).plus(values[i])
+      }
+
+      receiverOwnership.save()
+    }
   }
 }

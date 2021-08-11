@@ -2,10 +2,10 @@
 # ID: Account public address
 type Account @entity {
   id: ID!
-  packsOwned: [PackOwnership!]! @derivedFrom(field: "owner")
-  rewardsOwned: [RewardOwnership!]! @derivedFrom(field: "owner")
-  packsCreated: [Pack!]! @derivedFrom(field: "creator")
-  rewardsCreated: [Reward!]! @derivedFrom(field: "creator")
+  packsOwned: [PackOwnership!] @derivedFrom(field: "owner")
+  rewardsOwned: [RewardOwnership!] @derivedFrom(field: "owner")
+  packsCreated: [Pack!] @derivedFrom(field: "creator")
+  rewardsCreated: [Reward!] @derivedFrom(field: "creator")
 }
 
 # ID: account public address + pack tokenId
