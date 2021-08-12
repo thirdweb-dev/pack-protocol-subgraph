@@ -4,13 +4,16 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ pack-protocol",
-    "create-local": "graph create --node http://localhost:8020/ pack-protocol",
-    "remove-local": "graph remove --node http://localhost:8020/ pack-protocol",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 pack-protocol"
+    "prepare:polygon": "mustache config/polygon.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:mumbai": "mustache config/mumbai.json subgraph.template.yaml > subgraph.yaml",
+    "deploy:polygon": "mustache config/polygon.json subgraph.template.yaml > subgraph.yaml && graph deploy --product hosted-service nftlabs/pack-protocol-polygon",
+    "deploy:mumbai": "mustache config/mumbai.json subgraph.template.yaml > subgraph.yaml && graph deploy --product hosted-service nftlabs/pack-protocol-mumbai"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.21.1",
     "@graphprotocol/graph-ts": "0.20.0"
+  },
+  "devDependencies": {
+    "mustache": "^4.2.0"
   }
 }

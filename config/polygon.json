@@ -1,0 +1,15 @@
+{
+  "network": "matic",
+  "pack": {
+    "address": "0x3d5a51975fD29E45Eb285349F12b77b4c153c8e0",
+    "startBlock": 17911394
+  },
+  "market": {
+    "address": "0xfC958641E52563f071534495886A8Ac590DCBFA2",
+    "startBlock": 17911395
+  },
+  "reward": {
+    "address": "0x58408Fa085ae3942C3A6532ee6215bFC7f80c47A",
+    "startBlock": 17911495
+  }
+}

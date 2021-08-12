@@ -1,0 +1,15 @@
+{
+  "network": "mumbai",
+  "pack": {
+    "address": "0xdF6D4D22918048bA57e849dBBc83d9Bb502bb150",
+    "startBlock": 17428181
+  },
+  "market": {
+    "address": "0x420dF8F7659cad7b9701b882E5A0f0282c49907d",
+    "startBlock": 17504871
+  },
+  "reward": {
+    "address": "0xe9559e34a8A32FA8Dc050fAaFD9343B666BC92CF",
+    "startBlock": 17428165
+  }
+}

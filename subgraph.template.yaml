@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Pack
-    network: mumbai
+    network: {{network}}
     source:
-      address: "0xdF6D4D22918048bA57e849dBBc83d9Bb502bb150"
       abi: Pack
-      startBlock: 17428181
+      address: '{{pack.address}}'
+      startBlock: {{pack.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -34,11 +34,11 @@ dataSources:
       file: ./src/pack.ts
   - kind: ethereum/contract
     name: Market
-    network: mumbai
+    network: {{network}}
     source:
-      address: "0x420dF8F7659cad7b9701b882E5A0f0282c49907d"
       abi: Market
-      startBlock: 17504871
+      address: '{{market.address}}'
+      startBlock: {{market.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -57,41 +57,13 @@ dataSources:
         # - event: NewSale(indexed address,indexed address,indexed uint256,address,(address,address,uint256,uint256,address,uint256,uint256,uint256))
         #   handler: handleNewSale
       file: ./src/market.ts
-  # - kind: ethereum/contract
-  #   name: ProtocolControl
-  #   network: mumbai
-  #   source:
-  #     address: "0x932a80d12133daDa78d1eFeAa69C53f35b7717eB"
-  #     abi: ProtocolControl
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.4
-  #     language: wasm/assemblyscript
-  #     entities:
-  #       - Module
-  #       - Role
-  #     abis:
-  #       - name: ProtocolControl
-  #         file: ./abis/ProtocolControl.json
-  #     eventHandlers:
-  #       - event: ModuleInitialized(bytes32,address)
-  #         handler: handleModuleInitialized
-  #       - event: ModuleUpdated(bytes32,address)
-  #         handler: handleModuleUpdated
-  #       - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
-  #         handler: handleRoleAdminChanged
-  #       - event: RoleGranted(indexed bytes32,indexed address,indexed address)
-  #         handler: handleRoleGranted
-  #       - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
-  #         handler: handleRoleRevoked
-  #     file: ./src/protocol_control.ts
   - kind: ethereum/contract
     name: Reward
-    network: mumbai
+    network: {{network}}
     source:
-      address: "0xe9559e34a8A32FA8Dc050fAaFD9343B666BC92CF"
       abi: Reward
-      startBlock: 17428165
+      address: '{{reward.address}}'
+      startBlock: {{reward.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -122,3 +94,31 @@ dataSources:
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
       file: ./src/reward.ts
+  # - kind: ethereum/contract
+  #   name: ProtocolControl
+  #   network: {{network}}
+  #   source:
+  #     address: "0x932a80d12133daDa78d1eFeAa69C53f35b7717eB"
+  #     abi: ProtocolControl
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.4
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - Module
+  #       - Role
+  #     abis:
+  #       - name: ProtocolControl
+  #         file: ./abis/ProtocolControl.json
+  #     eventHandlers:
+  #       - event: ModuleInitialized(bytes32,address)
+  #         handler: handleModuleInitialized
+  #       - event: ModuleUpdated(bytes32,address)
+  #         handler: handleModuleUpdated
+  #       - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+  #         handler: handleRoleAdminChanged
+  #       - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+  #         handler: handleRoleGranted
+  #       - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+  #         handler: handleRoleRevoked
+  #     file: ./src/protocol_control.ts
