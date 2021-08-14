@@ -3,9 +3,11 @@
 type Account @entity {
   id: ID!
   packsOwned: [PackOwnership!] @derivedFrom(field: "owner")
-  #rewardsOwned: [PackRewardOwnership!] @derivedFrom(field: "owner")
   packsCreated: [Pack!] @derivedFrom(field: "creator")
-  #rewardsCreated: [PackReward!] @derivedFrom(field: "creator")
+  rewardsCreated: [PackReward!] @derivedFrom(field: "owner")
+
+  # Access Packs specific
+  rewardsOwned: [RewardOwnership!] @derivedFrom(field: "owner")
 }
 
 # ID: account public address + pack tokenId
@@ -17,13 +19,13 @@ type PackOwnership @entity {
 }
 
 # account public address + reward contract address + reward tokenId
-type PackRewardOwnership @entity {
-  id: ID!
-  owner: Account!
-  balance: BigInt
-  pack: Pack!
-  reward: PackReward!
-}
+#type PackRewardOwnership @entity {
+  #id: ID!
+  #owner: Account!
+  #balance: BigInt
+  #pack: Pack!
+  #reward: PackReward!
+#}
 
 # Pack
 # ID: pack tokenId
@@ -42,11 +44,12 @@ type Pack @entity {
 
 type PackReward @entity {
   id: ID!
+  owner: Account!
   tokenId: BigInt!
   uri: String!
   supply: BigInt!
   pack: Pack!
-  reward: Reward!
+  reward: Reward
 }
 
 # Reward
@@ -69,6 +72,7 @@ type Reward @entity {
 
 type RewardOwnership @entity {
   id: ID!
+  owner: Account!
   balance: BigInt!
   reward: Reward!
 }

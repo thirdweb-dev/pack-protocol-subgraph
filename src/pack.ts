@@ -10,7 +10,7 @@ import { ERC1155 } from "../generated/Pack/ERC1155";
 
 import { Account, Pack, PackOwnership, PackReward } from "../generated/schema";
 
-const zeroAddress: string = "0x0000000000000000000000000000000000000000";
+let zeroAddress: string = "0x0000000000000000000000000000000000000000";
 
 /**
  *
@@ -41,16 +41,18 @@ export function handlePackCreated(event: PackCreated): void {
   pack.save();
 
   let rewards = event.params.rewards;
-  for (let i = 0; i < rewards.tokenIds.length; i++) {
-    const source = rewards.source;
-    const tokenId = rewards.tokenIds[i];
-    const amountsPacked = rewards.amountsPacked[i];
-    const packRewardId = `${packId}-${source.toString()}-${tokenId.toString()}`;
-    const rewardId = `${source.toString()}-${tokenId.toString()}`;
+  let tokenIds = rewards.tokenIds;
+  let amountsPacked = rewards.amountsPacked;
+  for (let i = 0; i < tokenIds.length; i++) {
+    let source = rewards.source;
+    let tokenId = tokenIds[i];
+    let packRewardId = `${packId}-${source.toHexString()}-${tokenId.toString()}`;
+    let rewardId = `${source.toHexString()}-${tokenId.toString()}`;
 
-    const packReward = new PackReward(packRewardId);
+    let packReward = new PackReward(packRewardId);
+    packReward.owner = creatorAccountId;
     packReward.reward = rewardId;
-    packReward.supply = amountsPacked;
+    packReward.supply = amountsPacked[i];
     packReward.pack = packId;
     packReward.tokenId = tokenId;
     packReward.uri = ERC1155.bind(source).uri(tokenId);
@@ -63,19 +65,19 @@ export function handlePackCreated(event: PackCreated): void {
  * @param event PackOpenFulfilled(uint indexed packId, address indexed opener, bytes32 requestId, address indexed rewardContract, uint rewardId);
  */
 export function handlePackOpenFulfilled(event: PackOpenFulfilled): void {
-  const packId = event.params.packId.toString();
-  const rewardId = event.params.rewardId.toString();
-  const rewardContract = event.params.rewardContract;
+  let packId = event.params.packId.toString();
+  let rewardId = event.params.rewardId.toString();
+  let rewardContract = event.params.rewardContract;
 
-  const accountId = event.params.opener.toHexString();
+  let accountId = event.params.opener.toHexString();
   let account = Account.load(accountId);
   if (account == null) {
     account = new Account(accountId);
     account.save();
   }
 
-  const packRewardId = `${packId}-${rewardContract.toString()}-${rewardId.toString()}`;
-  const packReward = PackReward.load(packRewardId);
+  let packRewardId = `${packId}-${rewardContract.toString()}-${rewardId.toString()}`;
+  let packReward = PackReward.load(packRewardId);
   if (packReward) {
     packReward.supply = packReward.supply.minus(BigInt.fromI32(1));
     packReward.save();

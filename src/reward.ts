@@ -30,11 +30,12 @@ export function handleNativeRewards(event: NativeRewards): void {
   let rewardIds = event.params.rewardIds;
   let rewardURIs = event.params.rewardURIs;
   let rewardSupplies = event.params.rewardSupplies;
-  const rewardContractAddress = event.address;
+  let rewardContractAddress = event.address.toHexString();
 
   for (let i = 0; i < rewardIds.length; i++) {
     // Create `Reward`
-    let rewardId = rewardIds[i].toString();
+    let tokenId = rewardIds[i];
+    let rewardId = `${rewardContractAddress}-${tokenId.toString()}`;
     let reward = Reward.load(rewardId);
     if (reward == null) {
       reward = new Reward(rewardId);
@@ -67,7 +68,7 @@ export function handleNativeRewards(event: NativeRewards): void {
  */
 export function handleTransferSingle(event: TransferSingle): void {
   // Get `Reward` ID
-  const rewardContractAddress = event.address;
+  let rewardContractAddress = event.address.toHexString();
   let rewardId = rewardContractAddress + event.params.id.toString();
 
   // Create `Account` for receiver if it doesn't exist.
@@ -140,7 +141,7 @@ export function handleTransferBatch(event: TransferBatch): void {
     receiverAccount.save();
   }
 
-  const rewardContractAddress = event.address;
+  let rewardContractAddress = event.address.toHexString();
   for (let i = 0; i < rewardIds.length; i++) {
     // Get reward tokenId
     let rewardId = rewardContractAddress + rewardIds[i].toString();

@@ -59,23 +59,6 @@ export class Account extends Entity {
     }
   }
 
-  get rewardsOwned(): Array<string> | null {
-    let value = this.get("rewardsOwned");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
-  }
-
-  set rewardsOwned(value: Array<string> | null) {
-    if (value === null) {
-      this.unset("rewardsOwned");
-    } else {
-      this.set("rewardsOwned", Value.fromStringArray(value as Array<string>));
-    }
-  }
-
   get packsCreated(): Array<string> | null {
     let value = this.get("packsCreated");
     if (value === null || value.kind == ValueKind.NULL) {
@@ -90,6 +73,40 @@ export class Account extends Entity {
       this.unset("packsCreated");
     } else {
       this.set("packsCreated", Value.fromStringArray(value as Array<string>));
+    }
+  }
+
+  get rewardsCreated(): Array<string> | null {
+    let value = this.get("rewardsCreated");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set rewardsCreated(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("rewardsCreated");
+    } else {
+      this.set("rewardsCreated", Value.fromStringArray(value as Array<string>));
+    }
+  }
+
+  get rewardsOwned(): Array<string> | null {
+    let value = this.get("rewardsOwned");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set rewardsOwned(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("rewardsOwned");
+    } else {
+      this.set("rewardsOwned", Value.fromStringArray(value as Array<string>));
     }
   }
 }
@@ -149,81 +166,6 @@ export class PackOwnership extends Entity {
 
   set pack(value: string) {
     this.set("pack", Value.fromString(value));
-  }
-}
-
-export class PackRewardOwnership extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save PackRewardOwnership entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save PackRewardOwnership entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("PackRewardOwnership", id.toString(), this);
-  }
-
-  static load(id: string): PackRewardOwnership | null {
-    return store.get("PackRewardOwnership", id) as PackRewardOwnership | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get owner(): string {
-    let value = this.get("owner");
-    return value.toString();
-  }
-
-  set owner(value: string) {
-    this.set("owner", Value.fromString(value));
-  }
-
-  get balance(): BigInt | null {
-    let value = this.get("balance");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set balance(value: BigInt | null) {
-    if (value === null) {
-      this.unset("balance");
-    } else {
-      this.set("balance", Value.fromBigInt(value as BigInt));
-    }
-  }
-
-  get pack(): string {
-    let value = this.get("pack");
-    return value.toString();
-  }
-
-  set pack(value: string) {
-    this.set("pack", Value.fromString(value));
-  }
-
-  get reward(): string {
-    let value = this.get("reward");
-    return value.toString();
-  }
-
-  set reward(value: string) {
-    this.set("reward", Value.fromString(value));
   }
 }
 
@@ -417,6 +359,15 @@ export class PackReward extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get owner(): string {
+    let value = this.get("owner");
+    return value.toString();
+  }
+
+  set owner(value: string) {
+    this.set("owner", Value.fromString(value));
+  }
+
   get tokenId(): BigInt {
     let value = this.get("tokenId");
     return value.toBigInt();
@@ -453,13 +404,21 @@ export class PackReward extends Entity {
     this.set("pack", Value.fromString(value));
   }
 
-  get reward(): string {
+  get reward(): string | null {
     let value = this.get("reward");
-    return value.toString();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set reward(value: string) {
-    this.set("reward", Value.fromString(value));
+  set reward(value: string | null) {
+    if (value === null) {
+      this.unset("reward");
+    } else {
+      this.set("reward", Value.fromString(value as string));
+    }
   }
 }
 
@@ -592,6 +551,15 @@ export class RewardOwnership extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get owner(): string {
+    let value = this.get("owner");
+    return value.toString();
+  }
+
+  set owner(value: string) {
+    this.set("owner", Value.fromString(value));
   }
 
   get balance(): BigInt {
