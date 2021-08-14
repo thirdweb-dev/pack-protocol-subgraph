@@ -19,14 +19,18 @@ dataSources:
         - Account
         - Pack
         - PackOwnership
+        - PackReward
+        - PackRewardOwnership
       abis:
         - name: Pack
           file: ./abis/Pack.json
+        - name: ERC1155
+          file: ./abis/ERC1155.json
       eventHandlers:
         - event: PackCreated(indexed address,indexed address,(uint256,address,string,uint256,uint256,uint256),(address,uint256[],uint256[]))
           handler: handlePackCreated
-        # - event: PackOpenFulfilled(indexed uint256,indexed address,bytes32,indexed address,uint256)
-        #   handler: handlePackOpenFulfilled
+        - event: PackOpenFulfilled(indexed uint256,indexed address,bytes32,indexed address,uint256)
+          handler: handlePackOpenFulfilled
         - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
           handler: handleTransferBatch
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)

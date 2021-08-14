@@ -92,23 +92,6 @@ export class Account extends Entity {
       this.set("packsCreated", Value.fromStringArray(value as Array<string>));
     }
   }
-
-  get rewardsCreated(): Array<string> | null {
-    let value = this.get("rewardsCreated");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
-  }
-
-  set rewardsCreated(value: Array<string> | null) {
-    if (value === null) {
-      this.unset("rewardsCreated");
-    } else {
-      this.set("rewardsCreated", Value.fromStringArray(value as Array<string>));
-    }
-  }
 }
 
 export class PackOwnership extends Entity {
@@ -169,7 +152,7 @@ export class PackOwnership extends Entity {
   }
 }
 
-export class RewardOwnership extends Entity {
+export class PackRewardOwnership extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -177,17 +160,17 @@ export class RewardOwnership extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save RewardOwnership entity without an ID");
+    assert(id !== null, "Cannot save PackRewardOwnership entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save RewardOwnership entity with non-string ID. " +
+      "Cannot save PackRewardOwnership entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("RewardOwnership", id.toString(), this);
+    store.set("PackRewardOwnership", id.toString(), this);
   }
 
-  static load(id: string): RewardOwnership | null {
-    return store.get("RewardOwnership", id) as RewardOwnership | null;
+  static load(id: string): PackRewardOwnership | null {
+    return store.get("PackRewardOwnership", id) as PackRewardOwnership | null;
   }
 
   get id(): string {
@@ -223,6 +206,15 @@ export class RewardOwnership extends Entity {
     } else {
       this.set("balance", Value.fromBigInt(value as BigInt));
     }
+  }
+
+  get pack(): string {
+    let value = this.get("pack");
+    return value.toString();
+  }
+
+  set pack(value: string) {
+    this.set("pack", Value.fromString(value));
   }
 
   get reward(): string {
@@ -395,6 +387,82 @@ export class Pack extends Entity {
   }
 }
 
+export class PackReward extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save PackReward entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save PackReward entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("PackReward", id.toString(), this);
+  }
+
+  static load(id: string): PackReward | null {
+    return store.get("PackReward", id) as PackReward | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get tokenId(): BigInt {
+    let value = this.get("tokenId");
+    return value.toBigInt();
+  }
+
+  set tokenId(value: BigInt) {
+    this.set("tokenId", Value.fromBigInt(value));
+  }
+
+  get uri(): string {
+    let value = this.get("uri");
+    return value.toString();
+  }
+
+  set uri(value: string) {
+    this.set("uri", Value.fromString(value));
+  }
+
+  get supply(): BigInt {
+    let value = this.get("supply");
+    return value.toBigInt();
+  }
+
+  set supply(value: BigInt) {
+    this.set("supply", Value.fromBigInt(value));
+  }
+
+  get pack(): string {
+    let value = this.get("pack");
+    return value.toString();
+  }
+
+  set pack(value: string) {
+    this.set("pack", Value.fromString(value));
+  }
+
+  get reward(): string {
+    let value = this.get("reward");
+    return value.toString();
+  }
+
+  set reward(value: string) {
+    this.set("reward", Value.fromString(value));
+  }
+}
+
 export class Reward extends Entity {
   constructor(id: string) {
     super();
@@ -423,23 +491,6 @@ export class Reward extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
-  }
-
-  get pack(): string | null {
-    let value = this.get("pack");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set pack(value: string | null) {
-    if (value === null) {
-      this.unset("pack");
-    } else {
-      this.set("pack", Value.fromString(value as string));
-    }
   }
 
   get tokenId(): BigInt {
@@ -510,6 +561,55 @@ export class Reward extends Entity {
     } else {
       this.set("underlyingToken", Value.fromString(value as string));
     }
+  }
+}
+
+export class RewardOwnership extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save RewardOwnership entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save RewardOwnership entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("RewardOwnership", id.toString(), this);
+  }
+
+  static load(id: string): RewardOwnership | null {
+    return store.get("RewardOwnership", id) as RewardOwnership | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get balance(): BigInt {
+    let value = this.get("balance");
+    return value.toBigInt();
+  }
+
+  set balance(value: BigInt) {
+    this.set("balance", Value.fromBigInt(value));
+  }
+
+  get reward(): string {
+    let value = this.get("reward");
+    return value.toString();
+  }
+
+  set reward(value: string) {
+    this.set("reward", Value.fromString(value));
   }
 }
 

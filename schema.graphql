@@ -3,9 +3,9 @@
 type Account @entity {
   id: ID!
   packsOwned: [PackOwnership!] @derivedFrom(field: "owner")
-  rewardsOwned: [RewardOwnership!] @derivedFrom(field: "owner")
+  rewardsOwned: [PackRewardOwnership!] @derivedFrom(field: "owner")
   packsCreated: [Pack!] @derivedFrom(field: "creator")
-  rewardsCreated: [Reward!] @derivedFrom(field: "creator")
+  #rewardsCreated: [PackReward!] @derivedFrom(field: "creator")
 }
 
 # ID: account public address + pack tokenId
@@ -17,11 +17,12 @@ type PackOwnership @entity {
 }
 
 # account public address + reward contract address + reward tokenId
-type RewardOwnership @entity {
+type PackRewardOwnership @entity {
   id: ID!
   owner: Account!
   balance: BigInt
-  reward: Reward!
+  pack: Pack!
+  reward: PackReward!
 }
 
 # Pack
@@ -31,12 +32,21 @@ type Pack @entity {
   packId: BigInt!
   creator: Account!
   owners: [PackOwnership!] @derivedFrom(field: "pack")
-  rewards: [Reward!] @derivedFrom(field: "pack")
+  rewards: [PackReward!] @derivedFrom(field: "pack")
   uri: String
   supply: BigInt
   openStartTimestamp: BigInt
   openEndTimestamp: BigInt
   rewardContract: Bytes!
+}
+
+type PackReward @entity {
+  id: ID!
+  tokenId: BigInt!
+  uri: String!
+  supply: BigInt!
+  pack: Pack!
+  reward: Reward!
 }
 
 # Reward
@@ -49,13 +59,18 @@ enum UnderlyingTokenType {
 # ID: reward contract address + tokenId
 type Reward @entity {
   id: ID!
-  pack: Pack
   tokenId: BigInt!
   creator: Account!
   owners: [RewardOwnership!] @derivedFrom(field: "reward")
   uri: String!
   supply: BigInt!
   underlyingToken: RewardUnderlyingToken @derivedFrom(field: "reward")
+}
+
+type RewardOwnership @entity {
+  id: ID!
+  balance: BigInt!
+  reward: Reward!
 }
 
 # ID: reward contract address + tokenId + '-underlying'
