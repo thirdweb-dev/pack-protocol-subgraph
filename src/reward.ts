@@ -35,7 +35,7 @@ export function handleNativeRewards(event: NativeRewards): void {
   for (let i = 0; i < rewardIds.length; i++) {
     // Create `Reward`
     let tokenId = rewardIds[i];
-    let rewardId = `${rewardContractAddress}-${tokenId.toString()}`;
+    let rewardId = rewardContractAddress + "-" + tokenId.toString();
     let reward = Reward.load(rewardId);
     if (reward == null) {
       reward = new Reward(rewardId);
@@ -69,7 +69,7 @@ export function handleNativeRewards(event: NativeRewards): void {
 export function handleTransferSingle(event: TransferSingle): void {
   // Get `Reward` ID
   let rewardContractAddress = event.address.toHexString();
-  let rewardId = rewardContractAddress + event.params.id.toString();
+  let rewardId = rewardContractAddress + "-" + event.params.id.toString();
 
   // Create `Account` for receiver if it doesn't exist.
   let receiverAccountId = event.params.to.toHexString();
@@ -144,7 +144,7 @@ export function handleTransferBatch(event: TransferBatch): void {
   let rewardContractAddress = event.address.toHexString();
   for (let i = 0; i < rewardIds.length; i++) {
     // Get reward tokenId
-    let rewardId = rewardContractAddress + rewardIds[i].toString();
+    let rewardId = rewardContractAddress + "-" + rewardIds[i].toString();
 
     if (event.params.from.toHexString() != zeroAddress) {
       // Update `RewardOwnership` for sender

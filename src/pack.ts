@@ -46,8 +46,9 @@ export function handlePackCreated(event: PackCreated): void {
   for (let i = 0; i < tokenIds.length; i++) {
     let source = rewards.source;
     let tokenId = tokenIds[i];
-    let packRewardId = `${packId}-${source.toHexString()}-${tokenId.toString()}`;
-    let rewardId = `${source.toHexString()}-${tokenId.toString()}`;
+    let packRewardId =
+      packId + "-" + source.toHexString() + "-" + tokenId.toString();
+    let rewardId = source.toHexString() + "-" + tokenId.toString();
 
     let packReward = new PackReward(packRewardId);
     packReward.owner = creatorAccountId;
@@ -67,7 +68,7 @@ export function handlePackCreated(event: PackCreated): void {
 export function handlePackOpenFulfilled(event: PackOpenFulfilled): void {
   let packId = event.params.packId.toString();
   let rewardId = event.params.rewardId.toString();
-  let rewardContract = event.params.rewardContract;
+  let rewardContract = event.params.rewardContract.toHexString();
 
   let accountId = event.params.opener.toHexString();
   let account = Account.load(accountId);
@@ -76,7 +77,7 @@ export function handlePackOpenFulfilled(event: PackOpenFulfilled): void {
     account.save();
   }
 
-  let packRewardId = `${packId}-${rewardContract.toString()}-${rewardId.toString()}`;
+  let packRewardId = packId + "-" + rewardContract + "-" + rewardId;
   let packReward = PackReward.load(packRewardId);
   if (packReward) {
     packReward.supply = packReward.supply.minus(BigInt.fromI32(1));
@@ -208,4 +209,3 @@ export function handleTransferBatch(event: TransferBatch): void {
     }
   }
 }
-
