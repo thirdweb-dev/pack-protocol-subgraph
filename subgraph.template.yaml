@@ -20,7 +20,6 @@ dataSources:
         - Pack
         - PackOwnership
         - PackReward
-        - PackRewardOwnership
       abis:
         - name: Pack
           file: ./abis/Pack.json

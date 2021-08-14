@@ -8,13 +8,7 @@ import {
 } from "../generated/Pack/Pack";
 import { ERC1155 } from "../generated/Pack/ERC1155";
 
-import {
-  Account,
-  Pack,
-  PackOwnership,
-  PackReward,
-  PackRewardOwnership,
-} from "../generated/schema";
+import { Account, Pack, PackOwnership, PackReward } from "../generated/schema";
 
 const zeroAddress: string = "0x0000000000000000000000000000000000000000";
 
@@ -80,15 +74,14 @@ export function handlePackOpenFulfilled(event: PackOpenFulfilled): void {
     account.save();
   }
 
-  const pack = Pack.load(packId);
-  if (pack) {
-    const packRewardId = `${packId}-${rewardContract.toString()}-${rewardId.toString()}`;
-    const packReward = PackReward.load(packRewardId);
-    if (packReward) {
-      packReward.supply = packReward.supply.minus(BigInt.fromI32(1));
-      packReward.save();
-    }
+  const packRewardId = `${packId}-${rewardContract.toString()}-${rewardId.toString()}`;
+  const packReward = PackReward.load(packRewardId);
+  if (packReward) {
+    packReward.supply = packReward.supply.minus(BigInt.fromI32(1));
+    packReward.save();
   }
+
+  // todo: if we do packrewardownership here, there's no event for transfer of packrewardownership
 }
 
 /**

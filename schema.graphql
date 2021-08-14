@@ -3,7 +3,7 @@
 type Account @entity {
   id: ID!
   packsOwned: [PackOwnership!] @derivedFrom(field: "owner")
-  rewardsOwned: [PackRewardOwnership!] @derivedFrom(field: "owner")
+  #rewardsOwned: [PackRewardOwnership!] @derivedFrom(field: "owner")
   packsCreated: [Pack!] @derivedFrom(field: "creator")
   #rewardsCreated: [PackReward!] @derivedFrom(field: "creator")
 }
