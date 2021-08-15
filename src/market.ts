@@ -46,12 +46,11 @@ export function handleNewListing(event: NewListing): void {
     listing.currencyDecimals = BigInt.fromI32(0);
     listing.currencyPrice = listing.price.toBigDecimal();
   } else {
-    let decimals32 = BigInt.fromI32(call_decimals.value);
-    listing.currencyDecimals = decimals32;
+    listing.currencyDecimals = BigInt.fromI32(call_decimals.value);
     let dec = BigInt.fromI32(10)
-      .mod(decimals32)
+      .pow(call_decimals.value as u8)
       .toBigDecimal();
-    listing.currencyPrice = listing.price.toBigDecimal().div(dec);
+    listing.currencyPrice = listing.price.divDecimal(dec);
   }
 
   listing.save();
@@ -105,12 +104,11 @@ export function handleListingUpdate(event: ListingUpdate): void {
     listing.currencyDecimals = BigInt.fromI32(0);
     listing.currencyPrice = listing.price.toBigDecimal();
   } else {
-    let decimals32 = BigInt.fromI32(call_decimals.value);
-    listing.currencyDecimals = decimals32;
+    listing.currencyDecimals = BigInt.fromI32(call_decimals.value);
     let dec = BigInt.fromI32(10)
-      .mod(decimals32)
+      .pow(call_decimals.value as u8)
       .toBigDecimal();
-    listing.currencyPrice = listing.price.toBigDecimal().div(dec);
+    listing.currencyPrice = listing.price.divDecimal(dec);
   }
   listing.save();
 }
@@ -130,4 +128,3 @@ export function handleNewSale(event: NewSale): void {
   listing.quantity = quantity;
   listing.save();
 }
-
