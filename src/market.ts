@@ -124,6 +124,10 @@ export function handleNewSale(event: NewSale): void {
   let quantity = event.params.listing.quantity;
   if (quantity.equals(BigInt.fromI32(0))) {
     store.remove("Listing", listingId);
+    return;
   }
+  let listing = Listing.load(listingId);
+  listing.quantity = quantity;
+  listing.save();
 }
 
