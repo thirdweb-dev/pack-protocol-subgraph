@@ -1,4 +1,4 @@
-import { store, BigInt } from "@graphprotocol/graph-ts";
+import { store, BigInt, BigDecimal } from "@graphprotocol/graph-ts";
 
 import { NewListing, ListingUpdate, NewSale } from "../generated/Market/Market";
 import { ERC20 } from "../generated/Market/ERC20";
@@ -35,13 +35,23 @@ export function handleNewListing(event: NewListing): void {
   listing.saleEndTimestamp = event.params.listing.saleEnd;
 
   let erc20 = ERC20.bind(event.params.listing.currency);
-  listing.currencyName = erc20.name();
-  listing.currencySymbol = erc20.symbol();
-  listing.currencyDecimals = BigInt.fromI32(erc20.decimals());
-  if (listing.currencyDecimals.gt(BigInt.fromI32(0))) {
-    listing.currencyPrice = listing.price
-      .toBigDecimal()
-      .div(listing.currencyDecimals.toBigDecimal());
+  let call_name = erc20.try_name();
+  listing.currencyName = !call_name.reverted ? call_name.value : "";
+
+  let call_symbol = erc20.try_symbol();
+  listing.currencySymbol = !call_symbol.reverted ? call_symbol.value : "";
+
+  let call_decimals = erc20.try_decimals();
+  if (call_decimals.reverted) {
+    listing.currencyDecimals = BigInt.fromI32(0);
+    listing.currencyPrice = listing.price.toBigDecimal();
+  } else {
+    let decimals32 = BigInt.fromI32(call_decimals.value);
+    listing.currencyDecimals = decimals32;
+    let dec = BigInt.fromI32(10)
+      .mod(decimals32)
+      .toBigDecimal();
+    listing.currencyPrice = listing.price.toBigDecimal().div(dec);
   }
 
   listing.save();
@@ -84,13 +94,23 @@ export function handleListingUpdate(event: ListingUpdate): void {
   listing.saleEndTimestamp = event.params.listing.saleEnd;
 
   let erc20 = ERC20.bind(event.params.listing.currency);
-  listing.currencyName = erc20.name();
-  listing.currencySymbol = erc20.symbol();
-  listing.currencyDecimals = BigInt.fromI32(erc20.decimals());
-  if (listing.currencyDecimals.gt(BigInt.fromI32(0))) {
-    listing.currencyPrice = listing.price
-      .toBigDecimal()
-      .div(listing.currencyDecimals.toBigDecimal());
+  let call_name = erc20.try_name();
+  listing.currencyName = !call_name.reverted ? call_name.value : "";
+
+  let call_symbol = erc20.try_symbol();
+  listing.currencySymbol = !call_symbol.reverted ? call_symbol.value : "";
+
+  let call_decimals = erc20.try_decimals();
+  if (call_decimals.reverted) {
+    listing.currencyDecimals = BigInt.fromI32(0);
+    listing.currencyPrice = listing.price.toBigDecimal();
+  } else {
+    let decimals32 = BigInt.fromI32(call_decimals.value);
+    listing.currencyDecimals = decimals32;
+    let dec = BigInt.fromI32(10)
+      .mod(decimals32)
+      .toBigDecimal();
+    listing.currencyPrice = listing.price.toBigDecimal().div(dec);
   }
   listing.save();
 }
@@ -99,7 +119,7 @@ export function handleListingUpdate(event: ListingUpdate): void {
  *
  * @param   event NewSale(address indexed assetContract, address indexed seller, uint indexed listingId, address buyer, Listing listing);
  */
-export function hanbdleNewSale(event: NewSale): void {
+export function handleNewSale(event: NewSale): void {
   let listingId = event.params.listingId.toString();
   let quantity = event.params.listing.quantity;
   if (quantity.equals(BigInt.fromI32(0))) {
