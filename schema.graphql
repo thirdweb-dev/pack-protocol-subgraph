@@ -112,15 +112,32 @@ type RewardUnderlyingTokenERC721 @entity {
 }
 
 # Listing
-# ID: listing ID
-type Listing @entity {
+# ID: assetContract + tokenId
+type TokenListing @entity {
   id: ID!
-  seller: Account!
   assetContract: Bytes!
   tokenId: BigInt
-  quantity: BigInt
-  currency: Bytes!
-  price: BigInt!
+  uri: String
+  listings: [Listing!]! @derivedFrom(field: "tokenListing")
+}
+# ID: listing id
+type Listing @entity {
+  id: ID!
+  tokenListing: TokenListing!
+  seller: Account!
+  quantity: BigInt!
   saleStartTimestamp: BigInt
   saleEndTimestamp: BigInt
+
+  price: BigInt!
+  currency: Bytes!
+  currencyName: String
+  currencySymbol: String
+  currencyDecimals: BigInt
+  currencyPrice: BigDecimal
+}
+# ID: tx
+type Sale @entity {
+  id: ID!
+  # TODO
 }
