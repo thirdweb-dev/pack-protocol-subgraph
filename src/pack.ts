@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts";
+import { store, BigInt } from "@graphprotocol/graph-ts";
 
 import {
   PackCreated,
@@ -108,8 +108,11 @@ export function handleTransferSingle(event: TransferSingle): void {
     }
 
     senderOwnership.balance = senderOwnership.balance.minus(event.params.value);
-
-    senderOwnership.save();
+    if (senderOwnership.balance.equals(BigInt.fromI32(0))) {
+      store.remove("PackOwnership", senderOwnershipId);
+    } else {
+      senderOwnership.save();
+    }
   }
 
   if (event.params.to.toHexString() == zeroAddress) {
@@ -142,8 +145,11 @@ export function handleTransferSingle(event: TransferSingle): void {
         event.params.value
       );
     }
-
-    receiverOwnership.save();
+    if (receiverOwnership.balance.equals(BigInt.fromI32(0))) {
+      store.remove("PackOwnership", receiverOwnershipId);
+    } else {
+      receiverOwnership.save();
+    }
   }
 }
 
@@ -181,8 +187,11 @@ export function handleTransferBatch(event: TransferBatch): void {
       }
 
       senderOwnership.balance = senderOwnership.balance.minus(values[i]);
-
-      senderOwnership.save();
+      if (senderOwnership.balance.equals(BigInt.fromI32(0))) {
+        store.remove("PackOwnership", senderOwnershipId);
+      } else {
+        senderOwnership.save();
+      }
     }
 
     if (event.params.to.toHexString() == zeroAddress) {
@@ -205,7 +214,11 @@ export function handleTransferBatch(event: TransferBatch): void {
         receiverOwnership.balance = receiverOwnership.balance.plus(values[i]);
       }
 
-      receiverOwnership.save();
+      if (receiverOwnership.balance.equals(BigInt.fromI32(0))) {
+        store.remove("PackOwnership", receiverOwnershipId);
+      } else {
+        receiverOwnership.save();
+      }
     }
   }
 }
