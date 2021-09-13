@@ -14,7 +14,7 @@ let zeroAddress: string = "0x0000000000000000000000000000000000000000";
 
 /**
  *
- * @param event PackCreated(address indexed rewardContract, address indexed creator, PackState packState, Rewards rewards)
+ * @param event PackCreated(uint indexed packId, address indexed rewardContract, address indexed creator, PackState packState, Rewards rewards)
  */
 export function handlePackCreated(event: PackCreated): void {
   // Update `Account` for creator
@@ -27,10 +27,10 @@ export function handlePackCreated(event: PackCreated): void {
   }
 
   // Create `Pack`
-  let packId = event.params.packState.packId.toString();
+  let packId = event.params.packId.toString();
   let pack = new Pack(packId);
 
-  pack.packId = event.params.packState.packId;
+  pack.packId = event.params.packId;
   pack.creator = creatorAccountId;
   pack.uri = event.params.packState.uri;
   pack.supply = event.params.packState.currentSupply;
@@ -63,25 +63,30 @@ export function handlePackCreated(event: PackCreated): void {
 
 /**
  *
- * @param event PackOpenFulfilled(uint indexed packId, address indexed opener, bytes32 requestId, address indexed rewardContract, uint rewardId);
+ * @param event PackOpenFulfilled(uint indexed packId, address indexed opener, bytes32 requestId, address indexed rewardContract, uint[] rewardIds);
  */
 export function handlePackOpenFulfilled(event: PackOpenFulfilled): void {
   let packId = event.params.packId.toString();
-  let rewardId = event.params.rewardId.toString();
   let rewardContract = event.params.rewardContract.toHexString();
+
+  let rewardIds = event.params.rewardIds;
+
+  for (let i = 0; i < rewardIds.length; i += 1) {
+    let rewardId = rewardIds[i].toString();
+
+    let packRewardId = packId + "-" + rewardContract + "-" + rewardId;
+    let packReward = PackReward.load(packRewardId);
+    if (packReward) {
+        packReward.supply = packReward.supply.minus(BigInt.fromI32(1));
+        packReward.save();
+    }
+  }
 
   let accountId = event.params.opener.toHexString();
   let account = Account.load(accountId);
   if (account == null) {
     account = new Account(accountId);
     account.save();
-  }
-
-  let packRewardId = packId + "-" + rewardContract + "-" + rewardId;
-  let packReward = PackReward.load(packRewardId);
-  if (packReward) {
-    packReward.supply = packReward.supply.minus(BigInt.fromI32(1));
-    packReward.save();
   }
 
   // todo: if we do packrewardownership here, there's no event for transfer of packrewardownership

@@ -4,7 +4,7 @@ import { NewListing, ListingUpdate, NewSale } from "../generated/Market/Market";
 import { ERC20 } from "../generated/Market/ERC20";
 import { ERC1155 } from "../generated/Market/ERC1155";
 
-import { Listing, TokenListing, Sale } from "../generated/schema";
+import { Listing, TokenListing } from "../generated/schema";
 
 /**
  *
