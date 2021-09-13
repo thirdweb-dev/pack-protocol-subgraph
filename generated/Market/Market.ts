@@ -356,33 +356,23 @@ export class Market extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getListing(
-    _seller: Address,
-    _listingId: BigInt
-  ): Market__getListingResultListingStruct {
+  getListing(_listingId: BigInt): Market__getListingResultListingStruct {
     let result = super.call(
       "getListing",
-      "getListing(address,uint256):((address,address,uint256,uint256,address,uint256,uint256,uint256))",
-      [
-        ethereum.Value.fromAddress(_seller),
-        ethereum.Value.fromUnsignedBigInt(_listingId)
-      ]
+      "getListing(uint256):((address,address,uint256,uint256,address,uint256,uint256,uint256))",
+      [ethereum.Value.fromUnsignedBigInt(_listingId)]
     );
 
     return result[0].toTuple() as Market__getListingResultListingStruct;
   }
 
   try_getListing(
-    _seller: Address,
     _listingId: BigInt
   ): ethereum.CallResult<Market__getListingResultListingStruct> {
     let result = super.tryCall(
       "getListing",
-      "getListing(address,uint256):((address,address,uint256,uint256,address,uint256,uint256,uint256))",
-      [
-        ethereum.Value.fromAddress(_seller),
-        ethereum.Value.fromUnsignedBigInt(_listingId)
-      ]
+      "getListing(uint256):((address,address,uint256,uint256,address,uint256,uint256,uint256))",
+      [ethereum.Value.fromUnsignedBigInt(_listingId)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -393,14 +383,11 @@ export class Market extends ethereum.SmartContract {
     );
   }
 
-  listings(param0: Address, param1: BigInt): Market__listingsResult {
+  listings(param0: BigInt): Market__listingsResult {
     let result = super.call(
       "listings",
-      "listings(address,uint256):(address,address,uint256,uint256,address,uint256,uint256,uint256)",
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
+      "listings(uint256):(address,address,uint256,uint256,address,uint256,uint256,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
     return new Market__listingsResult(
@@ -415,17 +402,11 @@ export class Market extends ethereum.SmartContract {
     );
   }
 
-  try_listings(
-    param0: Address,
-    param1: BigInt
-  ): ethereum.CallResult<Market__listingsResult> {
+  try_listings(param0: BigInt): ethereum.CallResult<Market__listingsResult> {
     let result = super.tryCall(
       "listings",
-      "listings(address,uint256):(address,address,uint256,uint256,address,uint256,uint256,uint256)",
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromUnsignedBigInt(param1)
-      ]
+      "listings(uint256):(address,address,uint256,uint256,address,uint256,uint256,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -682,16 +663,12 @@ export class BuyCall__Inputs {
     this._call = call;
   }
 
-  get _seller(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
   get _listingId(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
+    return this._call.inputValues[0].value.toBigInt();
   }
 
   get _quantity(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
+    return this._call.inputValues[1].value.toBigInt();
   }
 }
 

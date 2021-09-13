@@ -194,6 +194,28 @@ export class NativeRewards__Params {
   }
 }
 
+export class OwnershipTransferred extends ethereum.Event {
+  get params(): OwnershipTransferred__Params {
+    return new OwnershipTransferred__Params(this);
+  }
+}
+
+export class OwnershipTransferred__Params {
+  _event: OwnershipTransferred;
+
+  constructor(event: OwnershipTransferred) {
+    this._event = event;
+  }
+
+  get previousOwner(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get newOwner(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+}
+
 export class TransferBatch extends ethereum.Event {
   get params(): TransferBatch__Params {
     return new TransferBatch__Params(this);
@@ -579,47 +601,34 @@ export class Reward extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  onERC721Received(
-    param0: Address,
-    param1: Address,
-    param2: BigInt,
-    param3: Bytes
-  ): Bytes {
-    let result = super.call(
-      "onERC721Received",
-      "onERC721Received(address,address,uint256,bytes):(bytes4)",
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromAddress(param1),
-        ethereum.Value.fromUnsignedBigInt(param2),
-        ethereum.Value.fromBytes(param3)
-      ]
-    );
+  owner(): Address {
+    let result = super.call("owner", "owner():(address)", []);
 
-    return result[0].toBytes();
+    return result[0].toAddress();
   }
 
-  try_onERC721Received(
-    param0: Address,
-    param1: Address,
-    param2: BigInt,
-    param3: Bytes
-  ): ethereum.CallResult<Bytes> {
-    let result = super.tryCall(
-      "onERC721Received",
-      "onERC721Received(address,address,uint256,bytes):(bytes4)",
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromAddress(param1),
-        ethereum.Value.fromUnsignedBigInt(param2),
-        ethereum.Value.fromBytes(param3)
-      ]
-    );
+  try_owner(): ethereum.CallResult<Address> {
+    let result = super.tryCall("owner", "owner():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  pack(): Address {
+    let result = super.call("pack", "pack():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_pack(): ethereum.CallResult<Address> {
+    let result = super.tryCall("pack", "pack():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   rewards(param0: BigInt): Reward__rewardsResult {
@@ -680,6 +689,25 @@ export class Reward extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  tokenURI(_rewardId: BigInt): string {
+    let result = super.call("tokenURI", "tokenURI(uint256):(string)", [
+      ethereum.Value.fromUnsignedBigInt(_rewardId)
+    ]);
+
+    return result[0].toString();
+  }
+
+  try_tokenURI(_rewardId: BigInt): ethereum.CallResult<string> {
+    let result = super.tryCall("tokenURI", "tokenURI(uint256):(string)", [
+      ethereum.Value.fromUnsignedBigInt(_rewardId)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
   uri(_rewardId: BigInt): string {
     let result = super.call("uri", "uri(uint256):(string)", [
       ethereum.Value.fromUnsignedBigInt(_rewardId)
@@ -715,6 +743,10 @@ export class ConstructorCall__Inputs {
 
   constructor(call: ConstructorCall) {
     this._call = call;
+  }
+
+  get _pack(): Address {
+    return this._call.inputValues[0].value.toAddress();
   }
 }
 
@@ -764,49 +796,99 @@ export class CreateNativeRewardsCall__Outputs {
   }
 }
 
-export class OnERC721ReceivedCall extends ethereum.Call {
-  get inputs(): OnERC721ReceivedCall__Inputs {
-    return new OnERC721ReceivedCall__Inputs(this);
+export class CreatePackCall extends ethereum.Call {
+  get inputs(): CreatePackCall__Inputs {
+    return new CreatePackCall__Inputs(this);
   }
 
-  get outputs(): OnERC721ReceivedCall__Outputs {
-    return new OnERC721ReceivedCall__Outputs(this);
-  }
-}
-
-export class OnERC721ReceivedCall__Inputs {
-  _call: OnERC721ReceivedCall;
-
-  constructor(call: OnERC721ReceivedCall) {
-    this._call = call;
-  }
-
-  get value0(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get value1(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get value2(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-
-  get value3(): Bytes {
-    return this._call.inputValues[3].value.toBytes();
+  get outputs(): CreatePackCall__Outputs {
+    return new CreatePackCall__Outputs(this);
   }
 }
 
-export class OnERC721ReceivedCall__Outputs {
-  _call: OnERC721ReceivedCall;
+export class CreatePackCall__Inputs {
+  _call: CreatePackCall;
 
-  constructor(call: OnERC721ReceivedCall) {
+  constructor(call: CreatePackCall) {
     this._call = call;
   }
 
-  get value0(): Bytes {
-    return this._call.outputValues[0].value.toBytes();
+  get _rewardIds(): Array<BigInt> {
+    return this._call.inputValues[0].value.toBigIntArray();
+  }
+
+  get _rewardAmounts(): Array<BigInt> {
+    return this._call.inputValues[1].value.toBigIntArray();
+  }
+
+  get _packURI(): string {
+    return this._call.inputValues[2].value.toString();
+  }
+
+  get _secondsUntilOpenStart(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
+  }
+
+  get _secondsUntilOpenEnd(): BigInt {
+    return this._call.inputValues[4].value.toBigInt();
+  }
+}
+
+export class CreatePackCall__Outputs {
+  _call: CreatePackCall;
+
+  constructor(call: CreatePackCall) {
+    this._call = call;
+  }
+}
+
+export class CreatePackAtomicCall extends ethereum.Call {
+  get inputs(): CreatePackAtomicCall__Inputs {
+    return new CreatePackAtomicCall__Inputs(this);
+  }
+
+  get outputs(): CreatePackAtomicCall__Outputs {
+    return new CreatePackAtomicCall__Outputs(this);
+  }
+}
+
+export class CreatePackAtomicCall__Inputs {
+  _call: CreatePackAtomicCall;
+
+  constructor(call: CreatePackAtomicCall) {
+    this._call = call;
+  }
+
+  get _rewardURIs(): Array<string> {
+    return this._call.inputValues[0].value.toStringArray();
+  }
+
+  get _rewardSupplies(): Array<BigInt> {
+    return this._call.inputValues[1].value.toBigIntArray();
+  }
+
+  get _packURI(): string {
+    return this._call.inputValues[2].value.toString();
+  }
+
+  get _secondsUntilOpenStart(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
+  }
+
+  get _secondsUntilOpenEnd(): BigInt {
+    return this._call.inputValues[4].value.toBigInt();
+  }
+
+  get _rewardsPerOpen(): BigInt {
+    return this._call.inputValues[5].value.toBigInt();
+  }
+}
+
+export class CreatePackAtomicCall__Outputs {
+  _call: CreatePackAtomicCall;
+
+  constructor(call: CreatePackAtomicCall) {
+    this._call = call;
   }
 }
 
@@ -870,6 +952,32 @@ export class RedeemERC721Call__Outputs {
   _call: RedeemERC721Call;
 
   constructor(call: RedeemERC721Call) {
+    this._call = call;
+  }
+}
+
+export class RenounceOwnershipCall extends ethereum.Call {
+  get inputs(): RenounceOwnershipCall__Inputs {
+    return new RenounceOwnershipCall__Inputs(this);
+  }
+
+  get outputs(): RenounceOwnershipCall__Outputs {
+    return new RenounceOwnershipCall__Outputs(this);
+  }
+}
+
+export class RenounceOwnershipCall__Inputs {
+  _call: RenounceOwnershipCall;
+
+  constructor(call: RenounceOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class RenounceOwnershipCall__Outputs {
+  _call: RenounceOwnershipCall;
+
+  constructor(call: RenounceOwnershipCall) {
     this._call = call;
   }
 }
@@ -996,6 +1104,36 @@ export class SetApprovalForAllCall__Outputs {
   _call: SetApprovalForAllCall;
 
   constructor(call: SetApprovalForAllCall) {
+    this._call = call;
+  }
+}
+
+export class TransferOwnershipCall extends ethereum.Call {
+  get inputs(): TransferOwnershipCall__Inputs {
+    return new TransferOwnershipCall__Inputs(this);
+  }
+
+  get outputs(): TransferOwnershipCall__Outputs {
+    return new TransferOwnershipCall__Outputs(this);
+  }
+}
+
+export class TransferOwnershipCall__Inputs {
+  _call: TransferOwnershipCall;
+
+  constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+
+  get newOwner(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class TransferOwnershipCall__Outputs {
+  _call: TransferOwnershipCall;
+
+  constructor(call: TransferOwnershipCall) {
     this._call = call;
   }
 }
