@@ -70,16 +70,16 @@ export class ListingUpdateListingStruct extends ethereum.Tuple {
   }
 }
 
-export class MarketFeesChanged extends ethereum.Event {
-  get params(): MarketFeesChanged__Params {
-    return new MarketFeesChanged__Params(this);
+export class MarketFeesUpdated extends ethereum.Event {
+  get params(): MarketFeesUpdated__Params {
+    return new MarketFeesUpdated__Params(this);
   }
 }
 
-export class MarketFeesChanged__Params {
-  _event: MarketFeesChanged;
+export class MarketFeesUpdated__Params {
+  _event: MarketFeesUpdated;
 
-  constructor(event: MarketFeesChanged) {
+  constructor(event: MarketFeesUpdated) {
     this._event = event;
   }
 
@@ -383,6 +383,29 @@ export class Market extends ethereum.SmartContract {
     );
   }
 
+  isTrustedForwarder(forwarder: Address): boolean {
+    let result = super.call(
+      "isTrustedForwarder",
+      "isTrustedForwarder(address):(bool)",
+      [ethereum.Value.fromAddress(forwarder)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isTrustedForwarder(forwarder: Address): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isTrustedForwarder",
+      "isTrustedForwarder(address):(bool)",
+      [ethereum.Value.fromAddress(forwarder)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   listings(param0: BigInt): Market__listingsResult {
     let result = super.call(
       "listings",
@@ -601,6 +624,10 @@ export class ConstructorCall__Inputs {
 
   get _controlCenter(): Address {
     return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _trustedForwarder(): Address {
+    return this._call.inputValues[1].value.toAddress();
   }
 }
 

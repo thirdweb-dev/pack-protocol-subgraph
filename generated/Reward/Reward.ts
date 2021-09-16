@@ -586,6 +586,29 @@ export class Reward extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  isTrustedForwarder(forwarder: Address): boolean {
+    let result = super.call(
+      "isTrustedForwarder",
+      "isTrustedForwarder(address):(bool)",
+      [ethereum.Value.fromAddress(forwarder)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isTrustedForwarder(forwarder: Address): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isTrustedForwarder",
+      "isTrustedForwarder(address):(bool)",
+      [ethereum.Value.fromAddress(forwarder)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   nextTokenId(): BigInt {
     let result = super.call("nextTokenId", "nextTokenId():(uint256)", []);
 
@@ -748,6 +771,10 @@ export class ConstructorCall__Inputs {
   get _pack(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
+
+  get _trustedForwarder(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
 }
 
 export class ConstructorCall__Outputs {
@@ -793,52 +820,6 @@ export class CreateNativeRewardsCall__Outputs {
 
   get rewardIds(): Array<BigInt> {
     return this._call.outputValues[0].value.toBigIntArray();
-  }
-}
-
-export class CreatePackCall extends ethereum.Call {
-  get inputs(): CreatePackCall__Inputs {
-    return new CreatePackCall__Inputs(this);
-  }
-
-  get outputs(): CreatePackCall__Outputs {
-    return new CreatePackCall__Outputs(this);
-  }
-}
-
-export class CreatePackCall__Inputs {
-  _call: CreatePackCall;
-
-  constructor(call: CreatePackCall) {
-    this._call = call;
-  }
-
-  get _rewardIds(): Array<BigInt> {
-    return this._call.inputValues[0].value.toBigIntArray();
-  }
-
-  get _rewardAmounts(): Array<BigInt> {
-    return this._call.inputValues[1].value.toBigIntArray();
-  }
-
-  get _packURI(): string {
-    return this._call.inputValues[2].value.toString();
-  }
-
-  get _secondsUntilOpenStart(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
-
-  get _secondsUntilOpenEnd(): BigInt {
-    return this._call.inputValues[4].value.toBigInt();
-  }
-}
-
-export class CreatePackCall__Outputs {
-  _call: CreatePackCall;
-
-  constructor(call: CreatePackCall) {
-    this._call = call;
   }
 }
 

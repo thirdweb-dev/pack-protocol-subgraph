@@ -688,6 +688,29 @@ export class Pack extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  isTrustedForwarder(forwarder: Address): boolean {
+    let result = super.call(
+      "isTrustedForwarder",
+      "isTrustedForwarder(address):(bool)",
+      [ethereum.Value.fromAddress(forwarder)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isTrustedForwarder(forwarder: Address): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isTrustedForwarder",
+      "isTrustedForwarder(address):(bool)",
+      [ethereum.Value.fromAddress(forwarder)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   nextTokenId(): BigInt {
     let result = super.call("nextTokenId", "nextTokenId():(uint256)", []);
 
@@ -1036,6 +1059,10 @@ export class ConstructorCall__Inputs {
 
   get _fees(): BigInt {
     return this._call.inputValues[5].value.toBigInt();
+  }
+
+  get _trustedForwarder(): Address {
+    return this._call.inputValues[6].value.toAddress();
   }
 }
 
