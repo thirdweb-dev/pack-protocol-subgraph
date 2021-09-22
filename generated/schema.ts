@@ -521,6 +521,15 @@ export class Reward extends Entity {
       this.set("underlyingToken", Value.fromString(value as string));
     }
   }
+
+  get redeemedAccess(): boolean {
+    let value = this.get("redeemedAccess");
+    return value.toBoolean();
+  }
+
+  set redeemedAccess(value: boolean) {
+    this.set("redeemedAccess", Value.fromBoolean(value));
+  }
 }
 
 export class RewardOwnership extends Entity {

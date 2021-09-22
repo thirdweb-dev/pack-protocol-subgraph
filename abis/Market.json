@@ -2,7 +2,7 @@
   {
     "inputs": [
       {
-        "internalType": "address",
+        "internalType": "address payable",
         "name": "_controlCenter",
         "type": "address"
       },
@@ -10,6 +10,11 @@
         "internalType": "address",
         "name": "_trustedForwarder",
         "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_uri",
+        "type": "string"
       }
     ],
     "stateMutability": "nonpayable",
@@ -32,6 +37,11 @@
       },
       {
         "components": [
+          {
+            "internalType": "uint256",
+            "name": "listingId",
+            "type": "uint256"
+          },
           {
             "internalType": "address",
             "name": "seller",
@@ -71,6 +81,11 @@
             "internalType": "uint256",
             "name": "saleEnd",
             "type": "uint256"
+          },
+          {
+            "internalType": "enum Market.TokenType",
+            "name": "tokenType",
+            "type": "uint8"
           }
         ],
         "indexed": false,
@@ -125,6 +140,11 @@
       {
         "components": [
           {
+            "internalType": "uint256",
+            "name": "listingId",
+            "type": "uint256"
+          },
+          {
             "internalType": "address",
             "name": "seller",
             "type": "address"
@@ -163,6 +183,11 @@
             "internalType": "uint256",
             "name": "saleEnd",
             "type": "uint256"
+          },
+          {
+            "internalType": "enum Market.TokenType",
+            "name": "tokenType",
+            "type": "uint8"
           }
         ],
         "indexed": false,
@@ -202,7 +227,18 @@
         "type": "address"
       },
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "quanitytBought",
+        "type": "uint256"
+      },
+      {
         "components": [
+          {
+            "internalType": "uint256",
+            "name": "listingId",
+            "type": "uint256"
+          },
           {
             "internalType": "address",
             "name": "seller",
@@ -242,6 +278,11 @@
             "internalType": "uint256",
             "name": "saleEnd",
             "type": "uint256"
+          },
+          {
+            "internalType": "enum Market.TokenType",
+            "name": "tokenType",
+            "type": "uint8"
           }
         ],
         "indexed": false,
@@ -255,20 +296,7 @@
   },
   {
     "inputs": [],
-    "name": "MAX_BPS",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "PACK",
+    "name": "_contractURI",
     "outputs": [
       {
         "internalType": "string",
@@ -317,29 +345,28 @@
   },
   {
     "inputs": [],
-    "name": "creatorFeeBps",
+    "name": "contractURI",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "string",
         "name": "",
-        "type": "uint256"
+        "type": "string"
       }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_listingId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getListing",
+    "inputs": [],
+    "name": "getAllListings",
     "outputs": [
       {
         "components": [
+          {
+            "internalType": "uint256",
+            "name": "listingId",
+            "type": "uint256"
+          },
           {
             "internalType": "address",
             "name": "seller",
@@ -379,11 +406,305 @@
             "internalType": "uint256",
             "name": "saleEnd",
             "type": "uint256"
+          },
+          {
+            "internalType": "enum Market.TokenType",
+            "name": "tokenType",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct Market.Listing[]",
+        "name": "allListings",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_listingId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getListing",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "listingId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "seller",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "assetContract",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "quantity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "currency",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "pricePerToken",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "saleStart",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "saleEnd",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum Market.TokenType",
+            "name": "tokenType",
+            "type": "uint8"
           }
         ],
         "internalType": "struct Market.Listing",
         "name": "listing",
         "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_assetContract",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getListingsByAsset",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "listingId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "seller",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "assetContract",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "quantity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "currency",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "pricePerToken",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "saleStart",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "saleEnd",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum Market.TokenType",
+            "name": "tokenType",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct Market.Listing[]",
+        "name": "tokenListings",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_assetContract",
+        "type": "address"
+      }
+    ],
+    "name": "getListingsByAssetContract",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "listingId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "seller",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "assetContract",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "quantity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "currency",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "pricePerToken",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "saleStart",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "saleEnd",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum Market.TokenType",
+            "name": "tokenType",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct Market.Listing[]",
+        "name": "tokenListings",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_seller",
+        "type": "address"
+      }
+    ],
+    "name": "getListingsBySeller",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "listingId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "seller",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "assetContract",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "quantity",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "currency",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "pricePerToken",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "saleStart",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "saleEnd",
+            "type": "uint256"
+          },
+          {
+            "internalType": "enum Market.TokenType",
+            "name": "tokenType",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct Market.Listing[]",
+        "name": "sellerListings",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",
@@ -462,6 +783,11 @@
     "name": "listings",
     "outputs": [
       {
+        "internalType": "uint256",
+        "name": "listingId",
+        "type": "uint256"
+      },
+      {
         "internalType": "address",
         "name": "seller",
         "type": "address"
@@ -500,6 +826,11 @@
         "internalType": "uint256",
         "name": "saleEnd",
         "type": "uint256"
+      },
+      {
+        "internalType": "enum Market.TokenType",
+        "name": "tokenType",
+        "type": "uint8"
       }
     ],
     "stateMutability": "view",
@@ -584,32 +915,48 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "protocolFeeBps",
-    "outputs": [
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
       }
     ],
-    "stateMutability": "view",
+    "name": "onERC721Received",
+    "outputs": [
+      {
+        "internalType": "bytes4",
+        "name": "",
+        "type": "bytes4"
+      }
+    ],
+    "stateMutability": "pure",
     "type": "function"
   },
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_protocolCut",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_creatorCut",
-        "type": "uint256"
+        "internalType": "string",
+        "name": "_URI",
+        "type": "string"
       }
     ],
-    "name": "setFees",
+    "name": "setContractURI",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

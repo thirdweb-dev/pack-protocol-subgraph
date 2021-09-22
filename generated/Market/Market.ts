@@ -37,36 +37,44 @@ export class ListingUpdate__Params {
 }
 
 export class ListingUpdateListingStruct extends ethereum.Tuple {
-  get seller(): Address {
-    return this[0].toAddress();
+  get listingId(): BigInt {
+    return this[0].toBigInt();
   }
 
-  get assetContract(): Address {
+  get seller(): Address {
     return this[1].toAddress();
   }
 
-  get tokenId(): BigInt {
-    return this[2].toBigInt();
+  get assetContract(): Address {
+    return this[2].toAddress();
   }
 
-  get quantity(): BigInt {
+  get tokenId(): BigInt {
     return this[3].toBigInt();
   }
 
+  get quantity(): BigInt {
+    return this[4].toBigInt();
+  }
+
   get currency(): Address {
-    return this[4].toAddress();
+    return this[5].toAddress();
   }
 
   get pricePerToken(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get saleStart(): BigInt {
     return this[6].toBigInt();
   }
 
-  get saleEnd(): BigInt {
+  get saleStart(): BigInt {
     return this[7].toBigInt();
+  }
+
+  get saleEnd(): BigInt {
+    return this[8].toBigInt();
+  }
+
+  get tokenType(): i32 {
+    return this[9].toI32();
   }
 }
 
@@ -123,36 +131,44 @@ export class NewListing__Params {
 }
 
 export class NewListingListingStruct extends ethereum.Tuple {
-  get seller(): Address {
-    return this[0].toAddress();
+  get listingId(): BigInt {
+    return this[0].toBigInt();
   }
 
-  get assetContract(): Address {
+  get seller(): Address {
     return this[1].toAddress();
   }
 
-  get tokenId(): BigInt {
-    return this[2].toBigInt();
+  get assetContract(): Address {
+    return this[2].toAddress();
   }
 
-  get quantity(): BigInt {
+  get tokenId(): BigInt {
     return this[3].toBigInt();
   }
 
+  get quantity(): BigInt {
+    return this[4].toBigInt();
+  }
+
   get currency(): Address {
-    return this[4].toAddress();
+    return this[5].toAddress();
   }
 
   get pricePerToken(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get saleStart(): BigInt {
     return this[6].toBigInt();
   }
 
-  get saleEnd(): BigInt {
+  get saleStart(): BigInt {
     return this[7].toBigInt();
+  }
+
+  get saleEnd(): BigInt {
+    return this[8].toBigInt();
+  }
+
+  get tokenType(): i32 {
+    return this[9].toI32();
   }
 }
 
@@ -185,98 +201,290 @@ export class NewSale__Params {
     return this._event.parameters[3].value.toAddress();
   }
 
+  get quanitytBought(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
+  }
+
   get listing(): NewSaleListingStruct {
-    return this._event.parameters[4].value.toTuple() as NewSaleListingStruct;
+    return this._event.parameters[5].value.toTuple() as NewSaleListingStruct;
   }
 }
 
 export class NewSaleListingStruct extends ethereum.Tuple {
-  get seller(): Address {
-    return this[0].toAddress();
+  get listingId(): BigInt {
+    return this[0].toBigInt();
   }
 
-  get assetContract(): Address {
+  get seller(): Address {
     return this[1].toAddress();
   }
 
-  get tokenId(): BigInt {
-    return this[2].toBigInt();
+  get assetContract(): Address {
+    return this[2].toAddress();
   }
 
-  get quantity(): BigInt {
+  get tokenId(): BigInt {
     return this[3].toBigInt();
   }
 
+  get quantity(): BigInt {
+    return this[4].toBigInt();
+  }
+
   get currency(): Address {
-    return this[4].toAddress();
+    return this[5].toAddress();
   }
 
   get pricePerToken(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get saleStart(): BigInt {
     return this[6].toBigInt();
   }
 
-  get saleEnd(): BigInt {
+  get saleStart(): BigInt {
     return this[7].toBigInt();
+  }
+
+  get saleEnd(): BigInt {
+    return this[8].toBigInt();
+  }
+
+  get tokenType(): i32 {
+    return this[9].toI32();
+  }
+}
+
+export class Market__getAllListingsResultAllListingsStruct extends ethereum.Tuple {
+  get listingId(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get seller(): Address {
+    return this[1].toAddress();
+  }
+
+  get assetContract(): Address {
+    return this[2].toAddress();
+  }
+
+  get tokenId(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get quantity(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get currency(): Address {
+    return this[5].toAddress();
+  }
+
+  get pricePerToken(): BigInt {
+    return this[6].toBigInt();
+  }
+
+  get saleStart(): BigInt {
+    return this[7].toBigInt();
+  }
+
+  get saleEnd(): BigInt {
+    return this[8].toBigInt();
+  }
+
+  get tokenType(): i32 {
+    return this[9].toI32();
   }
 }
 
 export class Market__getListingResultListingStruct extends ethereum.Tuple {
-  get seller(): Address {
-    return this[0].toAddress();
+  get listingId(): BigInt {
+    return this[0].toBigInt();
   }
 
-  get assetContract(): Address {
+  get seller(): Address {
     return this[1].toAddress();
   }
 
-  get tokenId(): BigInt {
-    return this[2].toBigInt();
+  get assetContract(): Address {
+    return this[2].toAddress();
   }
 
-  get quantity(): BigInt {
+  get tokenId(): BigInt {
     return this[3].toBigInt();
   }
 
+  get quantity(): BigInt {
+    return this[4].toBigInt();
+  }
+
   get currency(): Address {
-    return this[4].toAddress();
+    return this[5].toAddress();
   }
 
   get pricePerToken(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get saleStart(): BigInt {
     return this[6].toBigInt();
   }
 
-  get saleEnd(): BigInt {
+  get saleStart(): BigInt {
     return this[7].toBigInt();
+  }
+
+  get saleEnd(): BigInt {
+    return this[8].toBigInt();
+  }
+
+  get tokenType(): i32 {
+    return this[9].toI32();
+  }
+}
+
+export class Market__getListingsByAssetResultTokenListingsStruct extends ethereum.Tuple {
+  get listingId(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get seller(): Address {
+    return this[1].toAddress();
+  }
+
+  get assetContract(): Address {
+    return this[2].toAddress();
+  }
+
+  get tokenId(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get quantity(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get currency(): Address {
+    return this[5].toAddress();
+  }
+
+  get pricePerToken(): BigInt {
+    return this[6].toBigInt();
+  }
+
+  get saleStart(): BigInt {
+    return this[7].toBigInt();
+  }
+
+  get saleEnd(): BigInt {
+    return this[8].toBigInt();
+  }
+
+  get tokenType(): i32 {
+    return this[9].toI32();
+  }
+}
+
+export class Market__getListingsByAssetContractResultTokenListingsStruct extends ethereum.Tuple {
+  get listingId(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get seller(): Address {
+    return this[1].toAddress();
+  }
+
+  get assetContract(): Address {
+    return this[2].toAddress();
+  }
+
+  get tokenId(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get quantity(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get currency(): Address {
+    return this[5].toAddress();
+  }
+
+  get pricePerToken(): BigInt {
+    return this[6].toBigInt();
+  }
+
+  get saleStart(): BigInt {
+    return this[7].toBigInt();
+  }
+
+  get saleEnd(): BigInt {
+    return this[8].toBigInt();
+  }
+
+  get tokenType(): i32 {
+    return this[9].toI32();
+  }
+}
+
+export class Market__getListingsBySellerResultSellerListingsStruct extends ethereum.Tuple {
+  get listingId(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get seller(): Address {
+    return this[1].toAddress();
+  }
+
+  get assetContract(): Address {
+    return this[2].toAddress();
+  }
+
+  get tokenId(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get quantity(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get currency(): Address {
+    return this[5].toAddress();
+  }
+
+  get pricePerToken(): BigInt {
+    return this[6].toBigInt();
+  }
+
+  get saleStart(): BigInt {
+    return this[7].toBigInt();
+  }
+
+  get saleEnd(): BigInt {
+    return this[8].toBigInt();
+  }
+
+  get tokenType(): i32 {
+    return this[9].toI32();
   }
 }
 
 export class Market__listingsResult {
-  value0: Address;
+  value0: BigInt;
   value1: Address;
-  value2: BigInt;
+  value2: Address;
   value3: BigInt;
-  value4: Address;
-  value5: BigInt;
+  value4: BigInt;
+  value5: Address;
   value6: BigInt;
   value7: BigInt;
+  value8: BigInt;
+  value9: i32;
 
   constructor(
-    value0: Address,
+    value0: BigInt,
     value1: Address,
-    value2: BigInt,
+    value2: Address,
     value3: BigInt,
-    value4: Address,
-    value5: BigInt,
+    value4: BigInt,
+    value5: Address,
     value6: BigInt,
-    value7: BigInt
+    value7: BigInt,
+    value8: BigInt,
+    value9: i32
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -286,18 +494,25 @@ export class Market__listingsResult {
     this.value5 = value5;
     this.value6 = value6;
     this.value7 = value7;
+    this.value8 = value8;
+    this.value9 = value9;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
     let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromAddress(this.value0));
+    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
     map.set("value1", ethereum.Value.fromAddress(this.value1));
-    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
+    map.set("value2", ethereum.Value.fromAddress(this.value2));
     map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
-    map.set("value4", ethereum.Value.fromAddress(this.value4));
-    map.set("value5", ethereum.Value.fromUnsignedBigInt(this.value5));
+    map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
+    map.set("value5", ethereum.Value.fromAddress(this.value5));
     map.set("value6", ethereum.Value.fromUnsignedBigInt(this.value6));
     map.set("value7", ethereum.Value.fromUnsignedBigInt(this.value7));
+    map.set("value8", ethereum.Value.fromUnsignedBigInt(this.value8));
+    map.set(
+      "value9",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value9))
+    );
     return map;
   }
 }
@@ -307,29 +522,14 @@ export class Market extends ethereum.SmartContract {
     return new Market("Market", address);
   }
 
-  MAX_BPS(): BigInt {
-    let result = super.call("MAX_BPS", "MAX_BPS():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_MAX_BPS(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("MAX_BPS", "MAX_BPS():(uint256)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  PACK(): string {
-    let result = super.call("PACK", "PACK():(string)", []);
+  _contractURI(): string {
+    let result = super.call("_contractURI", "_contractURI():(string)", []);
 
     return result[0].toString();
   }
 
-  try_PACK(): ethereum.CallResult<string> {
-    let result = super.tryCall("PACK", "PACK():(string)", []);
+  try__contractURI(): ethereum.CallResult<string> {
+    let result = super.tryCall("_contractURI", "_contractURI():(string)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -337,29 +537,54 @@ export class Market extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toString());
   }
 
-  creatorFeeBps(): BigInt {
-    let result = super.call("creatorFeeBps", "creatorFeeBps():(uint256)", []);
+  contractURI(): string {
+    let result = super.call("contractURI", "contractURI():(string)", []);
 
-    return result[0].toBigInt();
+    return result[0].toString();
   }
 
-  try_creatorFeeBps(): ethereum.CallResult<BigInt> {
+  try_contractURI(): ethereum.CallResult<string> {
+    let result = super.tryCall("contractURI", "contractURI():(string)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  getAllListings(): Array<Market__getAllListingsResultAllListingsStruct> {
+    let result = super.call(
+      "getAllListings",
+      "getAllListings():((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      []
+    );
+
+    return result[0].toTupleArray<
+      Market__getAllListingsResultAllListingsStruct
+    >();
+  }
+
+  try_getAllListings(): ethereum.CallResult<
+    Array<Market__getAllListingsResultAllListingsStruct>
+  > {
     let result = super.tryCall(
-      "creatorFeeBps",
-      "creatorFeeBps():(uint256)",
+      "getAllListings",
+      "getAllListings():((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
       []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
+    return ethereum.CallResult.fromValue(
+      value[0].toTupleArray<Market__getAllListingsResultAllListingsStruct>()
+    );
   }
 
   getListing(_listingId: BigInt): Market__getListingResultListingStruct {
     let result = super.call(
       "getListing",
-      "getListing(uint256):((address,address,uint256,uint256,address,uint256,uint256,uint256))",
+      "getListing(uint256):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8))",
       [ethereum.Value.fromUnsignedBigInt(_listingId)]
     );
 
@@ -371,7 +596,7 @@ export class Market extends ethereum.SmartContract {
   ): ethereum.CallResult<Market__getListingResultListingStruct> {
     let result = super.tryCall(
       "getListing",
-      "getListing(uint256):((address,address,uint256,uint256,address,uint256,uint256,uint256))",
+      "getListing(uint256):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8))",
       [ethereum.Value.fromUnsignedBigInt(_listingId)]
     );
     if (result.reverted) {
@@ -380,6 +605,119 @@ export class Market extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(
       value[0].toTuple() as Market__getListingResultListingStruct
+    );
+  }
+
+  getListingsByAsset(
+    _assetContract: Address,
+    _tokenId: BigInt
+  ): Array<Market__getListingsByAssetResultTokenListingsStruct> {
+    let result = super.call(
+      "getListingsByAsset",
+      "getListingsByAsset(address,uint256):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      [
+        ethereum.Value.fromAddress(_assetContract),
+        ethereum.Value.fromUnsignedBigInt(_tokenId)
+      ]
+    );
+
+    return result[0].toTupleArray<
+      Market__getListingsByAssetResultTokenListingsStruct
+    >();
+  }
+
+  try_getListingsByAsset(
+    _assetContract: Address,
+    _tokenId: BigInt
+  ): ethereum.CallResult<
+    Array<Market__getListingsByAssetResultTokenListingsStruct>
+  > {
+    let result = super.tryCall(
+      "getListingsByAsset",
+      "getListingsByAsset(address,uint256):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      [
+        ethereum.Value.fromAddress(_assetContract),
+        ethereum.Value.fromUnsignedBigInt(_tokenId)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      value[0].toTupleArray<
+        Market__getListingsByAssetResultTokenListingsStruct
+      >()
+    );
+  }
+
+  getListingsByAssetContract(
+    _assetContract: Address
+  ): Array<Market__getListingsByAssetContractResultTokenListingsStruct> {
+    let result = super.call(
+      "getListingsByAssetContract",
+      "getListingsByAssetContract(address):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      [ethereum.Value.fromAddress(_assetContract)]
+    );
+
+    return result[0].toTupleArray<
+      Market__getListingsByAssetContractResultTokenListingsStruct
+    >();
+  }
+
+  try_getListingsByAssetContract(
+    _assetContract: Address
+  ): ethereum.CallResult<
+    Array<Market__getListingsByAssetContractResultTokenListingsStruct>
+  > {
+    let result = super.tryCall(
+      "getListingsByAssetContract",
+      "getListingsByAssetContract(address):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      [ethereum.Value.fromAddress(_assetContract)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      value[0].toTupleArray<
+        Market__getListingsByAssetContractResultTokenListingsStruct
+      >()
+    );
+  }
+
+  getListingsBySeller(
+    _seller: Address
+  ): Array<Market__getListingsBySellerResultSellerListingsStruct> {
+    let result = super.call(
+      "getListingsBySeller",
+      "getListingsBySeller(address):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      [ethereum.Value.fromAddress(_seller)]
+    );
+
+    return result[0].toTupleArray<
+      Market__getListingsBySellerResultSellerListingsStruct
+    >();
+  }
+
+  try_getListingsBySeller(
+    _seller: Address
+  ): ethereum.CallResult<
+    Array<Market__getListingsBySellerResultSellerListingsStruct>
+  > {
+    let result = super.tryCall(
+      "getListingsBySeller",
+      "getListingsBySeller(address):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      [ethereum.Value.fromAddress(_seller)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      value[0].toTupleArray<
+        Market__getListingsBySellerResultSellerListingsStruct
+      >()
     );
   }
 
@@ -409,26 +747,28 @@ export class Market extends ethereum.SmartContract {
   listings(param0: BigInt): Market__listingsResult {
     let result = super.call(
       "listings",
-      "listings(uint256):(address,address,uint256,uint256,address,uint256,uint256,uint256)",
+      "listings(uint256):(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
     return new Market__listingsResult(
-      result[0].toAddress(),
+      result[0].toBigInt(),
       result[1].toAddress(),
-      result[2].toBigInt(),
+      result[2].toAddress(),
       result[3].toBigInt(),
-      result[4].toAddress(),
-      result[5].toBigInt(),
+      result[4].toBigInt(),
+      result[5].toAddress(),
       result[6].toBigInt(),
-      result[7].toBigInt()
+      result[7].toBigInt(),
+      result[8].toBigInt(),
+      result[9].toI32()
     );
   }
 
   try_listings(param0: BigInt): ethereum.CallResult<Market__listingsResult> {
     let result = super.tryCall(
       "listings",
-      "listings(uint256):(address,address,uint256,uint256,address,uint256,uint256,uint256)",
+      "listings(uint256):(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -437,14 +777,16 @@ export class Market extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(
       new Market__listingsResult(
-        value[0].toAddress(),
+        value[0].toBigInt(),
         value[1].toAddress(),
-        value[2].toBigInt(),
+        value[2].toAddress(),
         value[3].toBigInt(),
-        value[4].toAddress(),
-        value[5].toBigInt(),
+        value[4].toBigInt(),
+        value[5].toAddress(),
         value[6].toBigInt(),
-        value[7].toBigInt()
+        value[7].toBigInt(),
+        value[8].toBigInt(),
+        value[9].toI32()
       )
     );
   }
@@ -543,23 +885,47 @@ export class Market extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
-  protocolFeeBps(): BigInt {
-    let result = super.call("protocolFeeBps", "protocolFeeBps():(uint256)", []);
+  onERC721Received(
+    param0: Address,
+    param1: Address,
+    param2: BigInt,
+    param3: Bytes
+  ): Bytes {
+    let result = super.call(
+      "onERC721Received",
+      "onERC721Received(address,address,uint256,bytes):(bytes4)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromUnsignedBigInt(param2),
+        ethereum.Value.fromBytes(param3)
+      ]
+    );
 
-    return result[0].toBigInt();
+    return result[0].toBytes();
   }
 
-  try_protocolFeeBps(): ethereum.CallResult<BigInt> {
+  try_onERC721Received(
+    param0: Address,
+    param1: Address,
+    param2: BigInt,
+    param3: Bytes
+  ): ethereum.CallResult<Bytes> {
     let result = super.tryCall(
-      "protocolFeeBps",
-      "protocolFeeBps():(uint256)",
-      []
+      "onERC721Received",
+      "onERC721Received(address,address,uint256,bytes):(bytes4)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromUnsignedBigInt(param2),
+        ethereum.Value.fromBytes(param3)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
+    return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
   supportsInterface(interfaceId: Bytes): boolean {
@@ -628,6 +994,10 @@ export class ConstructorCall__Inputs {
 
   get _trustedForwarder(): Address {
     return this._call.inputValues[1].value.toAddress();
+  }
+
+  get _uri(): string {
+    return this._call.inputValues[2].value.toString();
   }
 }
 
@@ -861,36 +1231,32 @@ export class OnERC1155ReceivedCall__Outputs {
   }
 }
 
-export class SetFeesCall extends ethereum.Call {
-  get inputs(): SetFeesCall__Inputs {
-    return new SetFeesCall__Inputs(this);
+export class SetContractURICall extends ethereum.Call {
+  get inputs(): SetContractURICall__Inputs {
+    return new SetContractURICall__Inputs(this);
   }
 
-  get outputs(): SetFeesCall__Outputs {
-    return new SetFeesCall__Outputs(this);
+  get outputs(): SetContractURICall__Outputs {
+    return new SetContractURICall__Outputs(this);
   }
 }
 
-export class SetFeesCall__Inputs {
-  _call: SetFeesCall;
+export class SetContractURICall__Inputs {
+  _call: SetContractURICall;
 
-  constructor(call: SetFeesCall) {
+  constructor(call: SetContractURICall) {
     this._call = call;
   }
 
-  get _protocolCut(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get _creatorCut(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
+  get _URI(): string {
+    return this._call.inputValues[0].value.toString();
   }
 }
 
-export class SetFeesCall__Outputs {
-  _call: SetFeesCall;
+export class SetContractURICall__Outputs {
+  _call: SetContractURICall;
 
-  constructor(call: SetFeesCall) {
+  constructor(call: SetContractURICall) {
     this._call = call;
   }
 }

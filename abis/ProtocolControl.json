@@ -1,6 +1,22 @@
 [
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_nftlabs",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_uri",
+        "type": "string"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -34,18 +50,37 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "marketFeeBps",
+        "type": "uint256"
+      }
+    ],
+    "name": "MarketFeeBps",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
         "internalType": "bytes32",
         "name": "moduleId",
         "type": "bytes32"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "module",
         "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "moduleType",
+        "type": "uint256"
       }
     ],
-    "name": "ModuleInitialized",
+    "name": "ModuleUpdated",
     "type": "event"
   },
   {
@@ -53,18 +88,12 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bytes32",
-        "name": "moduleId",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
         "internalType": "address",
-        "name": "module",
+        "name": "_nftlabsTreasury",
         "type": "address"
       }
     ],
-    "name": "ModuleUpdated",
+    "name": "NFTLabsTreasury",
     "type": "event"
   },
   {
@@ -170,12 +199,12 @@
   },
   {
     "inputs": [],
-    "name": "MARKET",
+    "name": "MAX_BPS",
     "outputs": [
       {
-        "internalType": "bytes32",
+        "internalType": "uint128",
         "name": "",
-        "type": "bytes32"
+        "type": "uint128"
       }
     ],
     "stateMutability": "view",
@@ -183,7 +212,7 @@
   },
   {
     "inputs": [],
-    "name": "PACK",
+    "name": "NFTLABS",
     "outputs": [
       {
         "internalType": "bytes32",
@@ -202,6 +231,75 @@
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_contractURI",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_newModuleAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_moduleType",
+        "type": "uint8"
+      }
+    ],
+    "name": "addModule",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "moduleId",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "contractURI",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_moduleType",
+        "type": "uint256"
+      }
+    ],
+    "name": "getAllModulesOfType",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "allModules",
+        "type": "address[]"
       }
     ],
     "stateMutability": "view",
@@ -269,21 +367,35 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "marketFeeBps",
+    "outputs": [
       {
-        "internalType": "address",
-        "name": "_pack",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_market",
-        "type": "address"
+        "internalType": "uint128",
+        "name": "",
+        "type": "uint128"
       }
     ],
-    "name": "initializeProtocol",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "moduleType",
+    "outputs": [
+      {
+        "internalType": "enum ProtocolControl.ModuleType",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -306,6 +418,38 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "nftlabsTreasury",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "numOfModuleType",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "bool",
@@ -313,7 +457,7 @@
         "type": "bool"
       }
     ],
-    "name": "pausePackProtocol",
+    "name": "pauseProtocol",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -350,6 +494,19 @@
       }
     ],
     "name": "revokeRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_URI",
+        "type": "string"
+      }
+    ],
+    "name": "setContractURI",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -412,6 +569,19 @@
   {
     "inputs": [
       {
+        "internalType": "uint128",
+        "name": "_newFeeBps",
+        "type": "uint128"
+      }
+    ],
+    "name": "updateMarketFeeBps",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes32",
         "name": "_moduleId",
         "type": "bytes32"
@@ -426,5 +596,22 @@
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_newTreasury",
+        "type": "address"
+      }
+    ],
+    "name": "updateNftlabsTreasury",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
   }
 ]

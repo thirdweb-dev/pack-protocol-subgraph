@@ -10,6 +10,74 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class AccessNFTRedeemed extends ethereum.Event {
+  get params(): AccessNFTRedeemed__Params {
+    return new AccessNFTRedeemed__Params(this);
+  }
+}
+
+export class AccessNFTRedeemed__Params {
+  _event: AccessNFTRedeemed;
+
+  constructor(event: AccessNFTRedeemed) {
+    this._event = event;
+  }
+
+  get redeemer(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get nftTokenId(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get accessNftId(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
+}
+
+export class AccessNFTsCreated extends ethereum.Event {
+  get params(): AccessNFTsCreated__Params {
+    return new AccessNFTsCreated__Params(this);
+  }
+}
+
+export class AccessNFTsCreated__Params {
+  _event: AccessNFTsCreated;
+
+  constructor(event: AccessNFTsCreated) {
+    this._event = event;
+  }
+
+  get creator(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get nftIds(): Array<BigInt> {
+    return this._event.parameters[1].value.toBigIntArray();
+  }
+
+  get nftURIs(): Array<string> {
+    return this._event.parameters[2].value.toStringArray();
+  }
+
+  get acessNftIds(): Array<BigInt> {
+    return this._event.parameters[3].value.toBigIntArray();
+  }
+
+  get accessNftURIs(): Array<string> {
+    return this._event.parameters[4].value.toStringArray();
+  }
+
+  get nftSupplies(): Array<BigInt> {
+    return this._event.parameters[5].value.toBigIntArray();
+  }
+}
+
 export class ApprovalForAll extends ethereum.Event {
   get params(): ApprovalForAll__Params {
     return new ApprovalForAll__Params(this);
@@ -33,158 +101,6 @@ export class ApprovalForAll__Params {
 
   get approved(): boolean {
     return this._event.parameters[2].value.toBoolean();
-  }
-}
-
-export class PackCreated extends ethereum.Event {
-  get params(): PackCreated__Params {
-    return new PackCreated__Params(this);
-  }
-}
-
-export class PackCreated__Params {
-  _event: PackCreated;
-
-  constructor(event: PackCreated) {
-    this._event = event;
-  }
-
-  get packId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get rewardContract(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get creator(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get packState(): PackCreatedPackStateStruct {
-    return this._event.parameters[3].value.toTuple() as PackCreatedPackStateStruct;
-  }
-
-  get rewards(): PackCreatedRewardsStruct {
-    return this._event.parameters[4].value.toTuple() as PackCreatedRewardsStruct;
-  }
-}
-
-export class PackCreatedPackStateStruct extends ethereum.Tuple {
-  get uri(): string {
-    return this[0].toString();
-  }
-
-  get creator(): Address {
-    return this[1].toAddress();
-  }
-
-  get currentSupply(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get openStart(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get openEnd(): BigInt {
-    return this[4].toBigInt();
-  }
-}
-
-export class PackCreatedRewardsStruct extends ethereum.Tuple {
-  get source(): Address {
-    return this[0].toAddress();
-  }
-
-  get tokenIds(): Array<BigInt> {
-    return this[1].toBigIntArray();
-  }
-
-  get amountsPacked(): Array<BigInt> {
-    return this[2].toBigIntArray();
-  }
-
-  get rewardsPerOpen(): BigInt {
-    return this[3].toBigInt();
-  }
-}
-
-export class PackOpenFulfilled extends ethereum.Event {
-  get params(): PackOpenFulfilled__Params {
-    return new PackOpenFulfilled__Params(this);
-  }
-}
-
-export class PackOpenFulfilled__Params {
-  _event: PackOpenFulfilled;
-
-  constructor(event: PackOpenFulfilled) {
-    this._event = event;
-  }
-
-  get packId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get opener(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get requestId(): Bytes {
-    return this._event.parameters[2].value.toBytes();
-  }
-
-  get rewardContract(): Address {
-    return this._event.parameters[3].value.toAddress();
-  }
-
-  get rewardIds(): Array<BigInt> {
-    return this._event.parameters[4].value.toBigIntArray();
-  }
-}
-
-export class PackOpenRequest extends ethereum.Event {
-  get params(): PackOpenRequest__Params {
-    return new PackOpenRequest__Params(this);
-  }
-}
-
-export class PackOpenRequest__Params {
-  _event: PackOpenRequest;
-
-  constructor(event: PackOpenRequest) {
-    this._event = event;
-  }
-
-  get packId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get opener(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get requestId(): Bytes {
-    return this._event.parameters[2].value.toBytes();
-  }
-}
-
-export class PackRoyaltyUpdated extends ethereum.Event {
-  get params(): PackRoyaltyUpdated__Params {
-    return new PackRoyaltyUpdated__Params(this);
-  }
-}
-
-export class PackRoyaltyUpdated__Params {
-  _event: PackRoyaltyUpdated;
-
-  constructor(event: PackRoyaltyUpdated) {
-    this._event = event;
-  }
-
-  get royaltyBps(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
   }
 }
 
@@ -281,6 +197,24 @@ export class RoleRevoked__Params {
 
   get sender(): Address {
     return this._event.parameters[2].value.toAddress();
+  }
+}
+
+export class RoyaltyUpdated extends ethereum.Event {
+  get params(): RoyaltyUpdated__Params {
+    return new RoyaltyUpdated__Params(this);
+  }
+}
+
+export class RoyaltyUpdated__Params {
+  _event: RoyaltyUpdated;
+
+  constructor(event: RoyaltyUpdated) {
+    this._event = event;
+  }
+
+  get royaltyBps(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 }
 
@@ -392,91 +326,39 @@ export class Unpaused__Params {
   }
 }
 
-export class Pack__getPackResultPackStruct extends ethereum.Tuple {
-  get uri(): string {
-    return this[0].toString();
-  }
+export class AccessNFT__accessNftInfoResult {
+  value0: Address;
+  value1: string;
+  value2: BigInt;
 
-  get creator(): Address {
-    return this[1].toAddress();
-  }
-
-  get currentSupply(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get openStart(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get openEnd(): BigInt {
-    return this[4].toBigInt();
-  }
-}
-
-export class Pack__getPackWithRewardsResultPackStruct extends ethereum.Tuple {
-  get uri(): string {
-    return this[0].toString();
-  }
-
-  get creator(): Address {
-    return this[1].toAddress();
-  }
-
-  get currentSupply(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get openStart(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get openEnd(): BigInt {
-    return this[4].toBigInt();
-  }
-}
-
-export class Pack__getPackWithRewardsResult {
-  value0: Pack__getPackWithRewardsResultPackStruct;
-  value1: Address;
-  value2: Array<BigInt>;
-  value3: Array<BigInt>;
-
-  constructor(
-    value0: Pack__getPackWithRewardsResultPackStruct,
-    value1: Address,
-    value2: Array<BigInt>,
-    value3: Array<BigInt>
-  ) {
+  constructor(value0: Address, value1: string, value2: BigInt) {
     this.value0 = value0;
     this.value1 = value1;
     this.value2 = value2;
-    this.value3 = value3;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
     let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromTuple(this.value0));
-    map.set("value1", ethereum.Value.fromAddress(this.value1));
-    map.set("value2", ethereum.Value.fromUnsignedBigIntArray(this.value2));
-    map.set("value3", ethereum.Value.fromUnsignedBigIntArray(this.value3));
+    map.set("value0", ethereum.Value.fromAddress(this.value0));
+    map.set("value1", ethereum.Value.fromString(this.value1));
+    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
     return map;
   }
 }
 
-export class Pack__packsResult {
-  value0: string;
-  value1: Address;
+export class AccessNFT__nftInfoResult {
+  value0: Address;
+  value1: string;
   value2: BigInt;
   value3: BigInt;
-  value4: BigInt;
+  value4: i32;
 
   constructor(
-    value0: string,
-    value1: Address,
+    value0: Address,
+    value1: string,
     value2: BigInt,
     value3: BigInt,
-    value4: BigInt
+    value4: i32
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -487,33 +369,19 @@ export class Pack__packsResult {
 
   toMap(): TypedMap<string, ethereum.Value> {
     let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromString(this.value0));
-    map.set("value1", ethereum.Value.fromAddress(this.value1));
+    map.set("value0", ethereum.Value.fromAddress(this.value0));
+    map.set("value1", ethereum.Value.fromString(this.value1));
     map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
     map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
-    map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
+    map.set(
+      "value4",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value4))
+    );
     return map;
   }
 }
 
-export class Pack__randomnessRequestsResult {
-  value0: BigInt;
-  value1: Address;
-
-  constructor(value0: BigInt, value1: Address) {
-    this.value0 = value0;
-    this.value1 = value1;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
-    map.set("value1", ethereum.Value.fromAddress(this.value1));
-    return map;
-  }
-}
-
-export class Pack__rewardsResult {
+export class AccessNFT__royaltyInfoResult {
   value0: Address;
   value1: BigInt;
 
@@ -530,26 +398,9 @@ export class Pack__rewardsResult {
   }
 }
 
-export class Pack__royaltyInfoResult {
-  value0: Address;
-  value1: BigInt;
-
-  constructor(value0: Address, value1: BigInt) {
-    this.value0 = value0;
-    this.value1 = value1;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromAddress(this.value0));
-    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
-    return map;
-  }
-}
-
-export class Pack extends ethereum.SmartContract {
-  static bind(address: Address): Pack {
-    return new Pack("Pack", address);
+export class AccessNFT extends ethereum.SmartContract {
+  static bind(address: Address): AccessNFT {
+    return new AccessNFT("AccessNFT", address);
   }
 
   DEFAULT_ADMIN_ROLE(): Bytes {
@@ -618,6 +469,41 @@ export class Pack extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  accessNftInfo(param0: BigInt): AccessNFT__accessNftInfoResult {
+    let result = super.call(
+      "accessNftInfo",
+      "accessNftInfo(uint256):(address,string,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+
+    return new AccessNFT__accessNftInfoResult(
+      result[0].toAddress(),
+      result[1].toString(),
+      result[2].toBigInt()
+    );
+  }
+
+  try_accessNftInfo(
+    param0: BigInt
+  ): ethereum.CallResult<AccessNFT__accessNftInfoResult> {
+    let result = super.tryCall(
+      "accessNftInfo",
+      "accessNftInfo(uint256):(address,string,uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new AccessNFT__accessNftInfoResult(
+        value[0].toAddress(),
+        value[1].toString(),
+        value[2].toBigInt()
+      )
+    );
   }
 
   balanceOf(account: Address, id: BigInt): BigInt {
@@ -696,119 +582,43 @@ export class Pack extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toString());
   }
 
-  creator(_packId: BigInt): Address {
-    let result = super.call("creator", "creator(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(_packId)
-    ]);
-
-    return result[0].toAddress();
-  }
-
-  try_creator(_packId: BigInt): ethereum.CallResult<Address> {
-    let result = super.tryCall("creator", "creator(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(_packId)
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  currentRequestId(param0: BigInt, param1: Address): Bytes {
+  createAccessNfts(
+    _nftURIs: Array<string>,
+    _accessNftURIs: Array<string>,
+    _nftSupplies: Array<BigInt>
+  ): Array<BigInt> {
     let result = super.call(
-      "currentRequestId",
-      "currentRequestId(uint256,address):(bytes32)",
+      "createAccessNfts",
+      "createAccessNfts(string[],string[],uint256[]):(uint256[])",
       [
-        ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromAddress(param1)
+        ethereum.Value.fromStringArray(_nftURIs),
+        ethereum.Value.fromStringArray(_accessNftURIs),
+        ethereum.Value.fromUnsignedBigIntArray(_nftSupplies)
       ]
     );
 
-    return result[0].toBytes();
+    return result[0].toBigIntArray();
   }
 
-  try_currentRequestId(
-    param0: BigInt,
-    param1: Address
-  ): ethereum.CallResult<Bytes> {
+  try_createAccessNfts(
+    _nftURIs: Array<string>,
+    _accessNftURIs: Array<string>,
+    _nftSupplies: Array<BigInt>
+  ): ethereum.CallResult<Array<BigInt>> {
     let result = super.tryCall(
-      "currentRequestId",
-      "currentRequestId(uint256,address):(bytes32)",
+      "createAccessNfts",
+      "createAccessNfts(string[],string[],uint256[]):(uint256[])",
       [
-        ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromAddress(param1)
+        ethereum.Value.fromStringArray(_nftURIs),
+        ethereum.Value.fromStringArray(_accessNftURIs),
+        ethereum.Value.fromUnsignedBigIntArray(_nftSupplies)
       ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  getPack(_packId: BigInt): Pack__getPackResultPackStruct {
-    let result = super.call(
-      "getPack",
-      "getPack(uint256):((string,address,uint256,uint256,uint256))",
-      [ethereum.Value.fromUnsignedBigInt(_packId)]
-    );
-
-    return result[0].toTuple() as Pack__getPackResultPackStruct;
-  }
-
-  try_getPack(
-    _packId: BigInt
-  ): ethereum.CallResult<Pack__getPackResultPackStruct> {
-    let result = super.tryCall(
-      "getPack",
-      "getPack(uint256):((string,address,uint256,uint256,uint256))",
-      [ethereum.Value.fromUnsignedBigInt(_packId)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      value[0].toTuple() as Pack__getPackResultPackStruct
-    );
-  }
-
-  getPackWithRewards(_packId: BigInt): Pack__getPackWithRewardsResult {
-    let result = super.call(
-      "getPackWithRewards",
-      "getPackWithRewards(uint256):((string,address,uint256,uint256,uint256),address,uint256[],uint256[])",
-      [ethereum.Value.fromUnsignedBigInt(_packId)]
-    );
-
-    return new Pack__getPackWithRewardsResult(
-      result[0].toTuple() as Pack__getPackWithRewardsResultPackStruct,
-      result[1].toAddress(),
-      result[2].toBigIntArray(),
-      result[3].toBigIntArray()
-    ) as Pack__getPackWithRewardsResult;
-  }
-
-  try_getPackWithRewards(
-    _packId: BigInt
-  ): ethereum.CallResult<Pack__getPackWithRewardsResult> {
-    let result = super.tryCall(
-      "getPackWithRewards",
-      "getPackWithRewards(uint256):((string,address,uint256,uint256,uint256),address,uint256[],uint256[])",
-      [ethereum.Value.fromUnsignedBigInt(_packId)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new Pack__getPackWithRewardsResult(
-        value[0].toTuple() as Pack__getPackWithRewardsResultPackStruct,
-        value[1].toAddress(),
-        value[2].toBigIntArray(),
-        value[3].toBigIntArray()
-      ) as Pack__getPackWithRewardsResult
-    );
+    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
   }
 
   getRoleAdmin(role: Bytes): Bytes {
@@ -975,139 +785,26 @@ export class Pack extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  onERC1155BatchReceived(
-    param0: Address,
-    _from: Address,
-    _ids: Array<BigInt>,
-    _values: Array<BigInt>,
-    _data: Bytes
-  ): Bytes {
+  nftInfo(param0: BigInt): AccessNFT__nftInfoResult {
     let result = super.call(
-      "onERC1155BatchReceived",
-      "onERC1155BatchReceived(address,address,uint256[],uint256[],bytes):(bytes4)",
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromAddress(_from),
-        ethereum.Value.fromUnsignedBigIntArray(_ids),
-        ethereum.Value.fromUnsignedBigIntArray(_values),
-        ethereum.Value.fromBytes(_data)
-      ]
-    );
-
-    return result[0].toBytes();
-  }
-
-  try_onERC1155BatchReceived(
-    param0: Address,
-    _from: Address,
-    _ids: Array<BigInt>,
-    _values: Array<BigInt>,
-    _data: Bytes
-  ): ethereum.CallResult<Bytes> {
-    let result = super.tryCall(
-      "onERC1155BatchReceived",
-      "onERC1155BatchReceived(address,address,uint256[],uint256[],bytes):(bytes4)",
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromAddress(_from),
-        ethereum.Value.fromUnsignedBigIntArray(_ids),
-        ethereum.Value.fromUnsignedBigIntArray(_values),
-        ethereum.Value.fromBytes(_data)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  onERC1155Received(
-    param0: Address,
-    param1: Address,
-    param2: BigInt,
-    param3: BigInt,
-    param4: Bytes
-  ): Bytes {
-    let result = super.call(
-      "onERC1155Received",
-      "onERC1155Received(address,address,uint256,uint256,bytes):(bytes4)",
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromAddress(param1),
-        ethereum.Value.fromUnsignedBigInt(param2),
-        ethereum.Value.fromUnsignedBigInt(param3),
-        ethereum.Value.fromBytes(param4)
-      ]
-    );
-
-    return result[0].toBytes();
-  }
-
-  try_onERC1155Received(
-    param0: Address,
-    param1: Address,
-    param2: BigInt,
-    param3: BigInt,
-    param4: Bytes
-  ): ethereum.CallResult<Bytes> {
-    let result = super.tryCall(
-      "onERC1155Received",
-      "onERC1155Received(address,address,uint256,uint256,bytes):(bytes4)",
-      [
-        ethereum.Value.fromAddress(param0),
-        ethereum.Value.fromAddress(param1),
-        ethereum.Value.fromUnsignedBigInt(param2),
-        ethereum.Value.fromUnsignedBigInt(param3),
-        ethereum.Value.fromBytes(param4)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  packRoyaltyBps(): BigInt {
-    let result = super.call("packRoyaltyBps", "packRoyaltyBps():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_packRoyaltyBps(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "packRoyaltyBps",
-      "packRoyaltyBps():(uint256)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  packs(param0: BigInt): Pack__packsResult {
-    let result = super.call(
-      "packs",
-      "packs(uint256):(string,address,uint256,uint256,uint256)",
+      "nftInfo",
+      "nftInfo(uint256):(address,string,uint256,uint256,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
-    return new Pack__packsResult(
-      result[0].toString(),
-      result[1].toAddress(),
+    return new AccessNFT__nftInfoResult(
+      result[0].toAddress(),
+      result[1].toString(),
       result[2].toBigInt(),
       result[3].toBigInt(),
-      result[4].toBigInt()
+      result[4].toI32()
     );
   }
 
-  try_packs(param0: BigInt): ethereum.CallResult<Pack__packsResult> {
+  try_nftInfo(param0: BigInt): ethereum.CallResult<AccessNFT__nftInfoResult> {
     let result = super.tryCall(
-      "packs",
-      "packs(uint256):(string,address,uint256,uint256,uint256)",
+      "nftInfo",
+      "nftInfo(uint256):(address,string,uint256,uint256,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -1115,12 +812,12 @@ export class Pack extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new Pack__packsResult(
-        value[0].toString(),
-        value[1].toAddress(),
+      new AccessNFT__nftInfoResult(
+        value[0].toAddress(),
+        value[1].toString(),
         value[2].toBigInt(),
         value[3].toBigInt(),
-        value[4].toBigInt()
+        value[4].toI32()
       )
     );
   }
@@ -1140,63 +837,25 @@ export class Pack extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  randomnessRequests(param0: Bytes): Pack__randomnessRequestsResult {
-    let result = super.call(
-      "randomnessRequests",
-      "randomnessRequests(bytes32):(uint256,address)",
-      [ethereum.Value.fromFixedBytes(param0)]
-    );
+  royaltyBps(): BigInt {
+    let result = super.call("royaltyBps", "royaltyBps():(uint256)", []);
 
-    return new Pack__randomnessRequestsResult(
-      result[0].toBigInt(),
-      result[1].toAddress()
-    );
+    return result[0].toBigInt();
   }
 
-  try_randomnessRequests(
-    param0: Bytes
-  ): ethereum.CallResult<Pack__randomnessRequestsResult> {
-    let result = super.tryCall(
-      "randomnessRequests",
-      "randomnessRequests(bytes32):(uint256,address)",
-      [ethereum.Value.fromFixedBytes(param0)]
-    );
+  try_royaltyBps(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("royaltyBps", "royaltyBps():(uint256)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new Pack__randomnessRequestsResult(
-        value[0].toBigInt(),
-        value[1].toAddress()
-      )
-    );
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  rewards(param0: BigInt): Pack__rewardsResult {
-    let result = super.call("rewards", "rewards(uint256):(address,uint256)", [
-      ethereum.Value.fromUnsignedBigInt(param0)
-    ]);
-
-    return new Pack__rewardsResult(result[0].toAddress(), result[1].toBigInt());
-  }
-
-  try_rewards(param0: BigInt): ethereum.CallResult<Pack__rewardsResult> {
-    let result = super.tryCall(
-      "rewards",
-      "rewards(uint256):(address,uint256)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new Pack__rewardsResult(value[0].toAddress(), value[1].toBigInt())
-    );
-  }
-
-  royaltyInfo(tokenId: BigInt, salePrice: BigInt): Pack__royaltyInfoResult {
+  royaltyInfo(
+    tokenId: BigInt,
+    salePrice: BigInt
+  ): AccessNFT__royaltyInfoResult {
     let result = super.call(
       "royaltyInfo",
       "royaltyInfo(uint256,uint256):(address,uint256)",
@@ -1206,7 +865,7 @@ export class Pack extends ethereum.SmartContract {
       ]
     );
 
-    return new Pack__royaltyInfoResult(
+    return new AccessNFT__royaltyInfoResult(
       result[0].toAddress(),
       result[1].toBigInt()
     );
@@ -1215,7 +874,7 @@ export class Pack extends ethereum.SmartContract {
   try_royaltyInfo(
     tokenId: BigInt,
     salePrice: BigInt
-  ): ethereum.CallResult<Pack__royaltyInfoResult> {
+  ): ethereum.CallResult<AccessNFT__royaltyInfoResult> {
     let result = super.tryCall(
       "royaltyInfo",
       "royaltyInfo(uint256,uint256):(address,uint256)",
@@ -1229,7 +888,10 @@ export class Pack extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new Pack__royaltyInfoResult(value[0].toAddress(), value[1].toBigInt())
+      new AccessNFT__royaltyInfoResult(
+        value[0].toAddress(),
+        value[1].toBigInt()
+      )
     );
   }
 
@@ -1256,17 +918,17 @@ export class Pack extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  tokenURI(_id: BigInt): string {
+  tokenURI(_nftId: BigInt): string {
     let result = super.call("tokenURI", "tokenURI(uint256):(string)", [
-      ethereum.Value.fromUnsignedBigInt(_id)
+      ethereum.Value.fromUnsignedBigInt(_nftId)
     ]);
 
     return result[0].toString();
   }
 
-  try_tokenURI(_id: BigInt): ethereum.CallResult<string> {
+  try_tokenURI(_nftId: BigInt): ethereum.CallResult<string> {
     let result = super.tryCall("tokenURI", "tokenURI(uint256):(string)", [
-      ethereum.Value.fromUnsignedBigInt(_id)
+      ethereum.Value.fromUnsignedBigInt(_nftId)
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -1275,53 +937,23 @@ export class Pack extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toString());
   }
 
-  uri(_id: BigInt): string {
+  uri(_nftId: BigInt): string {
     let result = super.call("uri", "uri(uint256):(string)", [
-      ethereum.Value.fromUnsignedBigInt(_id)
+      ethereum.Value.fromUnsignedBigInt(_nftId)
     ]);
 
     return result[0].toString();
   }
 
-  try_uri(_id: BigInt): ethereum.CallResult<string> {
+  try_uri(_nftId: BigInt): ethereum.CallResult<string> {
     let result = super.tryCall("uri", "uri(uint256):(string)", [
-      ethereum.Value.fromUnsignedBigInt(_id)
+      ethereum.Value.fromUnsignedBigInt(_nftId)
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
-  }
-
-  vrfFees(): BigInt {
-    let result = super.call("vrfFees", "vrfFees():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_vrfFees(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("vrfFees", "vrfFees():(uint256)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  vrfKeyHash(): Bytes {
-    let result = super.call("vrfKeyHash", "vrfKeyHash():(bytes32)", []);
-
-    return result[0].toBytes();
-  }
-
-  try_vrfKeyHash(): ethereum.CallResult<Bytes> {
-    let result = super.tryCall("vrfKeyHash", "vrfKeyHash():(bytes32)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 }
 
@@ -1346,28 +978,12 @@ export class ConstructorCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _uri(): string {
-    return this._call.inputValues[1].value.toString();
-  }
-
-  get _vrfCoordinator(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-
-  get _linkToken(): Address {
-    return this._call.inputValues[3].value.toAddress();
-  }
-
-  get _keyHash(): Bytes {
-    return this._call.inputValues[4].value.toBytes();
-  }
-
-  get _fees(): BigInt {
-    return this._call.inputValues[5].value.toBigInt();
-  }
-
   get _trustedForwarder(): Address {
-    return this._call.inputValues[6].value.toAddress();
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get _uri(): string {
+    return this._call.inputValues[2].value.toString();
   }
 }
 
@@ -1451,6 +1067,106 @@ export class BurnBatchCall__Outputs {
   _call: BurnBatchCall;
 
   constructor(call: BurnBatchCall) {
+    this._call = call;
+  }
+}
+
+export class CreateAccessNftsCall extends ethereum.Call {
+  get inputs(): CreateAccessNftsCall__Inputs {
+    return new CreateAccessNftsCall__Inputs(this);
+  }
+
+  get outputs(): CreateAccessNftsCall__Outputs {
+    return new CreateAccessNftsCall__Outputs(this);
+  }
+}
+
+export class CreateAccessNftsCall__Inputs {
+  _call: CreateAccessNftsCall;
+
+  constructor(call: CreateAccessNftsCall) {
+    this._call = call;
+  }
+
+  get _nftURIs(): Array<string> {
+    return this._call.inputValues[0].value.toStringArray();
+  }
+
+  get _accessNftURIs(): Array<string> {
+    return this._call.inputValues[1].value.toStringArray();
+  }
+
+  get _nftSupplies(): Array<BigInt> {
+    return this._call.inputValues[2].value.toBigIntArray();
+  }
+}
+
+export class CreateAccessNftsCall__Outputs {
+  _call: CreateAccessNftsCall;
+
+  constructor(call: CreateAccessNftsCall) {
+    this._call = call;
+  }
+
+  get nftIds(): Array<BigInt> {
+    return this._call.outputValues[0].value.toBigIntArray();
+  }
+}
+
+export class CreateAccessPackCall extends ethereum.Call {
+  get inputs(): CreateAccessPackCall__Inputs {
+    return new CreateAccessPackCall__Inputs(this);
+  }
+
+  get outputs(): CreateAccessPackCall__Outputs {
+    return new CreateAccessPackCall__Outputs(this);
+  }
+}
+
+export class CreateAccessPackCall__Inputs {
+  _call: CreateAccessPackCall;
+
+  constructor(call: CreateAccessPackCall) {
+    this._call = call;
+  }
+
+  get _pack(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _nftURIs(): Array<string> {
+    return this._call.inputValues[1].value.toStringArray();
+  }
+
+  get _accessNftURIs(): Array<string> {
+    return this._call.inputValues[2].value.toStringArray();
+  }
+
+  get _nftSupplies(): Array<BigInt> {
+    return this._call.inputValues[3].value.toBigIntArray();
+  }
+
+  get _packURI(): string {
+    return this._call.inputValues[4].value.toString();
+  }
+
+  get _secondsUntilOpenStart(): BigInt {
+    return this._call.inputValues[5].value.toBigInt();
+  }
+
+  get _secondsUntilOpenEnd(): BigInt {
+    return this._call.inputValues[6].value.toBigInt();
+  }
+
+  get _nftsPerOpen(): BigInt {
+    return this._call.inputValues[7].value.toBigInt();
+  }
+}
+
+export class CreateAccessPackCall__Outputs {
+  _call: CreateAccessPackCall;
+
+  constructor(call: CreateAccessPackCall) {
     this._call = call;
   }
 }
@@ -1573,136 +1289,6 @@ export class MintBatchCall__Outputs {
   }
 }
 
-export class OnERC1155BatchReceivedCall extends ethereum.Call {
-  get inputs(): OnERC1155BatchReceivedCall__Inputs {
-    return new OnERC1155BatchReceivedCall__Inputs(this);
-  }
-
-  get outputs(): OnERC1155BatchReceivedCall__Outputs {
-    return new OnERC1155BatchReceivedCall__Outputs(this);
-  }
-}
-
-export class OnERC1155BatchReceivedCall__Inputs {
-  _call: OnERC1155BatchReceivedCall;
-
-  constructor(call: OnERC1155BatchReceivedCall) {
-    this._call = call;
-  }
-
-  get value0(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get _from(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get _ids(): Array<BigInt> {
-    return this._call.inputValues[2].value.toBigIntArray();
-  }
-
-  get _values(): Array<BigInt> {
-    return this._call.inputValues[3].value.toBigIntArray();
-  }
-
-  get _data(): Bytes {
-    return this._call.inputValues[4].value.toBytes();
-  }
-}
-
-export class OnERC1155BatchReceivedCall__Outputs {
-  _call: OnERC1155BatchReceivedCall;
-
-  constructor(call: OnERC1155BatchReceivedCall) {
-    this._call = call;
-  }
-
-  get value0(): Bytes {
-    return this._call.outputValues[0].value.toBytes();
-  }
-}
-
-export class OnERC1155ReceivedCall extends ethereum.Call {
-  get inputs(): OnERC1155ReceivedCall__Inputs {
-    return new OnERC1155ReceivedCall__Inputs(this);
-  }
-
-  get outputs(): OnERC1155ReceivedCall__Outputs {
-    return new OnERC1155ReceivedCall__Outputs(this);
-  }
-}
-
-export class OnERC1155ReceivedCall__Inputs {
-  _call: OnERC1155ReceivedCall;
-
-  constructor(call: OnERC1155ReceivedCall) {
-    this._call = call;
-  }
-
-  get value0(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get value1(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get value2(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-
-  get value3(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
-
-  get value4(): Bytes {
-    return this._call.inputValues[4].value.toBytes();
-  }
-}
-
-export class OnERC1155ReceivedCall__Outputs {
-  _call: OnERC1155ReceivedCall;
-
-  constructor(call: OnERC1155ReceivedCall) {
-    this._call = call;
-  }
-
-  get value0(): Bytes {
-    return this._call.outputValues[0].value.toBytes();
-  }
-}
-
-export class OpenPackCall extends ethereum.Call {
-  get inputs(): OpenPackCall__Inputs {
-    return new OpenPackCall__Inputs(this);
-  }
-
-  get outputs(): OpenPackCall__Outputs {
-    return new OpenPackCall__Outputs(this);
-  }
-}
-
-export class OpenPackCall__Inputs {
-  _call: OpenPackCall;
-
-  constructor(call: OpenPackCall) {
-    this._call = call;
-  }
-
-  get _packId(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class OpenPackCall__Outputs {
-  _call: OpenPackCall;
-
-  constructor(call: OpenPackCall) {
-    this._call = call;
-  }
-}
-
 export class PauseCall extends ethereum.Call {
   get inputs(): PauseCall__Inputs {
     return new PauseCall__Inputs(this);
@@ -1729,36 +1315,36 @@ export class PauseCall__Outputs {
   }
 }
 
-export class RawFulfillRandomnessCall extends ethereum.Call {
-  get inputs(): RawFulfillRandomnessCall__Inputs {
-    return new RawFulfillRandomnessCall__Inputs(this);
+export class RedeemAccessCall extends ethereum.Call {
+  get inputs(): RedeemAccessCall__Inputs {
+    return new RedeemAccessCall__Inputs(this);
   }
 
-  get outputs(): RawFulfillRandomnessCall__Outputs {
-    return new RawFulfillRandomnessCall__Outputs(this);
+  get outputs(): RedeemAccessCall__Outputs {
+    return new RedeemAccessCall__Outputs(this);
   }
 }
 
-export class RawFulfillRandomnessCall__Inputs {
-  _call: RawFulfillRandomnessCall;
+export class RedeemAccessCall__Inputs {
+  _call: RedeemAccessCall;
 
-  constructor(call: RawFulfillRandomnessCall) {
+  constructor(call: RedeemAccessCall) {
     this._call = call;
   }
 
-  get requestId(): Bytes {
-    return this._call.inputValues[0].value.toBytes();
+  get _tokenId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
   }
 
-  get randomness(): BigInt {
+  get _amount(): BigInt {
     return this._call.inputValues[1].value.toBigInt();
   }
 }
 
-export class RawFulfillRandomnessCall__Outputs {
-  _call: RawFulfillRandomnessCall;
+export class RedeemAccessCall__Outputs {
+  _call: RedeemAccessCall;
 
-  constructor(call: RawFulfillRandomnessCall) {
+  constructor(call: RedeemAccessCall) {
     this._call = call;
   }
 }
@@ -1957,36 +1543,6 @@ export class SetApprovalForAllCall__Outputs {
   }
 }
 
-export class SetChainlinkFeesCall extends ethereum.Call {
-  get inputs(): SetChainlinkFeesCall__Inputs {
-    return new SetChainlinkFeesCall__Inputs(this);
-  }
-
-  get outputs(): SetChainlinkFeesCall__Outputs {
-    return new SetChainlinkFeesCall__Outputs(this);
-  }
-}
-
-export class SetChainlinkFeesCall__Inputs {
-  _call: SetChainlinkFeesCall;
-
-  constructor(call: SetChainlinkFeesCall) {
-    this._call = call;
-  }
-
-  get _newFees(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class SetChainlinkFeesCall__Outputs {
-  _call: SetChainlinkFeesCall;
-
-  constructor(call: SetChainlinkFeesCall) {
-    this._call = call;
-  }
-}
-
 export class SetContractURICall extends ethereum.Call {
   get inputs(): SetContractURICall__Inputs {
     return new SetContractURICall__Inputs(this);
@@ -2017,20 +1573,20 @@ export class SetContractURICall__Outputs {
   }
 }
 
-export class SetPackRoyaltyBpsCall extends ethereum.Call {
-  get inputs(): SetPackRoyaltyBpsCall__Inputs {
-    return new SetPackRoyaltyBpsCall__Inputs(this);
+export class SetRoyaltyBpsCall extends ethereum.Call {
+  get inputs(): SetRoyaltyBpsCall__Inputs {
+    return new SetRoyaltyBpsCall__Inputs(this);
   }
 
-  get outputs(): SetPackRoyaltyBpsCall__Outputs {
-    return new SetPackRoyaltyBpsCall__Outputs(this);
+  get outputs(): SetRoyaltyBpsCall__Outputs {
+    return new SetRoyaltyBpsCall__Outputs(this);
   }
 }
 
-export class SetPackRoyaltyBpsCall__Inputs {
-  _call: SetPackRoyaltyBpsCall;
+export class SetRoyaltyBpsCall__Inputs {
+  _call: SetRoyaltyBpsCall;
 
-  constructor(call: SetPackRoyaltyBpsCall) {
+  constructor(call: SetRoyaltyBpsCall) {
     this._call = call;
   }
 
@@ -2039,44 +1595,10 @@ export class SetPackRoyaltyBpsCall__Inputs {
   }
 }
 
-export class SetPackRoyaltyBpsCall__Outputs {
-  _call: SetPackRoyaltyBpsCall;
+export class SetRoyaltyBpsCall__Outputs {
+  _call: SetRoyaltyBpsCall;
 
-  constructor(call: SetPackRoyaltyBpsCall) {
-    this._call = call;
-  }
-}
-
-export class TransferLinkCall extends ethereum.Call {
-  get inputs(): TransferLinkCall__Inputs {
-    return new TransferLinkCall__Inputs(this);
-  }
-
-  get outputs(): TransferLinkCall__Outputs {
-    return new TransferLinkCall__Outputs(this);
-  }
-}
-
-export class TransferLinkCall__Inputs {
-  _call: TransferLinkCall;
-
-  constructor(call: TransferLinkCall) {
-    this._call = call;
-  }
-
-  get _to(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get _amount(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-}
-
-export class TransferLinkCall__Outputs {
-  _call: TransferLinkCall;
-
-  constructor(call: TransferLinkCall) {
+  constructor(call: SetRoyaltyBpsCall) {
     this._call = call;
   }
 }

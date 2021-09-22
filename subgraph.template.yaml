@@ -58,18 +58,18 @@ dataSources:
         - name: ERC20
           file: ./abis/ERC20.json
       eventHandlers:
-        - event: ListingUpdate(indexed address,indexed uint256,(address,address,uint256,uint256,address,uint256,uint256,uint256))
+        - event: ListingUpdate(indexed address,indexed uint256,(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8))
           handler: handleListingUpdate
-        - event: NewListing(indexed address,indexed address,indexed uint256,(address,address,uint256,uint256,address,uint256,uint256,uint256))
+        - event: NewListing(indexed address,indexed address,indexed uint256,(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8))
           handler: handleNewListing
-        - event: NewSale(indexed address,indexed address,indexed uint256,address,(address,address,uint256,uint256,address,uint256,uint256,uint256))
+        - event: NewSale(indexed address,indexed address,indexed uint256,address,uint256,(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8))
           handler: handleNewSale
       file: ./src/market.ts
   - kind: ethereum/contract
-    name: Reward
+    name: AccessNFT
     network: {{network}}
     source:
-      abi: Reward
+      abi: AccessNFT
       address: '{{reward.address}}'
       startBlock: {{reward.startBlock}}
     mapping:
@@ -84,8 +84,8 @@ dataSources:
         # - RewardUnderlyingTokenERC20
         # - RewardUnderlyingTokenERC721
       abis:
-        - name: Reward
-          file: ./abis/Rewards.json
+        - name: AccessNFT
+          file: ./abis/AccessNFT.json
       eventHandlers:
         # - event: ERC20Redeemed(indexed address,indexed address,uint256,uint256)
         #   handler: handleERC20Redeemed
@@ -95,8 +95,8 @@ dataSources:
         #   handler: handleERC721Redeemed
         # - event: ERC721Rewards(indexed address,indexed address,uint256,uint256,string)
         #   handler: handleERC721Rewards
-        - event: NativeRewards(indexed address,uint256[],string[],uint256[])
-          handler: handleNativeRewards
+        - event: AccessNFTsCreated(indexed address,uint256[],string[],uint256[],string[],uint256[])
+          handler: handleAccessNFTsCreated
         - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
           handler: handleTransferBatch
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)

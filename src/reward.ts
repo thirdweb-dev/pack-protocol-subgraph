@@ -1,9 +1,9 @@
 import { store, BigInt } from "@graphprotocol/graph-ts";
 import {
-  NativeRewards,
+  AccessNFTsCreated,
   TransferSingle,
   TransferBatch,
-} from "../generated/Reward/Reward";
+} from "../generated/AccessNFT/AccessNFT";
 
 import {
   Account,
@@ -16,9 +16,16 @@ const zeroAddress: string = "0x0000000000000000000000000000000000000000";
 
 /**
  *
- * @param event NativeRewards(address indexed creator, uint[] rewardIds, string[] rewardURIs, uint[] rewardSupplies)
+ * @param event AccessNFTsCreated(
+        address indexed creator,
+        uint256[] nftIds,
+        string[] nftURIs,
+        uint256[] acessNftIds,
+        string[] accessNftURIs,
+        uint256[] nftSupplies
+    );
  */
-export function handleNativeRewards(event: NativeRewards): void {
+export function handleAccessNFTsCreated(event: AccessNFTsCreated): void {
   // Update `Account` for creator
   let creatorAccountId: string = event.params.creator.toHexString();
   let creatorAccount = Account.load(creatorAccountId);
@@ -28,13 +35,19 @@ export function handleNativeRewards(event: NativeRewards): void {
     creatorAccount.save();
   }
 
-  let rewardIds = event.params.rewardIds;
-  let rewardURIs = event.params.rewardURIs;
-  let rewardSupplies = event.params.rewardSupplies;
+  // Unredeemed rewards state
+  let rewardIds = event.params.nftIds;
+  let rewardURIs = event.params.nftURIs;
+
+  // Redeemed rewards state
+  let accessIds = event.params.acessNftIds;
+  let accessURIs = event.params.accessNftURIs;
+
+  let rewardSupplies = event.params.nftSupplies;
   let rewardContractAddress = event.address.toHexString();
 
   for (let i = 0; i < rewardIds.length; i++) {
-    // Create `Reward`
+    // Create `Reward` of unredeemed state
     let tokenId = rewardIds[i];
     let rewardId = rewardContractAddress + "-" + tokenId.toString();
     let reward = Reward.load(rewardId);
@@ -46,6 +59,23 @@ export function handleNativeRewards(event: NativeRewards): void {
     reward.creator = creatorAccountId;
     reward.uri = rewardURIs[i];
     reward.supply = rewardSupplies[i];
+    reward.redeemedAccess = false;
+
+    reward.save();
+
+    // Create `Reward` of redeemed state
+    let accessTokenId = accessIds[i];
+    let accessRewardId = rewardContractAddress + "-" + accessTokenId.toString();
+    let accessReward = Reward.load(accessRewardId);
+    if (accessReward == null) {
+      reward = new Reward(rewardId);
+    }
+
+    reward.tokenId = rewardIds[i];
+    reward.creator = creatorAccountId;
+    reward.uri = accessURIs[i];
+    reward.supply = rewardSupplies[i];
+    reward.redeemedAccess = true;
 
     reward.save();
 
