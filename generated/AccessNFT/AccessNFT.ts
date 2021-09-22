@@ -326,45 +326,28 @@ export class Unpaused__Params {
   }
 }
 
-export class AccessNFT__accessNftInfoResult {
-  value0: Address;
-  value1: string;
-  value2: BigInt;
-
-  constructor(value0: Address, value1: string, value2: BigInt) {
-    this.value0 = value0;
-    this.value1 = value1;
-    this.value2 = value2;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromAddress(this.value0));
-    map.set("value1", ethereum.Value.fromString(this.value1));
-    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
-    return map;
-  }
-}
-
 export class AccessNFT__nftInfoResult {
   value0: Address;
   value1: string;
   value2: BigInt;
-  value3: BigInt;
-  value4: i32;
+  value3: boolean;
+  value4: BigInt;
+  value5: i32;
 
   constructor(
     value0: Address,
     value1: string,
     value2: BigInt,
-    value3: BigInt,
-    value4: i32
+    value3: boolean,
+    value4: BigInt,
+    value5: i32
   ) {
     this.value0 = value0;
     this.value1 = value1;
     this.value2 = value2;
     this.value3 = value3;
     this.value4 = value4;
+    this.value5 = value5;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -372,10 +355,11 @@ export class AccessNFT__nftInfoResult {
     map.set("value0", ethereum.Value.fromAddress(this.value0));
     map.set("value1", ethereum.Value.fromString(this.value1));
     map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
-    map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
+    map.set("value3", ethereum.Value.fromBoolean(this.value3));
+    map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
     map.set(
-      "value4",
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value4))
+      "value5",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value5))
     );
     return map;
   }
@@ -469,41 +453,6 @@ export class AccessNFT extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
-  }
-
-  accessNftInfo(param0: BigInt): AccessNFT__accessNftInfoResult {
-    let result = super.call(
-      "accessNftInfo",
-      "accessNftInfo(uint256):(address,string,uint256)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
-    );
-
-    return new AccessNFT__accessNftInfoResult(
-      result[0].toAddress(),
-      result[1].toString(),
-      result[2].toBigInt()
-    );
-  }
-
-  try_accessNftInfo(
-    param0: BigInt
-  ): ethereum.CallResult<AccessNFT__accessNftInfoResult> {
-    let result = super.tryCall(
-      "accessNftInfo",
-      "accessNftInfo(uint256):(address,string,uint256)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new AccessNFT__accessNftInfoResult(
-        value[0].toAddress(),
-        value[1].toString(),
-        value[2].toBigInt()
-      )
-    );
   }
 
   balanceOf(account: Address, id: BigInt): BigInt {
@@ -788,7 +737,7 @@ export class AccessNFT extends ethereum.SmartContract {
   nftInfo(param0: BigInt): AccessNFT__nftInfoResult {
     let result = super.call(
       "nftInfo",
-      "nftInfo(uint256):(address,string,uint256,uint256,uint8)",
+      "nftInfo(uint256):(address,string,uint256,bool,uint256,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -796,15 +745,16 @@ export class AccessNFT extends ethereum.SmartContract {
       result[0].toAddress(),
       result[1].toString(),
       result[2].toBigInt(),
-      result[3].toBigInt(),
-      result[4].toI32()
+      result[3].toBoolean(),
+      result[4].toBigInt(),
+      result[5].toI32()
     );
   }
 
   try_nftInfo(param0: BigInt): ethereum.CallResult<AccessNFT__nftInfoResult> {
     let result = super.tryCall(
       "nftInfo",
-      "nftInfo(uint256):(address,string,uint256,uint256,uint8)",
+      "nftInfo(uint256):(address,string,uint256,bool,uint256,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -816,8 +766,9 @@ export class AccessNFT extends ethereum.SmartContract {
         value[0].toAddress(),
         value[1].toString(),
         value[2].toBigInt(),
-        value[3].toBigInt(),
-        value[4].toI32()
+        value[3].toBoolean(),
+        value[4].toBigInt(),
+        value[5].toI32()
       )
     );
   }
