@@ -68,10 +68,10 @@ export function handleAccessNFTsCreated(event: AccessNFTsCreated): void {
     let accessRewardId = rewardContractAddress + "-" + accessTokenId.toString();
     let accessReward = Reward.load(accessRewardId);
     if (accessReward == null) {
-      reward = new Reward(rewardId);
+      reward = new Reward(accessRewardId);
     }
 
-    reward.tokenId = rewardIds[i];
+    reward.tokenId = accessIds[i];
     reward.creator = creatorAccountId;
     reward.uri = accessURIs[i];
     reward.supply = rewardSupplies[i];
