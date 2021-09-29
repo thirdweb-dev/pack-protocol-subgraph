@@ -83,6 +83,11 @@
             "type": "uint256"
           },
           {
+            "internalType": "uint256",
+            "name": "tokensPerBuyer",
+            "type": "uint256"
+          },
+          {
             "internalType": "enum Market.TokenType",
             "name": "tokenType",
             "type": "uint8"
@@ -102,18 +107,12 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "protocolFeeBps",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "creatorFeeBps",
-        "type": "uint256"
+        "internalType": "uint128",
+        "name": "newFee",
+        "type": "uint128"
       }
     ],
-    "name": "MarketFeesUpdated",
+    "name": "MarketFeeUpdate",
     "type": "event"
   },
   {
@@ -182,6 +181,11 @@
           {
             "internalType": "uint256",
             "name": "saleEnd",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokensPerBuyer",
             "type": "uint256"
           },
           {
@@ -229,7 +233,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "quanitytBought",
+        "name": "quantity",
         "type": "uint256"
       },
       {
@@ -280,6 +284,11 @@
             "type": "uint256"
           },
           {
+            "internalType": "uint256",
+            "name": "tokensPerBuyer",
+            "type": "uint256"
+          },
+          {
             "internalType": "enum Market.TokenType",
             "name": "tokenType",
             "type": "uint8"
@@ -323,6 +332,30 @@
     "name": "addToListing",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "boughtFromListing",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -408,6 +441,11 @@
             "type": "uint256"
           },
           {
+            "internalType": "uint256",
+            "name": "tokensPerBuyer",
+            "type": "uint256"
+          },
+          {
             "internalType": "enum Market.TokenType",
             "name": "tokenType",
             "type": "uint8"
@@ -476,6 +514,11 @@
           {
             "internalType": "uint256",
             "name": "saleEnd",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokensPerBuyer",
             "type": "uint256"
           },
           {
@@ -555,6 +598,11 @@
             "type": "uint256"
           },
           {
+            "internalType": "uint256",
+            "name": "tokensPerBuyer",
+            "type": "uint256"
+          },
+          {
             "internalType": "enum Market.TokenType",
             "name": "tokenType",
             "type": "uint8"
@@ -623,6 +671,11 @@
           {
             "internalType": "uint256",
             "name": "saleEnd",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokensPerBuyer",
             "type": "uint256"
           },
           {
@@ -697,6 +750,11 @@
             "type": "uint256"
           },
           {
+            "internalType": "uint256",
+            "name": "tokensPerBuyer",
+            "type": "uint256"
+          },
+          {
             "internalType": "enum Market.TokenType",
             "name": "tokenType",
             "type": "uint8"
@@ -754,6 +812,11 @@
       {
         "internalType": "uint256",
         "name": "_quantity",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokensPerBuyer",
         "type": "uint256"
       },
       {
@@ -828,9 +891,27 @@
         "type": "uint256"
       },
       {
+        "internalType": "uint256",
+        "name": "tokensPerBuyer",
+        "type": "uint256"
+      },
+      {
         "internalType": "enum Market.TokenType",
         "name": "tokenType",
         "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "marketFeeBps",
+    "outputs": [
+      {
+        "internalType": "uint128",
+        "name": "",
+        "type": "uint128"
       }
     ],
     "stateMutability": "view",
@@ -964,6 +1045,19 @@
   {
     "inputs": [
       {
+        "internalType": "uint128",
+        "name": "feeBps",
+        "type": "uint128"
+      }
+    ],
+    "name": "setMarketFeeBps",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes4",
         "name": "interfaceId",
         "type": "bytes4"
@@ -1027,6 +1121,11 @@
         "internalType": "address",
         "name": "_currency",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokensPerBuyer",
+        "type": "uint256"
       },
       {
         "internalType": "uint256",

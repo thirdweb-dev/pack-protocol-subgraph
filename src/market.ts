@@ -8,7 +8,7 @@ import { Listing, TokenListing } from "../generated/schema";
 
 /**
  *
- * @param event NewListing(address indexed assetContract, address indexed seller, Listing listing)
+ * @param event NewListing(address indexed assetContract, address indexed seller, uint256 indexed listingId, Listing listing);
  */
 export function handleNewListing(event: NewListing): void {
   let assetContract = event.params.assetContract;
@@ -31,6 +31,7 @@ export function handleNewListing(event: NewListing): void {
   listing.quantity = event.params.listing.quantity;
   listing.currency = event.params.listing.currency;
   listing.price = event.params.listing.pricePerToken;
+  listing.tokensPerBuyer = event.params.listing.tokensPerBuyer;
   listing.saleStartTimestamp = event.params.listing.saleStart;
   listing.saleEndTimestamp = event.params.listing.saleEnd;
 
@@ -89,6 +90,7 @@ export function handleListingUpdate(event: ListingUpdate): void {
   listing.quantity = event.params.listing.quantity;
   listing.currency = event.params.listing.currency;
   listing.price = event.params.listing.pricePerToken;
+  listing.tokensPerBuyer = event.params.listing.tokensPerBuyer;
   listing.saleStartTimestamp = event.params.listing.saleStart;
   listing.saleEndTimestamp = event.params.listing.saleEnd;
 

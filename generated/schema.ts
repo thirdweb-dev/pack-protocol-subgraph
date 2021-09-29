@@ -1040,6 +1040,15 @@ export class Listing extends Entity {
     this.set("quantity", Value.fromBigInt(value));
   }
 
+  get tokensPerBuyer(): BigInt {
+    let value = this.get("tokensPerBuyer");
+    return value.toBigInt();
+  }
+
+  set tokensPerBuyer(value: BigInt) {
+    this.set("tokensPerBuyer", Value.fromBigInt(value));
+  }
+
   get saleStartTimestamp(): BigInt | null {
     let value = this.get("saleStartTimestamp");
     if (value === null || value.kind == ValueKind.NULL) {

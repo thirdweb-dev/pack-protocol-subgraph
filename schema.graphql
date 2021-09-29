@@ -127,6 +127,7 @@ type Listing @entity {
   tokenListing: TokenListing!
   seller: Account!
   quantity: BigInt!
+  tokensPerBuyer: BigInt!
   saleStartTimestamp: BigInt
   saleEndTimestamp: BigInt
 

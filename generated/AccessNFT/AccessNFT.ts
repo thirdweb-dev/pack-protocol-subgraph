@@ -440,6 +440,25 @@ export class AccessNFT extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
+  TRANSFER_ROLE(): Bytes {
+    let result = super.call("TRANSFER_ROLE", "TRANSFER_ROLE():(bytes32)", []);
+
+    return result[0].toBytes();
+  }
+
+  try_TRANSFER_ROLE(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "TRANSFER_ROLE",
+      "TRANSFER_ROLE():(bytes32)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
   _contractURI(): string {
     let result = super.call("_contractURI", "_contractURI():(string)", []);
 
@@ -708,6 +727,29 @@ export class AccessNFT extends ethereum.SmartContract {
     let result = super.tryCall("isRedeemed", "isRedeemed(uint256):(bool)", [
       ethereum.Value.fromUnsignedBigInt(_nftId)
     ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  isRestrictedTransfer(): boolean {
+    let result = super.call(
+      "isRestrictedTransfer",
+      "isRestrictedTransfer():(bool)",
+      []
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isRestrictedTransfer(): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isRestrictedTransfer",
+      "isRestrictedTransfer():(bool)",
+      []
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -1733,6 +1775,36 @@ export class SetContractURICall__Outputs {
   _call: SetContractURICall;
 
   constructor(call: SetContractURICall) {
+    this._call = call;
+  }
+}
+
+export class SetRestrictedTransferCall extends ethereum.Call {
+  get inputs(): SetRestrictedTransferCall__Inputs {
+    return new SetRestrictedTransferCall__Inputs(this);
+  }
+
+  get outputs(): SetRestrictedTransferCall__Outputs {
+    return new SetRestrictedTransferCall__Outputs(this);
+  }
+}
+
+export class SetRestrictedTransferCall__Inputs {
+  _call: SetRestrictedTransferCall;
+
+  constructor(call: SetRestrictedTransferCall) {
+    this._call = call;
+  }
+
+  get _restrictedTransfer(): boolean {
+    return this._call.inputValues[0].value.toBoolean();
+  }
+}
+
+export class SetRestrictedTransferCall__Outputs {
+  _call: SetRestrictedTransferCall;
+
+  constructor(call: SetRestrictedTransferCall) {
     this._call = call;
   }
 }

@@ -73,30 +73,30 @@ export class ListingUpdateListingStruct extends ethereum.Tuple {
     return this[8].toBigInt();
   }
 
+  get tokensPerBuyer(): BigInt {
+    return this[9].toBigInt();
+  }
+
   get tokenType(): i32 {
-    return this[9].toI32();
+    return this[10].toI32();
   }
 }
 
-export class MarketFeesUpdated extends ethereum.Event {
-  get params(): MarketFeesUpdated__Params {
-    return new MarketFeesUpdated__Params(this);
+export class MarketFeeUpdate extends ethereum.Event {
+  get params(): MarketFeeUpdate__Params {
+    return new MarketFeeUpdate__Params(this);
   }
 }
 
-export class MarketFeesUpdated__Params {
-  _event: MarketFeesUpdated;
+export class MarketFeeUpdate__Params {
+  _event: MarketFeeUpdate;
 
-  constructor(event: MarketFeesUpdated) {
+  constructor(event: MarketFeeUpdate) {
     this._event = event;
   }
 
-  get protocolFeeBps(): BigInt {
+  get newFee(): BigInt {
     return this._event.parameters[0].value.toBigInt();
-  }
-
-  get creatorFeeBps(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
   }
 }
 
@@ -167,8 +167,12 @@ export class NewListingListingStruct extends ethereum.Tuple {
     return this[8].toBigInt();
   }
 
+  get tokensPerBuyer(): BigInt {
+    return this[9].toBigInt();
+  }
+
   get tokenType(): i32 {
-    return this[9].toI32();
+    return this[10].toI32();
   }
 }
 
@@ -201,7 +205,7 @@ export class NewSale__Params {
     return this._event.parameters[3].value.toAddress();
   }
 
-  get quanitytBought(): BigInt {
+  get quantity(): BigInt {
     return this._event.parameters[4].value.toBigInt();
   }
 
@@ -247,8 +251,12 @@ export class NewSaleListingStruct extends ethereum.Tuple {
     return this[8].toBigInt();
   }
 
+  get tokensPerBuyer(): BigInt {
+    return this[9].toBigInt();
+  }
+
   get tokenType(): i32 {
-    return this[9].toI32();
+    return this[10].toI32();
   }
 }
 
@@ -289,8 +297,12 @@ export class Market__getAllListingsResultAllListingsStruct extends ethereum.Tupl
     return this[8].toBigInt();
   }
 
+  get tokensPerBuyer(): BigInt {
+    return this[9].toBigInt();
+  }
+
   get tokenType(): i32 {
-    return this[9].toI32();
+    return this[10].toI32();
   }
 }
 
@@ -331,8 +343,12 @@ export class Market__getListingResultListingStruct extends ethereum.Tuple {
     return this[8].toBigInt();
   }
 
+  get tokensPerBuyer(): BigInt {
+    return this[9].toBigInt();
+  }
+
   get tokenType(): i32 {
-    return this[9].toI32();
+    return this[10].toI32();
   }
 }
 
@@ -373,8 +389,12 @@ export class Market__getListingsByAssetResultTokenListingsStruct extends ethereu
     return this[8].toBigInt();
   }
 
+  get tokensPerBuyer(): BigInt {
+    return this[9].toBigInt();
+  }
+
   get tokenType(): i32 {
-    return this[9].toI32();
+    return this[10].toI32();
   }
 }
 
@@ -415,8 +435,12 @@ export class Market__getListingsByAssetContractResultTokenListingsStruct extends
     return this[8].toBigInt();
   }
 
+  get tokensPerBuyer(): BigInt {
+    return this[9].toBigInt();
+  }
+
   get tokenType(): i32 {
-    return this[9].toI32();
+    return this[10].toI32();
   }
 }
 
@@ -457,8 +481,12 @@ export class Market__getListingsBySellerResultSellerListingsStruct extends ether
     return this[8].toBigInt();
   }
 
+  get tokensPerBuyer(): BigInt {
+    return this[9].toBigInt();
+  }
+
   get tokenType(): i32 {
-    return this[9].toI32();
+    return this[10].toI32();
   }
 }
 
@@ -472,7 +500,8 @@ export class Market__listingsResult {
   value6: BigInt;
   value7: BigInt;
   value8: BigInt;
-  value9: i32;
+  value9: BigInt;
+  value10: i32;
 
   constructor(
     value0: BigInt,
@@ -484,7 +513,8 @@ export class Market__listingsResult {
     value6: BigInt,
     value7: BigInt,
     value8: BigInt,
-    value9: i32
+    value9: BigInt,
+    value10: i32
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -496,6 +526,7 @@ export class Market__listingsResult {
     this.value7 = value7;
     this.value8 = value8;
     this.value9 = value9;
+    this.value10 = value10;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -509,9 +540,10 @@ export class Market__listingsResult {
     map.set("value6", ethereum.Value.fromUnsignedBigInt(this.value6));
     map.set("value7", ethereum.Value.fromUnsignedBigInt(this.value7));
     map.set("value8", ethereum.Value.fromUnsignedBigInt(this.value8));
+    map.set("value9", ethereum.Value.fromUnsignedBigInt(this.value9));
     map.set(
-      "value9",
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value9))
+      "value10",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value10))
     );
     return map;
   }
@@ -537,6 +569,38 @@ export class Market extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toString());
   }
 
+  boughtFromListing(param0: BigInt, param1: Address): BigInt {
+    let result = super.call(
+      "boughtFromListing",
+      "boughtFromListing(uint256,address):(uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromAddress(param1)
+      ]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_boughtFromListing(
+    param0: BigInt,
+    param1: Address
+  ): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "boughtFromListing",
+      "boughtFromListing(uint256,address):(uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromAddress(param1)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   contractURI(): string {
     let result = super.call("contractURI", "contractURI():(string)", []);
 
@@ -555,7 +619,7 @@ export class Market extends ethereum.SmartContract {
   getAllListings(): Array<Market__getAllListingsResultAllListingsStruct> {
     let result = super.call(
       "getAllListings",
-      "getAllListings():((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      "getAllListings():((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8)[])",
       []
     );
 
@@ -569,7 +633,7 @@ export class Market extends ethereum.SmartContract {
   > {
     let result = super.tryCall(
       "getAllListings",
-      "getAllListings():((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      "getAllListings():((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8)[])",
       []
     );
     if (result.reverted) {
@@ -584,7 +648,7 @@ export class Market extends ethereum.SmartContract {
   getListing(_listingId: BigInt): Market__getListingResultListingStruct {
     let result = super.call(
       "getListing",
-      "getListing(uint256):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8))",
+      "getListing(uint256):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8))",
       [ethereum.Value.fromUnsignedBigInt(_listingId)]
     );
 
@@ -596,7 +660,7 @@ export class Market extends ethereum.SmartContract {
   ): ethereum.CallResult<Market__getListingResultListingStruct> {
     let result = super.tryCall(
       "getListing",
-      "getListing(uint256):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8))",
+      "getListing(uint256):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8))",
       [ethereum.Value.fromUnsignedBigInt(_listingId)]
     );
     if (result.reverted) {
@@ -614,7 +678,7 @@ export class Market extends ethereum.SmartContract {
   ): Array<Market__getListingsByAssetResultTokenListingsStruct> {
     let result = super.call(
       "getListingsByAsset",
-      "getListingsByAsset(address,uint256):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      "getListingsByAsset(address,uint256):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8)[])",
       [
         ethereum.Value.fromAddress(_assetContract),
         ethereum.Value.fromUnsignedBigInt(_tokenId)
@@ -634,7 +698,7 @@ export class Market extends ethereum.SmartContract {
   > {
     let result = super.tryCall(
       "getListingsByAsset",
-      "getListingsByAsset(address,uint256):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      "getListingsByAsset(address,uint256):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8)[])",
       [
         ethereum.Value.fromAddress(_assetContract),
         ethereum.Value.fromUnsignedBigInt(_tokenId)
@@ -656,7 +720,7 @@ export class Market extends ethereum.SmartContract {
   ): Array<Market__getListingsByAssetContractResultTokenListingsStruct> {
     let result = super.call(
       "getListingsByAssetContract",
-      "getListingsByAssetContract(address):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      "getListingsByAssetContract(address):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8)[])",
       [ethereum.Value.fromAddress(_assetContract)]
     );
 
@@ -672,7 +736,7 @@ export class Market extends ethereum.SmartContract {
   > {
     let result = super.tryCall(
       "getListingsByAssetContract",
-      "getListingsByAssetContract(address):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      "getListingsByAssetContract(address):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8)[])",
       [ethereum.Value.fromAddress(_assetContract)]
     );
     if (result.reverted) {
@@ -691,7 +755,7 @@ export class Market extends ethereum.SmartContract {
   ): Array<Market__getListingsBySellerResultSellerListingsStruct> {
     let result = super.call(
       "getListingsBySeller",
-      "getListingsBySeller(address):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      "getListingsBySeller(address):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8)[])",
       [ethereum.Value.fromAddress(_seller)]
     );
 
@@ -707,7 +771,7 @@ export class Market extends ethereum.SmartContract {
   > {
     let result = super.tryCall(
       "getListingsBySeller",
-      "getListingsBySeller(address):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)[])",
+      "getListingsBySeller(address):((uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8)[])",
       [ethereum.Value.fromAddress(_seller)]
     );
     if (result.reverted) {
@@ -747,7 +811,7 @@ export class Market extends ethereum.SmartContract {
   listings(param0: BigInt): Market__listingsResult {
     let result = super.call(
       "listings",
-      "listings(uint256):(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)",
+      "listings(uint256):(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -761,14 +825,15 @@ export class Market extends ethereum.SmartContract {
       result[6].toBigInt(),
       result[7].toBigInt(),
       result[8].toBigInt(),
-      result[9].toI32()
+      result[9].toBigInt(),
+      result[10].toI32()
     );
   }
 
   try_listings(param0: BigInt): ethereum.CallResult<Market__listingsResult> {
     let result = super.tryCall(
       "listings",
-      "listings(uint256):(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8)",
+      "listings(uint256):(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -786,9 +851,25 @@ export class Market extends ethereum.SmartContract {
         value[6].toBigInt(),
         value[7].toBigInt(),
         value[8].toBigInt(),
-        value[9].toI32()
+        value[9].toBigInt(),
+        value[10].toI32()
       )
     );
+  }
+
+  marketFeeBps(): BigInt {
+    let result = super.call("marketFeeBps", "marketFeeBps():(uint128)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_marketFeeBps(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("marketFeeBps", "marketFeeBps():(uint128)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   onERC1155BatchReceived(
@@ -1114,12 +1195,16 @@ export class ListCall__Inputs {
     return this._call.inputValues[4].value.toBigInt();
   }
 
-  get _secondsUntilStart(): BigInt {
+  get _tokensPerBuyer(): BigInt {
     return this._call.inputValues[5].value.toBigInt();
   }
 
-  get _secondsUntilEnd(): BigInt {
+  get _secondsUntilStart(): BigInt {
     return this._call.inputValues[6].value.toBigInt();
+  }
+
+  get _secondsUntilEnd(): BigInt {
+    return this._call.inputValues[7].value.toBigInt();
   }
 }
 
@@ -1261,6 +1346,36 @@ export class SetContractURICall__Outputs {
   }
 }
 
+export class SetMarketFeeBpsCall extends ethereum.Call {
+  get inputs(): SetMarketFeeBpsCall__Inputs {
+    return new SetMarketFeeBpsCall__Inputs(this);
+  }
+
+  get outputs(): SetMarketFeeBpsCall__Outputs {
+    return new SetMarketFeeBpsCall__Outputs(this);
+  }
+}
+
+export class SetMarketFeeBpsCall__Inputs {
+  _call: SetMarketFeeBpsCall;
+
+  constructor(call: SetMarketFeeBpsCall) {
+    this._call = call;
+  }
+
+  get feeBps(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class SetMarketFeeBpsCall__Outputs {
+  _call: SetMarketFeeBpsCall;
+
+  constructor(call: SetMarketFeeBpsCall) {
+    this._call = call;
+  }
+}
+
 export class UnlistCall extends ethereum.Call {
   get inputs(): UnlistCall__Inputs {
     return new UnlistCall__Inputs(this);
@@ -1324,12 +1439,16 @@ export class UpdateListingParamsCall__Inputs {
     return this._call.inputValues[2].value.toAddress();
   }
 
-  get _secondsUntilStart(): BigInt {
+  get _tokensPerBuyer(): BigInt {
     return this._call.inputValues[3].value.toBigInt();
   }
 
-  get _secondsUntilEnd(): BigInt {
+  get _secondsUntilStart(): BigInt {
     return this._call.inputValues[4].value.toBigInt();
+  }
+
+  get _secondsUntilEnd(): BigInt {
+    return this._call.inputValues[5].value.toBigInt();
   }
 }
 

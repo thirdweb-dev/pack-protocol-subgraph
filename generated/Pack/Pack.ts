@@ -170,24 +170,6 @@ export class PackOpenRequest__Params {
   }
 }
 
-export class PackRoyaltyUpdated extends ethereum.Event {
-  get params(): PackRoyaltyUpdated__Params {
-    return new PackRoyaltyUpdated__Params(this);
-  }
-}
-
-export class PackRoyaltyUpdated__Params {
-  _event: PackRoyaltyUpdated;
-
-  constructor(event: PackRoyaltyUpdated) {
-    this._event = event;
-  }
-
-  get royaltyBps(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
 export class Paused extends ethereum.Event {
   get params(): Paused__Params {
     return new Paused__Params(this);
@@ -281,6 +263,24 @@ export class RoleRevoked__Params {
 
   get sender(): Address {
     return this._event.parameters[2].value.toAddress();
+  }
+}
+
+export class RoyaltyUpdated extends ethereum.Event {
+  get params(): RoyaltyUpdated__Params {
+    return new RoyaltyUpdated__Params(this);
+  }
+}
+
+export class RoyaltyUpdated__Params {
+  _event: RoyaltyUpdated;
+
+  constructor(event: RoyaltyUpdated) {
+    this._event = event;
+  }
+
+  get royaltyBps(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 }
 
@@ -598,6 +598,25 @@ export class Pack extends ethereum.SmartContract {
 
   try_PAUSER_ROLE(): ethereum.CallResult<Bytes> {
     let result = super.tryCall("PAUSER_ROLE", "PAUSER_ROLE():(bytes32)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  TRANSFER_ROLE(): Bytes {
+    let result = super.call("TRANSFER_ROLE", "TRANSFER_ROLE():(bytes32)", []);
+
+    return result[0].toBytes();
+  }
+
+  try_TRANSFER_ROLE(): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "TRANSFER_ROLE",
+      "TRANSFER_ROLE():(bytes32)",
+      []
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -937,6 +956,29 @@ export class Pack extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  isRestrictedTransfer(): boolean {
+    let result = super.call(
+      "isRestrictedTransfer",
+      "isRestrictedTransfer():(bool)",
+      []
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isRestrictedTransfer(): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isRestrictedTransfer",
+      "isRestrictedTransfer():(bool)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   isTrustedForwarder(forwarder: Address): boolean {
     let result = super.call(
       "isTrustedForwarder",
@@ -1069,25 +1111,6 @@ export class Pack extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
-  packRoyaltyBps(): BigInt {
-    let result = super.call("packRoyaltyBps", "packRoyaltyBps():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_packRoyaltyBps(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "packRoyaltyBps",
-      "packRoyaltyBps():(uint256)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
   packs(param0: BigInt): Pack__packsResult {
     let result = super.call(
       "packs",
@@ -1194,6 +1217,21 @@ export class Pack extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(
       new Pack__rewardsResult(value[0].toAddress(), value[1].toBigInt())
     );
+  }
+
+  royaltyBps(): BigInt {
+    let result = super.call("royaltyBps", "royaltyBps():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_royaltyBps(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("royaltyBps", "royaltyBps():(uint256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   royaltyInfo(tokenId: BigInt, salePrice: BigInt): Pack__royaltyInfoResult {
@@ -2017,20 +2055,50 @@ export class SetContractURICall__Outputs {
   }
 }
 
-export class SetPackRoyaltyBpsCall extends ethereum.Call {
-  get inputs(): SetPackRoyaltyBpsCall__Inputs {
-    return new SetPackRoyaltyBpsCall__Inputs(this);
+export class SetRestrictedTransferCall extends ethereum.Call {
+  get inputs(): SetRestrictedTransferCall__Inputs {
+    return new SetRestrictedTransferCall__Inputs(this);
   }
 
-  get outputs(): SetPackRoyaltyBpsCall__Outputs {
-    return new SetPackRoyaltyBpsCall__Outputs(this);
+  get outputs(): SetRestrictedTransferCall__Outputs {
+    return new SetRestrictedTransferCall__Outputs(this);
   }
 }
 
-export class SetPackRoyaltyBpsCall__Inputs {
-  _call: SetPackRoyaltyBpsCall;
+export class SetRestrictedTransferCall__Inputs {
+  _call: SetRestrictedTransferCall;
 
-  constructor(call: SetPackRoyaltyBpsCall) {
+  constructor(call: SetRestrictedTransferCall) {
+    this._call = call;
+  }
+
+  get _restrictedTransfer(): boolean {
+    return this._call.inputValues[0].value.toBoolean();
+  }
+}
+
+export class SetRestrictedTransferCall__Outputs {
+  _call: SetRestrictedTransferCall;
+
+  constructor(call: SetRestrictedTransferCall) {
+    this._call = call;
+  }
+}
+
+export class SetRoyaltyBpsCall extends ethereum.Call {
+  get inputs(): SetRoyaltyBpsCall__Inputs {
+    return new SetRoyaltyBpsCall__Inputs(this);
+  }
+
+  get outputs(): SetRoyaltyBpsCall__Outputs {
+    return new SetRoyaltyBpsCall__Outputs(this);
+  }
+}
+
+export class SetRoyaltyBpsCall__Inputs {
+  _call: SetRoyaltyBpsCall;
+
+  constructor(call: SetRoyaltyBpsCall) {
     this._call = call;
   }
 
@@ -2039,10 +2107,10 @@ export class SetPackRoyaltyBpsCall__Inputs {
   }
 }
 
-export class SetPackRoyaltyBpsCall__Outputs {
-  _call: SetPackRoyaltyBpsCall;
+export class SetRoyaltyBpsCall__Outputs {
+  _call: SetRoyaltyBpsCall;
 
-  constructor(call: SetPackRoyaltyBpsCall) {
+  constructor(call: SetRoyaltyBpsCall) {
     this._call = call;
   }
 }
