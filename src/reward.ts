@@ -3,7 +3,7 @@ import {
   AccessNFTsCreated,
   TransferSingle,
   TransferBatch,
-} from "../generated/AccessNFT/AccessNFT";
+} from "../generated/AccessNFT_PL/AccessNFT_PL";
 
 import {
   Account,

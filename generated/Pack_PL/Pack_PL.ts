@@ -392,7 +392,7 @@ export class Unpaused__Params {
   }
 }
 
-export class Pack__getPackResultPackStruct extends ethereum.Tuple {
+export class Pack_PL__getPackResultPackStruct extends ethereum.Tuple {
   get uri(): string {
     return this[0].toString();
   }
@@ -414,7 +414,7 @@ export class Pack__getPackResultPackStruct extends ethereum.Tuple {
   }
 }
 
-export class Pack__getPackWithRewardsResultPackStruct extends ethereum.Tuple {
+export class Pack_PL__getPackWithRewardsResultPackStruct extends ethereum.Tuple {
   get uri(): string {
     return this[0].toString();
   }
@@ -436,14 +436,14 @@ export class Pack__getPackWithRewardsResultPackStruct extends ethereum.Tuple {
   }
 }
 
-export class Pack__getPackWithRewardsResult {
-  value0: Pack__getPackWithRewardsResultPackStruct;
+export class Pack_PL__getPackWithRewardsResult {
+  value0: Pack_PL__getPackWithRewardsResultPackStruct;
   value1: Address;
   value2: Array<BigInt>;
   value3: Array<BigInt>;
 
   constructor(
-    value0: Pack__getPackWithRewardsResultPackStruct,
+    value0: Pack_PL__getPackWithRewardsResultPackStruct,
     value1: Address,
     value2: Array<BigInt>,
     value3: Array<BigInt>
@@ -464,7 +464,7 @@ export class Pack__getPackWithRewardsResult {
   }
 }
 
-export class Pack__packsResult {
+export class Pack_PL__packsResult {
   value0: string;
   value1: Address;
   value2: BigInt;
@@ -496,7 +496,7 @@ export class Pack__packsResult {
   }
 }
 
-export class Pack__randomnessRequestsResult {
+export class Pack_PL__randomnessRequestsResult {
   value0: BigInt;
   value1: Address;
 
@@ -513,7 +513,7 @@ export class Pack__randomnessRequestsResult {
   }
 }
 
-export class Pack__rewardsResult {
+export class Pack_PL__rewardsResult {
   value0: Address;
   value1: BigInt;
 
@@ -530,7 +530,7 @@ export class Pack__rewardsResult {
   }
 }
 
-export class Pack__royaltyInfoResult {
+export class Pack_PL__royaltyInfoResult {
   value0: Address;
   value1: BigInt;
 
@@ -547,9 +547,9 @@ export class Pack__royaltyInfoResult {
   }
 }
 
-export class Pack extends ethereum.SmartContract {
-  static bind(address: Address): Pack {
-    return new Pack("Pack", address);
+export class Pack_PL extends ethereum.SmartContract {
+  static bind(address: Address): Pack_PL {
+    return new Pack_PL("Pack_PL", address);
   }
 
   DEFAULT_ADMIN_ROLE(): Bytes {
@@ -766,19 +766,19 @@ export class Pack extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
-  getPack(_packId: BigInt): Pack__getPackResultPackStruct {
+  getPack(_packId: BigInt): Pack_PL__getPackResultPackStruct {
     let result = super.call(
       "getPack",
       "getPack(uint256):((string,address,uint256,uint256,uint256))",
       [ethereum.Value.fromUnsignedBigInt(_packId)]
     );
 
-    return result[0].toTuple() as Pack__getPackResultPackStruct;
+    return result[0].toTuple() as Pack_PL__getPackResultPackStruct;
   }
 
   try_getPack(
     _packId: BigInt
-  ): ethereum.CallResult<Pack__getPackResultPackStruct> {
+  ): ethereum.CallResult<Pack_PL__getPackResultPackStruct> {
     let result = super.tryCall(
       "getPack",
       "getPack(uint256):((string,address,uint256,uint256,uint256))",
@@ -789,28 +789,28 @@ export class Pack extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      value[0].toTuple() as Pack__getPackResultPackStruct
+      value[0].toTuple() as Pack_PL__getPackResultPackStruct
     );
   }
 
-  getPackWithRewards(_packId: BigInt): Pack__getPackWithRewardsResult {
+  getPackWithRewards(_packId: BigInt): Pack_PL__getPackWithRewardsResult {
     let result = super.call(
       "getPackWithRewards",
       "getPackWithRewards(uint256):((string,address,uint256,uint256,uint256),address,uint256[],uint256[])",
       [ethereum.Value.fromUnsignedBigInt(_packId)]
     );
 
-    return new Pack__getPackWithRewardsResult(
-      result[0].toTuple() as Pack__getPackWithRewardsResultPackStruct,
+    return new Pack_PL__getPackWithRewardsResult(
+      result[0].toTuple() as Pack_PL__getPackWithRewardsResultPackStruct,
       result[1].toAddress(),
       result[2].toBigIntArray(),
       result[3].toBigIntArray()
-    ) as Pack__getPackWithRewardsResult;
+    ) as Pack_PL__getPackWithRewardsResult;
   }
 
   try_getPackWithRewards(
     _packId: BigInt
-  ): ethereum.CallResult<Pack__getPackWithRewardsResult> {
+  ): ethereum.CallResult<Pack_PL__getPackWithRewardsResult> {
     let result = super.tryCall(
       "getPackWithRewards",
       "getPackWithRewards(uint256):((string,address,uint256,uint256,uint256),address,uint256[],uint256[])",
@@ -821,12 +821,12 @@ export class Pack extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new Pack__getPackWithRewardsResult(
-        value[0].toTuple() as Pack__getPackWithRewardsResultPackStruct,
+      new Pack_PL__getPackWithRewardsResult(
+        value[0].toTuple() as Pack_PL__getPackWithRewardsResultPackStruct,
         value[1].toAddress(),
         value[2].toBigIntArray(),
         value[3].toBigIntArray()
-      ) as Pack__getPackWithRewardsResult
+      ) as Pack_PL__getPackWithRewardsResult
     );
   }
 
@@ -1111,14 +1111,14 @@ export class Pack extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
-  packs(param0: BigInt): Pack__packsResult {
+  packs(param0: BigInt): Pack_PL__packsResult {
     let result = super.call(
       "packs",
       "packs(uint256):(string,address,uint256,uint256,uint256)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
-    return new Pack__packsResult(
+    return new Pack_PL__packsResult(
       result[0].toString(),
       result[1].toAddress(),
       result[2].toBigInt(),
@@ -1127,7 +1127,7 @@ export class Pack extends ethereum.SmartContract {
     );
   }
 
-  try_packs(param0: BigInt): ethereum.CallResult<Pack__packsResult> {
+  try_packs(param0: BigInt): ethereum.CallResult<Pack_PL__packsResult> {
     let result = super.tryCall(
       "packs",
       "packs(uint256):(string,address,uint256,uint256,uint256)",
@@ -1138,7 +1138,7 @@ export class Pack extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new Pack__packsResult(
+      new Pack_PL__packsResult(
         value[0].toString(),
         value[1].toAddress(),
         value[2].toBigInt(),
@@ -1163,14 +1163,14 @@ export class Pack extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  randomnessRequests(param0: Bytes): Pack__randomnessRequestsResult {
+  randomnessRequests(param0: Bytes): Pack_PL__randomnessRequestsResult {
     let result = super.call(
       "randomnessRequests",
       "randomnessRequests(bytes32):(uint256,address)",
       [ethereum.Value.fromFixedBytes(param0)]
     );
 
-    return new Pack__randomnessRequestsResult(
+    return new Pack_PL__randomnessRequestsResult(
       result[0].toBigInt(),
       result[1].toAddress()
     );
@@ -1178,7 +1178,7 @@ export class Pack extends ethereum.SmartContract {
 
   try_randomnessRequests(
     param0: Bytes
-  ): ethereum.CallResult<Pack__randomnessRequestsResult> {
+  ): ethereum.CallResult<Pack_PL__randomnessRequestsResult> {
     let result = super.tryCall(
       "randomnessRequests",
       "randomnessRequests(bytes32):(uint256,address)",
@@ -1189,22 +1189,25 @@ export class Pack extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new Pack__randomnessRequestsResult(
+      new Pack_PL__randomnessRequestsResult(
         value[0].toBigInt(),
         value[1].toAddress()
       )
     );
   }
 
-  rewards(param0: BigInt): Pack__rewardsResult {
+  rewards(param0: BigInt): Pack_PL__rewardsResult {
     let result = super.call("rewards", "rewards(uint256):(address,uint256)", [
       ethereum.Value.fromUnsignedBigInt(param0)
     ]);
 
-    return new Pack__rewardsResult(result[0].toAddress(), result[1].toBigInt());
+    return new Pack_PL__rewardsResult(
+      result[0].toAddress(),
+      result[1].toBigInt()
+    );
   }
 
-  try_rewards(param0: BigInt): ethereum.CallResult<Pack__rewardsResult> {
+  try_rewards(param0: BigInt): ethereum.CallResult<Pack_PL__rewardsResult> {
     let result = super.tryCall(
       "rewards",
       "rewards(uint256):(address,uint256)",
@@ -1215,7 +1218,7 @@ export class Pack extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new Pack__rewardsResult(value[0].toAddress(), value[1].toBigInt())
+      new Pack_PL__rewardsResult(value[0].toAddress(), value[1].toBigInt())
     );
   }
 
@@ -1234,7 +1237,7 @@ export class Pack extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  royaltyInfo(tokenId: BigInt, salePrice: BigInt): Pack__royaltyInfoResult {
+  royaltyInfo(tokenId: BigInt, salePrice: BigInt): Pack_PL__royaltyInfoResult {
     let result = super.call(
       "royaltyInfo",
       "royaltyInfo(uint256,uint256):(address,uint256)",
@@ -1244,7 +1247,7 @@ export class Pack extends ethereum.SmartContract {
       ]
     );
 
-    return new Pack__royaltyInfoResult(
+    return new Pack_PL__royaltyInfoResult(
       result[0].toAddress(),
       result[1].toBigInt()
     );
@@ -1253,7 +1256,7 @@ export class Pack extends ethereum.SmartContract {
   try_royaltyInfo(
     tokenId: BigInt,
     salePrice: BigInt
-  ): ethereum.CallResult<Pack__royaltyInfoResult> {
+  ): ethereum.CallResult<Pack_PL__royaltyInfoResult> {
     let result = super.tryCall(
       "royaltyInfo",
       "royaltyInfo(uint256,uint256):(address,uint256)",
@@ -1267,7 +1270,7 @@ export class Pack extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new Pack__royaltyInfoResult(value[0].toAddress(), value[1].toBigInt())
+      new Pack_PL__royaltyInfoResult(value[0].toAddress(), value[1].toBigInt())
     );
   }
 
@@ -1523,90 +1526,6 @@ export class GrantRoleCall__Outputs {
   _call: GrantRoleCall;
 
   constructor(call: GrantRoleCall) {
-    this._call = call;
-  }
-}
-
-export class MintCall extends ethereum.Call {
-  get inputs(): MintCall__Inputs {
-    return new MintCall__Inputs(this);
-  }
-
-  get outputs(): MintCall__Outputs {
-    return new MintCall__Outputs(this);
-  }
-}
-
-export class MintCall__Inputs {
-  _call: MintCall;
-
-  constructor(call: MintCall) {
-    this._call = call;
-  }
-
-  get to(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-
-  get data(): Bytes {
-    return this._call.inputValues[3].value.toBytes();
-  }
-}
-
-export class MintCall__Outputs {
-  _call: MintCall;
-
-  constructor(call: MintCall) {
-    this._call = call;
-  }
-}
-
-export class MintBatchCall extends ethereum.Call {
-  get inputs(): MintBatchCall__Inputs {
-    return new MintBatchCall__Inputs(this);
-  }
-
-  get outputs(): MintBatchCall__Outputs {
-    return new MintBatchCall__Outputs(this);
-  }
-}
-
-export class MintBatchCall__Inputs {
-  _call: MintBatchCall;
-
-  constructor(call: MintBatchCall) {
-    this._call = call;
-  }
-
-  get to(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get ids(): Array<BigInt> {
-    return this._call.inputValues[1].value.toBigIntArray();
-  }
-
-  get amounts(): Array<BigInt> {
-    return this._call.inputValues[2].value.toBigIntArray();
-  }
-
-  get data(): Bytes {
-    return this._call.inputValues[3].value.toBytes();
-  }
-}
-
-export class MintBatchCall__Outputs {
-  _call: MintBatchCall;
-
-  constructor(call: MintBatchCall) {
     this._call = call;
   }
 }
