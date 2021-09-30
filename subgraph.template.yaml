@@ -22,7 +22,7 @@ dataSources:
         - PackReward
       abis:
         - name: Pack
-          file: ./abis/Pack.json
+          file: ./abis/Pack_PL.json
         - name: ERC1155
           file: ./abis/ERC1155.json
       eventHandlers:
@@ -58,11 +58,11 @@ dataSources:
         - name: ERC20
           file: ./abis/ERC20.json
       eventHandlers:
-        - event: ListingUpdate(indexed address,indexed uint256,(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8))
+        - event: ListingUpdate(indexed address,indexed uint256,(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8))
           handler: handleListingUpdate
-        - event: NewListing(indexed address,indexed address,indexed uint256,(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8))
+        - event: NewListing(indexed address,indexed address,indexed uint256,(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8))
           handler: handleNewListing
-        - event: NewSale(indexed address,indexed address,indexed uint256,address,uint256,(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint8))
+        - event: NewSale(indexed address,indexed address,indexed uint256,address,uint256,(uint256,address,address,uint256,uint256,address,uint256,uint256,uint256,uint256,uint8))
           handler: handleNewSale
       file: ./src/market.ts
   - kind: ethereum/contract
@@ -85,7 +85,7 @@ dataSources:
         # - RewardUnderlyingTokenERC721
       abis:
         - name: AccessNFT
-          file: ./abis/AccessNFT.json
+          file: ./abis/AccessNFT_PL.json
       eventHandlers:
         # - event: ERC20Redeemed(indexed address,indexed address,uint256,uint256)
         #   handler: handleERC20Redeemed
