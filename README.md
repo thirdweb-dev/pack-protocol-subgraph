@@ -5,7 +5,7 @@
 ## Subgraph endpoints
 
 ### Mumbai
-- Subgrpah ID: Qma7yJbss3CoCMwyMGg6YruyM1VzuTHsu1AQtVBDtXu2zF
+- Subgrpah ID: QmdETnrVW3HysnN5Kuk97x7pHPSM1tbJeZKTtXQQnCeqDo
 - View on explorer: https://thegraph.com/legacy-explorer/subgraph/nftlabs/pack-protocol-mumbai
 - API endpoint: https://api.thegraph.com/subgraphs/name/nftlabs/pack-protocol-mumbai
 
