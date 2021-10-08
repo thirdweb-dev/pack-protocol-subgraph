@@ -61,12 +61,16 @@ export class PackCreated__Params {
     return this._event.parameters[2].value.toAddress();
   }
 
+  get packTotalSupply(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
+
   get packState(): PackCreatedPackStateStruct {
-    return this._event.parameters[3].value.toTuple() as PackCreatedPackStateStruct;
+    return this._event.parameters[4].value.toTuple() as PackCreatedPackStateStruct;
   }
 
   get rewards(): PackCreatedRewardsStruct {
-    return this._event.parameters[4].value.toTuple() as PackCreatedRewardsStruct;
+    return this._event.parameters[5].value.toTuple() as PackCreatedRewardsStruct;
   }
 }
 
@@ -79,16 +83,12 @@ export class PackCreatedPackStateStruct extends ethereum.Tuple {
     return this[1].toAddress();
   }
 
-  get currentSupply(): BigInt {
+  get openStart(): BigInt {
     return this[2].toBigInt();
   }
 
-  get openStart(): BigInt {
-    return this[3].toBigInt();
-  }
-
   get openEnd(): BigInt {
-    return this[4].toBigInt();
+    return this[3].toBigInt();
   }
 }
 
@@ -401,16 +401,12 @@ export class Pack_PL__getPackResultPackStruct extends ethereum.Tuple {
     return this[1].toAddress();
   }
 
-  get currentSupply(): BigInt {
+  get openStart(): BigInt {
     return this[2].toBigInt();
   }
 
-  get openStart(): BigInt {
-    return this[3].toBigInt();
-  }
-
   get openEnd(): BigInt {
-    return this[4].toBigInt();
+    return this[3].toBigInt();
   }
 }
 
@@ -423,16 +419,12 @@ export class Pack_PL__getPackWithRewardsResultPackStruct extends ethereum.Tuple 
     return this[1].toAddress();
   }
 
-  get currentSupply(): BigInt {
+  get openStart(): BigInt {
     return this[2].toBigInt();
   }
 
-  get openStart(): BigInt {
-    return this[3].toBigInt();
-  }
-
   get openEnd(): BigInt {
-    return this[4].toBigInt();
+    return this[3].toBigInt();
   }
 }
 
@@ -469,20 +461,12 @@ export class Pack_PL__packsResult {
   value1: Address;
   value2: BigInt;
   value3: BigInt;
-  value4: BigInt;
 
-  constructor(
-    value0: string,
-    value1: Address,
-    value2: BigInt,
-    value3: BigInt,
-    value4: BigInt
-  ) {
+  constructor(value0: string, value1: Address, value2: BigInt, value3: BigInt) {
     this.value0 = value0;
     this.value1 = value1;
     this.value2 = value2;
     this.value3 = value3;
-    this.value4 = value4;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -491,7 +475,6 @@ export class Pack_PL__packsResult {
     map.set("value1", ethereum.Value.fromAddress(this.value1));
     map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
     map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
-    map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
     return map;
   }
 }
@@ -769,7 +752,7 @@ export class Pack_PL extends ethereum.SmartContract {
   getPack(_packId: BigInt): Pack_PL__getPackResultPackStruct {
     let result = super.call(
       "getPack",
-      "getPack(uint256):((string,address,uint256,uint256,uint256))",
+      "getPack(uint256):((string,address,uint256,uint256))",
       [ethereum.Value.fromUnsignedBigInt(_packId)]
     );
 
@@ -781,7 +764,7 @@ export class Pack_PL extends ethereum.SmartContract {
   ): ethereum.CallResult<Pack_PL__getPackResultPackStruct> {
     let result = super.tryCall(
       "getPack",
-      "getPack(uint256):((string,address,uint256,uint256,uint256))",
+      "getPack(uint256):((string,address,uint256,uint256))",
       [ethereum.Value.fromUnsignedBigInt(_packId)]
     );
     if (result.reverted) {
@@ -796,7 +779,7 @@ export class Pack_PL extends ethereum.SmartContract {
   getPackWithRewards(_packId: BigInt): Pack_PL__getPackWithRewardsResult {
     let result = super.call(
       "getPackWithRewards",
-      "getPackWithRewards(uint256):((string,address,uint256,uint256,uint256),address,uint256[],uint256[])",
+      "getPackWithRewards(uint256):((string,address,uint256,uint256),address,uint256[],uint256[])",
       [ethereum.Value.fromUnsignedBigInt(_packId)]
     );
 
@@ -813,7 +796,7 @@ export class Pack_PL extends ethereum.SmartContract {
   ): ethereum.CallResult<Pack_PL__getPackWithRewardsResult> {
     let result = super.tryCall(
       "getPackWithRewards",
-      "getPackWithRewards(uint256):((string,address,uint256,uint256,uint256),address,uint256[],uint256[])",
+      "getPackWithRewards(uint256):((string,address,uint256,uint256),address,uint256[],uint256[])",
       [ethereum.Value.fromUnsignedBigInt(_packId)]
     );
     if (result.reverted) {
@@ -956,29 +939,6 @@ export class Pack_PL extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  isRestrictedTransfer(): boolean {
-    let result = super.call(
-      "isRestrictedTransfer",
-      "isRestrictedTransfer():(bool)",
-      []
-    );
-
-    return result[0].toBoolean();
-  }
-
-  try_isRestrictedTransfer(): ethereum.CallResult<boolean> {
-    let result = super.tryCall(
-      "isRestrictedTransfer",
-      "isRestrictedTransfer():(bool)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
   isTrustedForwarder(forwarder: Address): boolean {
     let result = super.call(
       "isTrustedForwarder",
@@ -1111,10 +1071,53 @@ export class Pack_PL extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
+  onERC721Received(
+    param0: Address,
+    param1: Address,
+    param2: BigInt,
+    param3: Bytes
+  ): Bytes {
+    let result = super.call(
+      "onERC721Received",
+      "onERC721Received(address,address,uint256,bytes):(bytes4)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromUnsignedBigInt(param2),
+        ethereum.Value.fromBytes(param3)
+      ]
+    );
+
+    return result[0].toBytes();
+  }
+
+  try_onERC721Received(
+    param0: Address,
+    param1: Address,
+    param2: BigInt,
+    param3: Bytes
+  ): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "onERC721Received",
+      "onERC721Received(address,address,uint256,bytes):(bytes4)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromUnsignedBigInt(param2),
+        ethereum.Value.fromBytes(param3)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
   packs(param0: BigInt): Pack_PL__packsResult {
     let result = super.call(
       "packs",
-      "packs(uint256):(string,address,uint256,uint256,uint256)",
+      "packs(uint256):(string,address,uint256,uint256)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -1122,15 +1125,14 @@ export class Pack_PL extends ethereum.SmartContract {
       result[0].toString(),
       result[1].toAddress(),
       result[2].toBigInt(),
-      result[3].toBigInt(),
-      result[4].toBigInt()
+      result[3].toBigInt()
     );
   }
 
   try_packs(param0: BigInt): ethereum.CallResult<Pack_PL__packsResult> {
     let result = super.tryCall(
       "packs",
-      "packs(uint256):(string,address,uint256,uint256,uint256)",
+      "packs(uint256):(string,address,uint256,uint256)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -1142,8 +1144,7 @@ export class Pack_PL extends ethereum.SmartContract {
         value[0].toString(),
         value[1].toAddress(),
         value[2].toBigInt(),
-        value[3].toBigInt(),
-        value[4].toBigInt()
+        value[3].toBigInt()
       )
     );
   }
@@ -1314,6 +1315,50 @@ export class Pack_PL extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  totalSupply(id: BigInt): BigInt {
+    let result = super.call("totalSupply", "totalSupply(uint256):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(id)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_totalSupply(id: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "totalSupply",
+      "totalSupply(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(id)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  transfersRestricted(): boolean {
+    let result = super.call(
+      "transfersRestricted",
+      "transfersRestricted():(bool)",
+      []
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_transfersRestricted(): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "transfersRestricted",
+      "transfersRestricted():(bool)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
   uri(_id: BigInt): string {
@@ -1622,6 +1667,52 @@ export class OnERC1155ReceivedCall__Outputs {
   _call: OnERC1155ReceivedCall;
 
   constructor(call: OnERC1155ReceivedCall) {
+    this._call = call;
+  }
+
+  get value0(): Bytes {
+    return this._call.outputValues[0].value.toBytes();
+  }
+}
+
+export class OnERC721ReceivedCall extends ethereum.Call {
+  get inputs(): OnERC721ReceivedCall__Inputs {
+    return new OnERC721ReceivedCall__Inputs(this);
+  }
+
+  get outputs(): OnERC721ReceivedCall__Outputs {
+    return new OnERC721ReceivedCall__Outputs(this);
+  }
+}
+
+export class OnERC721ReceivedCall__Inputs {
+  _call: OnERC721ReceivedCall;
+
+  constructor(call: OnERC721ReceivedCall) {
+    this._call = call;
+  }
+
+  get value0(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get value1(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get value2(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+
+  get value3(): Bytes {
+    return this._call.inputValues[3].value.toBytes();
+  }
+}
+
+export class OnERC721ReceivedCall__Outputs {
+  _call: OnERC721ReceivedCall;
+
+  constructor(call: OnERC721ReceivedCall) {
     this._call = call;
   }
 

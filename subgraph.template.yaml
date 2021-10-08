@@ -26,7 +26,7 @@ dataSources:
         - name: ERC1155
           file: ./abis/ERC1155.json
       eventHandlers:
-        - event: PackCreated(indexed uint256,indexed address,indexed address,(string,address,uint256,uint256,uint256),(address,uint256[],uint256[],uint256))
+        - event: PackCreated(indexed uint256,indexed address,indexed address,uint256,(string,address,uint256,uint256),(address,uint256[],uint256[],uint256))
           handler: handlePackCreated
         - event: PackOpenFulfilled(indexed uint256,indexed address,bytes32,indexed address,uint256[])
           handler: handlePackOpenFulfilled

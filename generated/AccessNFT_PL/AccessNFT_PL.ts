@@ -78,6 +78,24 @@ export class AccessNFTsCreated__Params {
   }
 }
 
+export class AccessTransferabilityUpdated extends ethereum.Event {
+  get params(): AccessTransferabilityUpdated__Params {
+    return new AccessTransferabilityUpdated__Params(this);
+  }
+}
+
+export class AccessTransferabilityUpdated__Params {
+  _event: AccessTransferabilityUpdated;
+
+  constructor(event: AccessTransferabilityUpdated) {
+    this._event = event;
+  }
+
+  get isTransferable(): boolean {
+    return this._event.parameters[0].value.toBoolean();
+  }
+}
+
 export class ApprovalForAll extends ethereum.Event {
   get params(): ApprovalForAll__Params {
     return new ApprovalForAll__Params(this);
@@ -101,6 +119,32 @@ export class ApprovalForAll__Params {
 
   get approved(): boolean {
     return this._event.parameters[2].value.toBoolean();
+  }
+}
+
+export class LastRedeemTimeUpdated extends ethereum.Event {
+  get params(): LastRedeemTimeUpdated__Params {
+    return new LastRedeemTimeUpdated__Params(this);
+  }
+}
+
+export class LastRedeemTimeUpdated__Params {
+  _event: LastRedeemTimeUpdated;
+
+  constructor(event: LastRedeemTimeUpdated) {
+    this._event = event;
+  }
+
+  get accessNftId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get creator(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get lastTimeToRedeem(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
@@ -326,45 +370,6 @@ export class Unpaused__Params {
   }
 }
 
-export class AccessNFT_PL__nftInfoResult {
-  value0: Address;
-  value1: string;
-  value2: BigInt;
-  value3: boolean;
-  value4: BigInt;
-  value5: i32;
-
-  constructor(
-    value0: Address,
-    value1: string,
-    value2: BigInt,
-    value3: boolean,
-    value4: BigInt,
-    value5: i32
-  ) {
-    this.value0 = value0;
-    this.value1 = value1;
-    this.value2 = value2;
-    this.value3 = value3;
-    this.value4 = value4;
-    this.value5 = value5;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromAddress(this.value0));
-    map.set("value1", ethereum.Value.fromString(this.value1));
-    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
-    map.set("value3", ethereum.Value.fromBoolean(this.value3));
-    map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
-    map.set(
-      "value5",
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value5))
-    );
-    return map;
-  }
-}
-
 export class AccessNFT_PL__royaltyInfoResult {
   value0: Address;
   value1: BigInt;
@@ -378,6 +383,41 @@ export class AccessNFT_PL__royaltyInfoResult {
     let map = new TypedMap<string, ethereum.Value>();
     map.set("value0", ethereum.Value.fromAddress(this.value0));
     map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    return map;
+  }
+}
+
+export class AccessNFT_PL__tokenStateResult {
+  value0: Address;
+  value1: string;
+  value2: boolean;
+  value3: BigInt;
+  value4: i32;
+
+  constructor(
+    value0: Address,
+    value1: string,
+    value2: boolean,
+    value3: BigInt,
+    value4: i32
+  ) {
+    this.value0 = value0;
+    this.value1 = value1;
+    this.value2 = value2;
+    this.value3 = value3;
+    this.value4 = value4;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromAddress(this.value0));
+    map.set("value1", ethereum.Value.fromString(this.value1));
+    map.set("value2", ethereum.Value.fromBoolean(this.value2));
+    map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
+    map.set(
+      "value4",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value4))
+    );
     return map;
   }
 }
@@ -474,6 +514,29 @@ export class AccessNFT_PL extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toString());
   }
 
+  accessNftIsTransferable(): boolean {
+    let result = super.call(
+      "accessNftIsTransferable",
+      "accessNftIsTransferable():(bool)",
+      []
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_accessNftIsTransferable(): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "accessNftIsTransferable",
+      "accessNftIsTransferable():(bool)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   balanceOf(account: Address, id: BigInt): BigInt {
     let result = super.call(
       "balanceOf",
@@ -553,15 +616,19 @@ export class AccessNFT_PL extends ethereum.SmartContract {
   createAccessNfts(
     _nftURIs: Array<string>,
     _accessNftURIs: Array<string>,
-    _nftSupplies: Array<BigInt>
+    _nftSupplies: Array<BigInt>,
+    _pack: Address,
+    _packArgs: Bytes
   ): Array<BigInt> {
     let result = super.call(
       "createAccessNfts",
-      "createAccessNfts(string[],string[],uint256[]):(uint256[])",
+      "createAccessNfts(string[],string[],uint256[],address,bytes):(uint256[])",
       [
         ethereum.Value.fromStringArray(_nftURIs),
         ethereum.Value.fromStringArray(_accessNftURIs),
-        ethereum.Value.fromUnsignedBigIntArray(_nftSupplies)
+        ethereum.Value.fromUnsignedBigIntArray(_nftSupplies),
+        ethereum.Value.fromAddress(_pack),
+        ethereum.Value.fromBytes(_packArgs)
       ]
     );
 
@@ -571,15 +638,19 @@ export class AccessNFT_PL extends ethereum.SmartContract {
   try_createAccessNfts(
     _nftURIs: Array<string>,
     _accessNftURIs: Array<string>,
-    _nftSupplies: Array<BigInt>
+    _nftSupplies: Array<BigInt>,
+    _pack: Address,
+    _packArgs: Bytes
   ): ethereum.CallResult<Array<BigInt>> {
     let result = super.tryCall(
       "createAccessNfts",
-      "createAccessNfts(string[],string[],uint256[]):(uint256[])",
+      "createAccessNfts(string[],string[],uint256[],address,bytes):(uint256[])",
       [
         ethereum.Value.fromStringArray(_nftURIs),
         ethereum.Value.fromStringArray(_accessNftURIs),
-        ethereum.Value.fromUnsignedBigIntArray(_nftSupplies)
+        ethereum.Value.fromUnsignedBigIntArray(_nftSupplies),
+        ethereum.Value.fromAddress(_pack),
+        ethereum.Value.fromBytes(_packArgs)
       ]
     );
     if (result.reverted) {
@@ -715,41 +786,18 @@ export class AccessNFT_PL extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  isRedeemed(_nftId: BigInt): boolean {
-    let result = super.call("isRedeemed", "isRedeemed(uint256):(bool)", [
+  isRedeemable(_nftId: BigInt): boolean {
+    let result = super.call("isRedeemable", "isRedeemable(uint256):(bool)", [
       ethereum.Value.fromUnsignedBigInt(_nftId)
     ]);
 
     return result[0].toBoolean();
   }
 
-  try_isRedeemed(_nftId: BigInt): ethereum.CallResult<boolean> {
-    let result = super.tryCall("isRedeemed", "isRedeemed(uint256):(bool)", [
+  try_isRedeemable(_nftId: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall("isRedeemable", "isRedeemable(uint256):(bool)", [
       ethereum.Value.fromUnsignedBigInt(_nftId)
     ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
-  isRestrictedTransfer(): boolean {
-    let result = super.call(
-      "isRestrictedTransfer",
-      "isRestrictedTransfer():(bool)",
-      []
-    );
-
-    return result[0].toBoolean();
-  }
-
-  try_isRestrictedTransfer(): ethereum.CallResult<boolean> {
-    let result = super.tryCall(
-      "isRestrictedTransfer",
-      "isRestrictedTransfer():(bool)",
-      []
-    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -780,6 +828,29 @@ export class AccessNFT_PL extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  lastTimeToRedeem(param0: BigInt): BigInt {
+    let result = super.call(
+      "lastTimeToRedeem",
+      "lastTimeToRedeem(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_lastTimeToRedeem(param0: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "lastTimeToRedeem",
+      "lastTimeToRedeem(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   nextTokenId(): BigInt {
     let result = super.call("nextTokenId", "nextTokenId():(uint256)", []);
 
@@ -793,47 +864,6 @@ export class AccessNFT_PL extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  nftInfo(param0: BigInt): AccessNFT_PL__nftInfoResult {
-    let result = super.call(
-      "nftInfo",
-      "nftInfo(uint256):(address,string,uint256,bool,uint256,uint8)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
-    );
-
-    return new AccessNFT_PL__nftInfoResult(
-      result[0].toAddress(),
-      result[1].toString(),
-      result[2].toBigInt(),
-      result[3].toBoolean(),
-      result[4].toBigInt(),
-      result[5].toI32()
-    );
-  }
-
-  try_nftInfo(
-    param0: BigInt
-  ): ethereum.CallResult<AccessNFT_PL__nftInfoResult> {
-    let result = super.tryCall(
-      "nftInfo",
-      "nftInfo(uint256):(address,string,uint256,bool,uint256,uint8)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new AccessNFT_PL__nftInfoResult(
-        value[0].toAddress(),
-        value[1].toString(),
-        value[2].toBigInt(),
-        value[3].toBoolean(),
-        value[4].toBigInt(),
-        value[5].toI32()
-      )
-    );
   }
 
   onERC1155BatchReceived(
@@ -921,6 +951,49 @@ export class AccessNFT_PL extends ethereum.SmartContract {
         ethereum.Value.fromUnsignedBigInt(param2),
         ethereum.Value.fromUnsignedBigInt(param3),
         ethereum.Value.fromBytes(param4)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  onERC721Received(
+    param0: Address,
+    param1: Address,
+    param2: BigInt,
+    param3: Bytes
+  ): Bytes {
+    let result = super.call(
+      "onERC721Received",
+      "onERC721Received(address,address,uint256,bytes):(bytes4)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromUnsignedBigInt(param2),
+        ethereum.Value.fromBytes(param3)
+      ]
+    );
+
+    return result[0].toBytes();
+  }
+
+  try_onERC721Received(
+    param0: Address,
+    param1: Address,
+    param2: BigInt,
+    param3: Bytes
+  ): ethereum.CallResult<Bytes> {
+    let result = super.tryCall(
+      "onERC721Received",
+      "onERC721Received(address,address,uint256,bytes):(bytes4)",
+      [
+        ethereum.Value.fromAddress(param0),
+        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromUnsignedBigInt(param2),
+        ethereum.Value.fromBytes(param3)
       ]
     );
     if (result.reverted) {
@@ -1026,6 +1099,45 @@ export class AccessNFT_PL extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  tokenState(param0: BigInt): AccessNFT_PL__tokenStateResult {
+    let result = super.call(
+      "tokenState",
+      "tokenState(uint256):(address,string,bool,uint256,uint8)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+
+    return new AccessNFT_PL__tokenStateResult(
+      result[0].toAddress(),
+      result[1].toString(),
+      result[2].toBoolean(),
+      result[3].toBigInt(),
+      result[4].toI32()
+    );
+  }
+
+  try_tokenState(
+    param0: BigInt
+  ): ethereum.CallResult<AccessNFT_PL__tokenStateResult> {
+    let result = super.tryCall(
+      "tokenState",
+      "tokenState(uint256):(address,string,bool,uint256,uint8)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new AccessNFT_PL__tokenStateResult(
+        value[0].toAddress(),
+        value[1].toString(),
+        value[2].toBoolean(),
+        value[3].toBigInt(),
+        value[4].toI32()
+      )
+    );
+  }
+
   tokenURI(_nftId: BigInt): string {
     let result = super.call("tokenURI", "tokenURI(uint256):(string)", [
       ethereum.Value.fromUnsignedBigInt(_nftId)
@@ -1043,6 +1155,50 @@ export class AccessNFT_PL extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  totalSupply(id: BigInt): BigInt {
+    let result = super.call("totalSupply", "totalSupply(uint256):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(id)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_totalSupply(id: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "totalSupply",
+      "totalSupply(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(id)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  transfersRestricted(): boolean {
+    let result = super.call(
+      "transfersRestricted",
+      "transfersRestricted():(bool)",
+      []
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_transfersRestricted(): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "transfersRestricted",
+      "transfersRestricted():(bool)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
   uri(_nftId: BigInt): string {
@@ -1090,8 +1246,12 @@ export class ConstructorCall__Inputs {
     return this._call.inputValues[1].value.toAddress();
   }
 
+  get _nftWrapper(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
   get _uri(): string {
-    return this._call.inputValues[2].value.toString();
+    return this._call.inputValues[3].value.toString();
   }
 }
 
@@ -1207,6 +1367,14 @@ export class CreateAccessNftsCall__Inputs {
   get _nftSupplies(): Array<BigInt> {
     return this._call.inputValues[2].value.toBigIntArray();
   }
+
+  get _pack(): Address {
+    return this._call.inputValues[3].value.toAddress();
+  }
+
+  get _packArgs(): Bytes {
+    return this._call.inputValues[4].value.toBytes();
+  }
 }
 
 export class CreateAccessNftsCall__Outputs {
@@ -1218,64 +1386,6 @@ export class CreateAccessNftsCall__Outputs {
 
   get nftIds(): Array<BigInt> {
     return this._call.outputValues[0].value.toBigIntArray();
-  }
-}
-
-export class CreateAccessPackCall extends ethereum.Call {
-  get inputs(): CreateAccessPackCall__Inputs {
-    return new CreateAccessPackCall__Inputs(this);
-  }
-
-  get outputs(): CreateAccessPackCall__Outputs {
-    return new CreateAccessPackCall__Outputs(this);
-  }
-}
-
-export class CreateAccessPackCall__Inputs {
-  _call: CreateAccessPackCall;
-
-  constructor(call: CreateAccessPackCall) {
-    this._call = call;
-  }
-
-  get _pack(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get _nftURIs(): Array<string> {
-    return this._call.inputValues[1].value.toStringArray();
-  }
-
-  get _accessNftURIs(): Array<string> {
-    return this._call.inputValues[2].value.toStringArray();
-  }
-
-  get _nftSupplies(): Array<BigInt> {
-    return this._call.inputValues[3].value.toBigIntArray();
-  }
-
-  get _packURI(): string {
-    return this._call.inputValues[4].value.toString();
-  }
-
-  get _secondsUntilOpenStart(): BigInt {
-    return this._call.inputValues[5].value.toBigInt();
-  }
-
-  get _secondsUntilOpenEnd(): BigInt {
-    return this._call.inputValues[6].value.toBigInt();
-  }
-
-  get _nftsPerOpen(): BigInt {
-    return this._call.inputValues[7].value.toBigInt();
-  }
-}
-
-export class CreateAccessPackCall__Outputs {
-  _call: CreateAccessPackCall;
-
-  constructor(call: CreateAccessPackCall) {
-    this._call = call;
   }
 }
 
@@ -1413,6 +1523,52 @@ export class OnERC1155ReceivedCall__Outputs {
   }
 }
 
+export class OnERC721ReceivedCall extends ethereum.Call {
+  get inputs(): OnERC721ReceivedCall__Inputs {
+    return new OnERC721ReceivedCall__Inputs(this);
+  }
+
+  get outputs(): OnERC721ReceivedCall__Outputs {
+    return new OnERC721ReceivedCall__Outputs(this);
+  }
+}
+
+export class OnERC721ReceivedCall__Inputs {
+  _call: OnERC721ReceivedCall;
+
+  constructor(call: OnERC721ReceivedCall) {
+    this._call = call;
+  }
+
+  get value0(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get value1(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get value2(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+
+  get value3(): Bytes {
+    return this._call.inputValues[3].value.toBytes();
+  }
+}
+
+export class OnERC721ReceivedCall__Outputs {
+  _call: OnERC721ReceivedCall;
+
+  constructor(call: OnERC721ReceivedCall) {
+    this._call = call;
+  }
+
+  get value0(): Bytes {
+    return this._call.outputValues[0].value.toBytes();
+  }
+}
+
 export class PauseCall extends ethereum.Call {
   get inputs(): PauseCall__Inputs {
     return new PauseCall__Inputs(this);
@@ -1439,20 +1595,20 @@ export class PauseCall__Outputs {
   }
 }
 
-export class RedeemAccessCall extends ethereum.Call {
-  get inputs(): RedeemAccessCall__Inputs {
-    return new RedeemAccessCall__Inputs(this);
+export class RedeemTokenCall extends ethereum.Call {
+  get inputs(): RedeemTokenCall__Inputs {
+    return new RedeemTokenCall__Inputs(this);
   }
 
-  get outputs(): RedeemAccessCall__Outputs {
-    return new RedeemAccessCall__Outputs(this);
+  get outputs(): RedeemTokenCall__Outputs {
+    return new RedeemTokenCall__Outputs(this);
   }
 }
 
-export class RedeemAccessCall__Inputs {
-  _call: RedeemAccessCall;
+export class RedeemTokenCall__Inputs {
+  _call: RedeemTokenCall;
 
-  constructor(call: RedeemAccessCall) {
+  constructor(call: RedeemTokenCall) {
     this._call = call;
   }
 
@@ -1465,10 +1621,10 @@ export class RedeemAccessCall__Inputs {
   }
 }
 
-export class RedeemAccessCall__Outputs {
-  _call: RedeemAccessCall;
+export class RedeemTokenCall__Outputs {
+  _call: RedeemTokenCall;
 
-  constructor(call: RedeemAccessCall) {
+  constructor(call: RedeemTokenCall) {
     this._call = call;
   }
 }
@@ -1633,6 +1789,36 @@ export class SafeTransferFromCall__Outputs {
   }
 }
 
+export class SetAccessNftTransferabilityCall extends ethereum.Call {
+  get inputs(): SetAccessNftTransferabilityCall__Inputs {
+    return new SetAccessNftTransferabilityCall__Inputs(this);
+  }
+
+  get outputs(): SetAccessNftTransferabilityCall__Outputs {
+    return new SetAccessNftTransferabilityCall__Outputs(this);
+  }
+}
+
+export class SetAccessNftTransferabilityCall__Inputs {
+  _call: SetAccessNftTransferabilityCall;
+
+  constructor(call: SetAccessNftTransferabilityCall) {
+    this._call = call;
+  }
+
+  get _isTransferable(): boolean {
+    return this._call.inputValues[0].value.toBoolean();
+  }
+}
+
+export class SetAccessNftTransferabilityCall__Outputs {
+  _call: SetAccessNftTransferabilityCall;
+
+  constructor(call: SetAccessNftTransferabilityCall) {
+    this._call = call;
+  }
+}
+
 export class SetApprovalForAllCall extends ethereum.Call {
   get inputs(): SetApprovalForAllCall__Inputs {
     return new SetApprovalForAllCall__Inputs(this);
@@ -1693,6 +1879,40 @@ export class SetContractURICall__Outputs {
   _call: SetContractURICall;
 
   constructor(call: SetContractURICall) {
+    this._call = call;
+  }
+}
+
+export class SetLastTimeToRedeemCall extends ethereum.Call {
+  get inputs(): SetLastTimeToRedeemCall__Inputs {
+    return new SetLastTimeToRedeemCall__Inputs(this);
+  }
+
+  get outputs(): SetLastTimeToRedeemCall__Outputs {
+    return new SetLastTimeToRedeemCall__Outputs(this);
+  }
+}
+
+export class SetLastTimeToRedeemCall__Inputs {
+  _call: SetLastTimeToRedeemCall;
+
+  constructor(call: SetLastTimeToRedeemCall) {
+    this._call = call;
+  }
+
+  get _tokenId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get _secondsUntilRedeem(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+}
+
+export class SetLastTimeToRedeemCall__Outputs {
+  _call: SetLastTimeToRedeemCall;
+
+  constructor(call: SetLastTimeToRedeemCall) {
     this._call = call;
   }
 }
@@ -1779,6 +1999,86 @@ export class UnpauseCall__Outputs {
   _call: UnpauseCall;
 
   constructor(call: UnpauseCall) {
+    this._call = call;
+  }
+}
+
+export class WrapERC20Call extends ethereum.Call {
+  get inputs(): WrapERC20Call__Inputs {
+    return new WrapERC20Call__Inputs(this);
+  }
+
+  get outputs(): WrapERC20Call__Outputs {
+    return new WrapERC20Call__Outputs(this);
+  }
+}
+
+export class WrapERC20Call__Inputs {
+  _call: WrapERC20Call;
+
+  constructor(call: WrapERC20Call) {
+    this._call = call;
+  }
+
+  get _tokenContracts(): Array<Address> {
+    return this._call.inputValues[0].value.toAddressArray();
+  }
+
+  get _tokenAmounts(): Array<BigInt> {
+    return this._call.inputValues[1].value.toBigIntArray();
+  }
+
+  get _numOfNftsToMint(): Array<BigInt> {
+    return this._call.inputValues[2].value.toBigIntArray();
+  }
+
+  get _nftURIs(): Array<string> {
+    return this._call.inputValues[3].value.toStringArray();
+  }
+}
+
+export class WrapERC20Call__Outputs {
+  _call: WrapERC20Call;
+
+  constructor(call: WrapERC20Call) {
+    this._call = call;
+  }
+}
+
+export class WrapERC721Call extends ethereum.Call {
+  get inputs(): WrapERC721Call__Inputs {
+    return new WrapERC721Call__Inputs(this);
+  }
+
+  get outputs(): WrapERC721Call__Outputs {
+    return new WrapERC721Call__Outputs(this);
+  }
+}
+
+export class WrapERC721Call__Inputs {
+  _call: WrapERC721Call;
+
+  constructor(call: WrapERC721Call) {
+    this._call = call;
+  }
+
+  get _nftContracts(): Array<Address> {
+    return this._call.inputValues[0].value.toAddressArray();
+  }
+
+  get _tokenIds(): Array<BigInt> {
+    return this._call.inputValues[1].value.toBigIntArray();
+  }
+
+  get _nftURIs(): Array<string> {
+    return this._call.inputValues[2].value.toStringArray();
+  }
+}
+
+export class WrapERC721Call__Outputs {
+  _call: WrapERC721Call;
+
+  constructor(call: WrapERC721Call) {
     this._call = call;
   }
 }
