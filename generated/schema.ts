@@ -522,13 +522,13 @@ export class Reward extends Entity {
     }
   }
 
-  get redeemedAccess(): boolean {
-    let value = this.get("redeemedAccess");
+  get isRedeemable(): boolean {
+    let value = this.get("isRedeemable");
     return value.toBoolean();
   }
 
-  set redeemedAccess(value: boolean) {
-    this.set("redeemedAccess", Value.fromBoolean(value));
+  set isRedeemable(value: boolean) {
+    this.set("isRedeemable", Value.fromBoolean(value));
   }
 }
 

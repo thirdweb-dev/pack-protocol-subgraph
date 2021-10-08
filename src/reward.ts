@@ -59,7 +59,7 @@ export function handleAccessNFTsCreated(event: AccessNFTsCreated): void {
     reward.creator = creatorAccountId;
     reward.uri = rewardURIs[i];
     reward.supply = rewardSupplies[i];
-    reward.redeemedAccess = false;
+    reward.isRedeemable = true;
 
     reward.save();
 
@@ -75,7 +75,7 @@ export function handleAccessNFTsCreated(event: AccessNFTsCreated): void {
     reward.creator = creatorAccountId;
     reward.uri = accessURIs[i];
     reward.supply = rewardSupplies[i];
-    reward.redeemedAccess = true;
+    reward.isRedeemable = false;
 
     reward.save();
 

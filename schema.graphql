@@ -68,7 +68,7 @@ type Reward @entity {
   uri: String!
   supply: BigInt!
   underlyingToken: RewardUnderlyingToken @derivedFrom(field: "reward")
-  redeemedAccess: Boolean!
+  isRedeemable: Boolean!
 }
 
 type RewardOwnership @entity {
