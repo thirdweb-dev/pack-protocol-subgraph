@@ -5,8 +5,8 @@ import {
   TransferSingle,
   TransferBatch,
   PackOpenFulfilled,
-} from "../generated/Pack_PL/Pack_PL";
-import { ERC1155 } from "../generated/Pack_PL/ERC1155";
+} from "../generated/Pack/Pack";
+import { ERC1155 } from "../generated/Pack/ERC1155";
 
 import { Account, Pack, PackOwnership, PackReward } from "../generated/schema";
 

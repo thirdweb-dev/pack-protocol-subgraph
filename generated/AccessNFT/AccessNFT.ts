@@ -370,7 +370,7 @@ export class Unpaused__Params {
   }
 }
 
-export class AccessNFT_PL__royaltyInfoResult {
+export class AccessNFT__royaltyInfoResult {
   value0: Address;
   value1: BigInt;
 
@@ -387,7 +387,7 @@ export class AccessNFT_PL__royaltyInfoResult {
   }
 }
 
-export class AccessNFT_PL__tokenStateResult {
+export class AccessNFT__tokenStateResult {
   value0: Address;
   value1: string;
   value2: boolean;
@@ -422,9 +422,9 @@ export class AccessNFT_PL__tokenStateResult {
   }
 }
 
-export class AccessNFT_PL extends ethereum.SmartContract {
-  static bind(address: Address): AccessNFT_PL {
-    return new AccessNFT_PL("AccessNFT_PL", address);
+export class AccessNFT extends ethereum.SmartContract {
+  static bind(address: Address): AccessNFT {
+    return new AccessNFT("AccessNFT", address);
   }
 
   DEFAULT_ADMIN_ROLE(): Bytes {
@@ -1036,7 +1036,7 @@ export class AccessNFT_PL extends ethereum.SmartContract {
   royaltyInfo(
     tokenId: BigInt,
     salePrice: BigInt
-  ): AccessNFT_PL__royaltyInfoResult {
+  ): AccessNFT__royaltyInfoResult {
     let result = super.call(
       "royaltyInfo",
       "royaltyInfo(uint256,uint256):(address,uint256)",
@@ -1046,7 +1046,7 @@ export class AccessNFT_PL extends ethereum.SmartContract {
       ]
     );
 
-    return new AccessNFT_PL__royaltyInfoResult(
+    return new AccessNFT__royaltyInfoResult(
       result[0].toAddress(),
       result[1].toBigInt()
     );
@@ -1055,7 +1055,7 @@ export class AccessNFT_PL extends ethereum.SmartContract {
   try_royaltyInfo(
     tokenId: BigInt,
     salePrice: BigInt
-  ): ethereum.CallResult<AccessNFT_PL__royaltyInfoResult> {
+  ): ethereum.CallResult<AccessNFT__royaltyInfoResult> {
     let result = super.tryCall(
       "royaltyInfo",
       "royaltyInfo(uint256,uint256):(address,uint256)",
@@ -1069,7 +1069,7 @@ export class AccessNFT_PL extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new AccessNFT_PL__royaltyInfoResult(
+      new AccessNFT__royaltyInfoResult(
         value[0].toAddress(),
         value[1].toBigInt()
       )
@@ -1099,14 +1099,14 @@ export class AccessNFT_PL extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  tokenState(param0: BigInt): AccessNFT_PL__tokenStateResult {
+  tokenState(param0: BigInt): AccessNFT__tokenStateResult {
     let result = super.call(
       "tokenState",
       "tokenState(uint256):(address,string,bool,uint256,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
-    return new AccessNFT_PL__tokenStateResult(
+    return new AccessNFT__tokenStateResult(
       result[0].toAddress(),
       result[1].toString(),
       result[2].toBoolean(),
@@ -1117,7 +1117,7 @@ export class AccessNFT_PL extends ethereum.SmartContract {
 
   try_tokenState(
     param0: BigInt
-  ): ethereum.CallResult<AccessNFT_PL__tokenStateResult> {
+  ): ethereum.CallResult<AccessNFT__tokenStateResult> {
     let result = super.tryCall(
       "tokenState",
       "tokenState(uint256):(address,string,bool,uint256,uint8)",
@@ -1128,7 +1128,7 @@ export class AccessNFT_PL extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new AccessNFT_PL__tokenStateResult(
+      new AccessNFT__tokenStateResult(
         value[0].toAddress(),
         value[1].toString(),
         value[2].toBoolean(),
@@ -1419,6 +1419,90 @@ export class GrantRoleCall__Outputs {
   _call: GrantRoleCall;
 
   constructor(call: GrantRoleCall) {
+    this._call = call;
+  }
+}
+
+export class MintCall extends ethereum.Call {
+  get inputs(): MintCall__Inputs {
+    return new MintCall__Inputs(this);
+  }
+
+  get outputs(): MintCall__Outputs {
+    return new MintCall__Outputs(this);
+  }
+}
+
+export class MintCall__Inputs {
+  _call: MintCall;
+
+  constructor(call: MintCall) {
+    this._call = call;
+  }
+
+  get to(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get id(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get amount(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+
+  get data(): Bytes {
+    return this._call.inputValues[3].value.toBytes();
+  }
+}
+
+export class MintCall__Outputs {
+  _call: MintCall;
+
+  constructor(call: MintCall) {
+    this._call = call;
+  }
+}
+
+export class MintBatchCall extends ethereum.Call {
+  get inputs(): MintBatchCall__Inputs {
+    return new MintBatchCall__Inputs(this);
+  }
+
+  get outputs(): MintBatchCall__Outputs {
+    return new MintBatchCall__Outputs(this);
+  }
+}
+
+export class MintBatchCall__Inputs {
+  _call: MintBatchCall;
+
+  constructor(call: MintBatchCall) {
+    this._call = call;
+  }
+
+  get to(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get ids(): Array<BigInt> {
+    return this._call.inputValues[1].value.toBigIntArray();
+  }
+
+  get amounts(): Array<BigInt> {
+    return this._call.inputValues[2].value.toBigIntArray();
+  }
+
+  get data(): Bytes {
+    return this._call.inputValues[3].value.toBytes();
+  }
+}
+
+export class MintBatchCall__Outputs {
+  _call: MintBatchCall;
+
+  constructor(call: MintBatchCall) {
     this._call = call;
   }
 }

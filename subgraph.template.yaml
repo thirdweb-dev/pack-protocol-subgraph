@@ -22,7 +22,7 @@ dataSources:
         - PackReward
       abis:
         - name: Pack
-          file: ./abis/Pack_PL.json
+          file: ./abis/Pack.json
         - name: ERC1155
           file: ./abis/ERC1155.json
       eventHandlers:
@@ -85,7 +85,7 @@ dataSources:
         # - RewardUnderlyingTokenERC721
       abis:
         - name: AccessNFT
-          file: ./abis/AccessNFT_PL.json
+          file: ./abis/AccessNFT.json
       eventHandlers:
         # - event: ERC20Redeemed(indexed address,indexed address,uint256,uint256)
         #   handler: handleERC20Redeemed
