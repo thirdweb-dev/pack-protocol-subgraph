@@ -302,23 +302,6 @@ export class Pack extends Entity {
     }
   }
 
-  get openEndTimestamp(): BigInt | null {
-    let value = this.get("openEndTimestamp");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set openEndTimestamp(value: BigInt | null) {
-    if (value === null) {
-      this.unset("openEndTimestamp");
-    } else {
-      this.set("openEndTimestamp", Value.fromBigInt(value as BigInt));
-    }
-  }
-
   get rewardContract(): Bytes {
     let value = this.get("rewardContract");
     return value.toBytes();

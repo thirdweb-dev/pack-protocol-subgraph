@@ -35,7 +35,6 @@ export function handlePackCreated(event: PackCreated): void {
   pack.uri = event.params.packState.uri;
   pack.supply = event.params.packTotalSupply;
   pack.openStartTimestamp = event.params.packState.openStart;
-  pack.openEndTimestamp = event.params.packState.openEnd;
   pack.rewardContract = event.params.rewardContract;
 
   pack.save();
