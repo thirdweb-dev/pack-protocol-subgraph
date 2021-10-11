@@ -285,6 +285,23 @@ export class Pack extends Entity {
     }
   }
 
+  get totalSupply(): BigInt | null {
+    let value = this.get("totalSupply");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalSupply(value: BigInt | null) {
+    if (value === null) {
+      this.unset("totalSupply");
+    } else {
+      this.set("totalSupply", Value.fromBigInt(value as BigInt));
+    }
+  }
+
   get openStartTimestamp(): BigInt | null {
     let value = this.get("openStartTimestamp");
     if (value === null || value.kind == ValueKind.NULL) {
@@ -486,6 +503,15 @@ export class Reward extends Entity {
 
   set supply(value: BigInt) {
     this.set("supply", Value.fromBigInt(value));
+  }
+
+  get totalSupply(): BigInt {
+    let value = this.get("totalSupply");
+    return value.toBigInt();
+  }
+
+  set totalSupply(value: BigInt) {
+    this.set("totalSupply", Value.fromBigInt(value));
   }
 
   get underlyingToken(): string | null {

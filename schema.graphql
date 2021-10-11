@@ -37,6 +37,7 @@ type Pack @entity {
   rewards: [PackReward!] @derivedFrom(field: "pack")
   uri: String
   supply: BigInt
+  totalSupply: BigInt
   openStartTimestamp: BigInt
   rewardContract: Bytes!
 }
@@ -66,6 +67,7 @@ type Reward @entity {
   owners: [RewardOwnership!] @derivedFrom(field: "reward")
   uri: String!
   supply: BigInt!
+  totalSupply: BigInt!
   underlyingToken: RewardUnderlyingToken @derivedFrom(field: "reward")
   isRedeemable: Boolean!
 }

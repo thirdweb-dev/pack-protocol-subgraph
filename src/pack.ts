@@ -34,6 +34,7 @@ export function handlePackCreated(event: PackCreated): void {
   pack.creator = creatorAccountId;
   pack.uri = event.params.packState.uri;
   pack.supply = event.params.packTotalSupply;
+  pack.totalSupply = event.params.packTotalSupply;
   pack.openStartTimestamp = event.params.packState.openStart;
   pack.rewardContract = event.params.rewardContract;
 
@@ -76,8 +77,8 @@ export function handlePackOpenFulfilled(event: PackOpenFulfilled): void {
     let packRewardId = packId + "-" + rewardContract + "-" + rewardId;
     let packReward = PackReward.load(packRewardId);
     if (packReward) {
-        packReward.supply = packReward.supply.minus(BigInt.fromI32(1));
-        packReward.save();
+      packReward.supply = packReward.supply.minus(BigInt.fromI32(1));
+      packReward.save();
     }
   }
 
