@@ -54,6 +54,7 @@ export function handlePackCreated(event: PackCreated): void {
     packReward.owner = creatorAccountId;
     packReward.reward = rewardId;
     packReward.supply = amountsPacked[i];
+    packReward.totalSupply = amountsPacked[i];
     packReward.pack = packId;
     packReward.tokenId = tokenId;
     packReward.uri = ERC1155.bind(source).uri(tokenId);

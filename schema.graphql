@@ -48,6 +48,7 @@ type PackReward @entity {
   tokenId: BigInt!
   uri: String!
   supply: BigInt!
+  totalSupply: BigInt!
   pack: Pack!
   reward: Reward
 }

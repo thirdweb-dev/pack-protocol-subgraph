@@ -395,6 +395,15 @@ export class PackReward extends Entity {
     this.set("supply", Value.fromBigInt(value));
   }
 
+  get totalSupply(): BigInt {
+    let value = this.get("totalSupply");
+    return value.toBigInt();
+  }
+
+  set totalSupply(value: BigInt) {
+    this.set("totalSupply", Value.fromBigInt(value));
+  }
+
   get pack(): string {
     let value = this.get("pack");
     return value.toString();
