@@ -418,28 +418,32 @@ export class Pack__getPackWithRewardsResultPackStruct extends ethereum.Tuple {
 
 export class Pack__getPackWithRewardsResult {
   value0: Pack__getPackWithRewardsResultPackStruct;
-  value1: Address;
-  value2: Array<BigInt>;
+  value1: BigInt;
+  value2: Address;
   value3: Array<BigInt>;
+  value4: Array<BigInt>;
 
   constructor(
     value0: Pack__getPackWithRewardsResultPackStruct,
-    value1: Address,
-    value2: Array<BigInt>,
-    value3: Array<BigInt>
+    value1: BigInt,
+    value2: Address,
+    value3: Array<BigInt>,
+    value4: Array<BigInt>
   ) {
     this.value0 = value0;
     this.value1 = value1;
     this.value2 = value2;
     this.value3 = value3;
+    this.value4 = value4;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
     let map = new TypedMap<string, ethereum.Value>();
     map.set("value0", ethereum.Value.fromTuple(this.value0));
-    map.set("value1", ethereum.Value.fromAddress(this.value1));
-    map.set("value2", ethereum.Value.fromUnsignedBigIntArray(this.value2));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    map.set("value2", ethereum.Value.fromAddress(this.value2));
     map.set("value3", ethereum.Value.fromUnsignedBigIntArray(this.value3));
+    map.set("value4", ethereum.Value.fromUnsignedBigIntArray(this.value4));
     return map;
   }
 }
@@ -764,15 +768,16 @@ export class Pack extends ethereum.SmartContract {
   getPackWithRewards(_packId: BigInt): Pack__getPackWithRewardsResult {
     let result = super.call(
       "getPackWithRewards",
-      "getPackWithRewards(uint256):((string,address,uint256),address,uint256[],uint256[])",
+      "getPackWithRewards(uint256):((string,address,uint256),uint256,address,uint256[],uint256[])",
       [ethereum.Value.fromUnsignedBigInt(_packId)]
     );
 
     return new Pack__getPackWithRewardsResult(
       result[0].toTuple() as Pack__getPackWithRewardsResultPackStruct,
-      result[1].toAddress(),
-      result[2].toBigIntArray(),
-      result[3].toBigIntArray()
+      result[1].toBigInt(),
+      result[2].toAddress(),
+      result[3].toBigIntArray(),
+      result[4].toBigIntArray()
     ) as Pack__getPackWithRewardsResult;
   }
 
@@ -781,7 +786,7 @@ export class Pack extends ethereum.SmartContract {
   ): ethereum.CallResult<Pack__getPackWithRewardsResult> {
     let result = super.tryCall(
       "getPackWithRewards",
-      "getPackWithRewards(uint256):((string,address,uint256),address,uint256[],uint256[])",
+      "getPackWithRewards(uint256):((string,address,uint256),uint256,address,uint256[],uint256[])",
       [ethereum.Value.fromUnsignedBigInt(_packId)]
     );
     if (result.reverted) {
@@ -791,9 +796,10 @@ export class Pack extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(
       new Pack__getPackWithRewardsResult(
         value[0].toTuple() as Pack__getPackWithRewardsResultPackStruct,
-        value[1].toAddress(),
-        value[2].toBigIntArray(),
-        value[3].toBigIntArray()
+        value[1].toBigInt(),
+        value[2].toAddress(),
+        value[3].toBigIntArray(),
+        value[4].toBigIntArray()
       ) as Pack__getPackWithRewardsResult
     );
   }
@@ -964,7 +970,7 @@ export class Pack extends ethereum.SmartContract {
 
   onERC1155BatchReceived(
     _operator: Address,
-    _from: Address,
+    param1: Address,
     _ids: Array<BigInt>,
     _values: Array<BigInt>,
     _data: Bytes
@@ -974,7 +980,7 @@ export class Pack extends ethereum.SmartContract {
       "onERC1155BatchReceived(address,address,uint256[],uint256[],bytes):(bytes4)",
       [
         ethereum.Value.fromAddress(_operator),
-        ethereum.Value.fromAddress(_from),
+        ethereum.Value.fromAddress(param1),
         ethereum.Value.fromUnsignedBigIntArray(_ids),
         ethereum.Value.fromUnsignedBigIntArray(_values),
         ethereum.Value.fromBytes(_data)
@@ -986,7 +992,7 @@ export class Pack extends ethereum.SmartContract {
 
   try_onERC1155BatchReceived(
     _operator: Address,
-    _from: Address,
+    param1: Address,
     _ids: Array<BigInt>,
     _values: Array<BigInt>,
     _data: Bytes
@@ -996,7 +1002,7 @@ export class Pack extends ethereum.SmartContract {
       "onERC1155BatchReceived(address,address,uint256[],uint256[],bytes):(bytes4)",
       [
         ethereum.Value.fromAddress(_operator),
-        ethereum.Value.fromAddress(_from),
+        ethereum.Value.fromAddress(param1),
         ethereum.Value.fromUnsignedBigIntArray(_ids),
         ethereum.Value.fromUnsignedBigIntArray(_values),
         ethereum.Value.fromBytes(_data)
@@ -1660,7 +1666,7 @@ export class OnERC1155BatchReceivedCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _from(): Address {
+  get value1(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
@@ -2116,7 +2122,7 @@ export class SetContractURICall__Inputs {
     this._call = call;
   }
 
-  get _URI(): string {
+  get _uri(): string {
     return this._call.inputValues[0].value.toString();
   }
 }
