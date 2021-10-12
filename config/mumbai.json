@@ -1,15 +1,15 @@
 {
   "network": "mumbai",
   "pack": {
-    "address": "0x60734D85eD65641Cc20de6cC87e589e367876748",
-    "startBlock": 20011040
+    "address": "0xB350f6b4FD9e2009ad64db4E7a064E00dB82cE67",
+    "startBlock": 20084185
   },
   "market": {
-    "address": "0x005b59d38EB1b76412bCe0BA37c45128EEbda362",
-    "startBlock": 20011046
+    "address": "0x55e4475DdE15F39E3bE837d205E2a09a8861153e",
+    "startBlock": 20084185
   },
   "reward": {
-    "address": "0xE8cBcE800dcc6C2957626732e808E1833052DCEE",
-    "startBlock": 20011053
+    "address": "0xf1482e0aC5742B0683f51ed8e87bdbFA66f3da3f",
+    "startBlock": 20084185
   }
 }
