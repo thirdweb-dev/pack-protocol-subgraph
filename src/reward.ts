@@ -175,10 +175,12 @@ export function handleTransferBatch(event: TransferBatch): void {
 
   // Create `Account` for receiver if it doesn't exist.
   let receiverAccountId = event.params.to.toHexString();
+  let receiverAccount = Account.load(receiverAccountId);
 
-  // not calling Account.load before save cuz mumbai having issues on 10/12
-  let receiverAccount = new Account(receiverAccountId);
-  receiverAccount.save();
+  if (receiverAccount == null) {
+    receiverAccount = new Account(receiverAccountId);
+    receiverAccount.save();
+  }
 
   let rewardContractAddress = event.address.toHexString();
   for (let i = 0; i < rewardIds.length; i++) {
