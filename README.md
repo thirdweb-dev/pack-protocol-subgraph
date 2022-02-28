@@ -1,6 +1,6 @@
 # $PACK Protocol: Subgraph
 
-**WIP**. This is the subgraph for [$PACK Protocol](https://github.com/nftlabs/pack-protocol). 
+**WIP**. This is the subgraph for [$PACK Protocol](https://github.com/thirdweb-dev/pack-protocol). 
 
 ## Subgraph endpoints
 
